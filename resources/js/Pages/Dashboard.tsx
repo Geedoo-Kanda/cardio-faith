@@ -1,6 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
+import { AiFillDollarCircle, AiOutlineBarChart } from "react-icons/ai";
+
 
 export default function Dashboard({ auth }: PageProps) {
     return (
@@ -10,12 +12,92 @@ export default function Dashboard({ auth }: PageProps) {
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">You're logged in!</div>
+            <div className="mt-10">
+                <section className="container px-4 mx-auto py-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md-grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div className="p-4">
+                            <h2 className="font-bold text-4xl text-gray-900">Statistiques sur les status des <span className='text-red-500'>Rendez-vous</span></h2>
+                        </div>
+                        <div className="bg-white rounded-md p-4 shadow-md">
+                            <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Tous les rendez-vous</h2>
+                            <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
+                                50
+                                <span className="text-sm rounded-md ml-2">
+                                    Total
+                                </span>
+                            </p>
+                        </div>
+                        <div className="bg-white rounded-md p-4 shadow-md">
+                            <h2 className="font-bold text-xl text-gray-900"> <AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous à venir</h2>
+                            <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
+                                50
+                                <span className="text-sm rounded-md ml-2">
+                                    Total
+                                </span>
+                            </p>
+                        </div>
+                        <div className="bg-white rounded-md p-4 shadow-md">
+                            <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous effectués</h2>
+                            <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
+                                50
+                                <span className="text-sm rounded-md ml-2">
+                                    Total
+                                </span>
+                            </p>
+                        </div>
+                        <div className="bg-white rounded-md p-4 shadow-md">
+                            <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous manqués</h2>
+                            <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
+                                50
+                                <span className="text-sm rounded-md ml-2">
+                                    Total
+                                </span>
+                            </p>
+                        </div>
+                        <div className="bg-white rounded-md p-4 shadow-md">
+                            <h2 className="font-bold text-xl text-gray-900"> <AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous annulés</h2>
+                            <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
+                                50
+                                <span className="text-sm rounded-md ml-2">
+                                    Total
+                                </span>
+                            </p>
+                        </div>
+                        
                     </div>
-                </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md-grid-cols-3 lg:grid-cols-4 gap-4 mt-28">
+                        <div className="p-4">
+                            <h2 className="font-bold text-4xl text-gray-900">Statistiques sur les opérations à la <span className='text-red-500'>Caisse</span></h2>
+                        </div>
+                        <div className="bg-white rounded-md p-4 shadow-md">
+                            <h2 className="font-bold text-xl text-gray-900"><AiFillDollarCircle className='inline-flex text-red-500 text-3xl' /> Solde total</h2>
+                            <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
+                                50
+                                <span className="text-sm rounded-md ml-2">
+                                    Dollar
+                                </span>
+                            </p>
+                        </div>
+                        <div className="bg-white rounded-md p-4 shadow-md">
+                            <h2 className="font-bold text-xl text-gray-900"> <AiFillDollarCircle className='inline-flex text-red-500 text-3xl' />Somme dibiter</h2>
+                            <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
+                                50
+                                <span className="text-sm rounded-md ml-2">
+                                    Dollar
+                                </span>
+                            </p>
+                        </div>
+                        <div className="bg-white rounded-md p-4 shadow-md">
+                            <h2 className="font-bold text-xl text-gray-900"><AiFillDollarCircle className='inline-flex text-red-500 text-3xl' /> Somme crediter</h2>
+                            <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
+                                50
+                                <span className="text-sm rounded-md ml-2">
+                                    Dollar
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </section>
             </div>
         </AuthenticatedLayout>
     );

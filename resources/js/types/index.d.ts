@@ -3,7 +3,7 @@ export interface User {
     name: string;
     email: string;
     phone: string;
-    acces: string;
+    acces: number;
     adresse: string;
     email_verified_at: string;
 }

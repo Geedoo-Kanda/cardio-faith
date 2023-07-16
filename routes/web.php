@@ -5,6 +5,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\RendezVousController;
+use App\Http\Controllers\FicheMedicaleController;
+use App\Http\Controllers\CaisseController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,6 +18,18 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::prefix('rendez-vous')->group(function () {
+    Route::get('/liste', [RendezVousController::class, 'indexView'])->name('rendez-vous.indexView');
+});
+
+Route::prefix('fiches')->group(function () {
+    Route::get('/liste', [FicheMedicaleController::class, 'indexView'])->name('fiches.indexView');
+});
+
+Route::prefix('caisse')->group(function () {
+    Route::get('/liste', [CaisseController::class, 'indexView'])->name('caisse.indexView');
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
