@@ -1,7 +1,7 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { FaEye, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { BiPlusMedical } from "react-icons/bi";
 import { PageProps } from '@/types';
 import { useState } from 'react';
@@ -10,37 +10,65 @@ import Modal from '@/Components/Modal';
 import AddRdv from './part/AddRdv';
 import EditRdv from "./part/EditRdv";
 import RemoveRdv from "./part/RevomeRdv";
+import axios from "axios";
+import { toast } from "react-toastify";
+import DangerButton from "@/Components/DangerButton";
 
 
-export default function Rdv({ auth }: PageProps<{ data: [] }>) {
+export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
     const [view, setview] = useState(false);
     const [add, setadd] = useState(false);
+    const [id, setid] = useState('');
     const [edit, setedit] = useState(false);
     const [disable, setDisable] = useState(false);
     const [search, setSearch] = useState("");
 
-
-
-    const Show = () => {
+    function Show(p: any) {
         setview(true);
+        setid(p)
+    };
+    function Edit(p: any) {
+        setedit(true);
+        setid(p)
+    };
+    function Disable(p: any) {
+        setDisable(true);
+        setid(p)
     };
     const Add = () => {
         setadd(true);
     };
-    const Edit = () => {
-        setedit(true);
-    };
-
-    const Disable = () => {
-        setDisable(true);
-    };
-
 
     const closeModal = () => {
         setview(false);
         setadd(false);
         setedit(false);
         setDisable(false);
+
+    };
+
+    const DeleteRdv = () => {
+        const etat = toast.loading("Chargement...")
+        axios.get('/admin/rendez-vous/delete/' + id)
+            .then(() => {
+                toast.update(etat, {
+                    render: "Rendez-vous supprimé",
+                    type: toast.TYPE.SUCCESS,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+                setDisable(false);
+                router.reload({ only: ['rdvs'] })
+
+            }).catch(() => {
+                toast.update(etat, {
+                    render: "Oups, veillez récommencer",
+                    type: toast.TYPE.ERROR,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+            }
+            )
     };
 
     return (
@@ -60,7 +88,7 @@ export default function Rdv({ auth }: PageProps<{ data: [] }>) {
                         <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter un rendez-vous</span>
                     </div>
                     <div className="max-w-xs w-full">
-                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm text-red-500 rounded-full w-full h-12" placeholder="Recherche..." />
+                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
                     </div>
                 </div>
 
@@ -102,10 +130,13 @@ export default function Rdv({ auth }: PageProps<{ data: [] }>) {
                                                     <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
                                                         Noms complets
                                                     </th>
-
                                                     <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
                                                         Téléphones
                                                     </th>
+                                                    <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
+                                                        Status
+                                                    </th>
+
                                                     <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
                                                         Objets
                                                     </th>
@@ -115,55 +146,85 @@ export default function Rdv({ auth }: PageProps<{ data: [] }>) {
                                                 </tr>
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
-                                                <tr>
-                                                    <td className="p-4 text-sm font-medium text-gray-700 whitespace-nowrap text-center">
-                                                        <div className="inline-flex items-center gap-x-3">
-                                                            <input type="checkbox" className="text-blue-500 border-gray-500 rounded " />
-                                                            <span>1</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">15/06/2023 à x12h 30</td>
-                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">Geedoo kanda</td>
-                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">azertyui</td>
-                                                    <td className="">
-                                                        <div className="w-96 md:w-full p-4 text-sm text-gray-700 text-center capitalize ">
-                                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore distinctio quisquam voluptas dolorum eaque, eius vitae, natus rem similique magnam veritatis deserunt ad obcaecati dolore mollitia laborum assumenda tempore omnis.
-                                                        </div>
-                                                    </td>
-
-                                                    <td className="flex items-center justify-center px-2 h-full">
-                                                        <span onClick={Show} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white mt-1 p-2 rounded-md text-sm">  <FaEye /></span>
-                                                        <Modal show={view} onClose={closeModal}>
-                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                            <div className="p-5 mt-4 ">
-                                                                <h2 className="text-2xl font-bold text-gray-800 text-center w-full border-b-2 mb-4 pb-2">Détails du rendez-vous</h2>
-                                                                <div className="grid grid-cols-12 gap-4 text-gray-700 text-md h-96 overflow-hidden overflow-y-scroll">
-                                                                    <span className="col-span-4 font-semibold">Nom</span> <span className="col-span-1">:</span> <span className="col-span-7">Kanda</span>
-                                                                    <span className="col-span-4 font-semibold">Postnom </span> <span className="col-span-1">:</span> <span className="col-span-7">Geddoo</span>
-                                                                    <span className="col-span-4 font-semibold">Prenom </span> <span className="col-span-1">:</span> <span className="col-span-7">Heritier</span>
-                                                                    <span className="col-span-4 font-semibold">Numéro de téléphone </span> <span className="col-span-1">:</span> <span className="col-span-7">(+244) 810 190 567</span>
-                                                                    <span className="col-span-4 font-semibold">Sexe </span> <span className="col-span-1">:</span> <span className="col-span-7">M</span>
-                                                                    <span className="col-span-4 font-semibold">email </span> <span className="col-span-1">:</span> <span className="col-span-7">geedookanda06@gmail.com</span>
-                                                                    <span className="col-span-4 font-semibold">Date </span> <span className="col-span-1">:</span> <span className="col-span-7">16/07/2024 à 14h 40</span>
-                                                                    <span className="col-span-4 font-semibold">Status </span> <span className="col-span-1">:</span> <span className="col-span-7"><span className="bg-red-100 text-red-500 p-3">En entente</span></span>
-                                                                    <span className="col-span-4 font-semibold">Objet </span> <span className="col-span-1">:</span> <span className="col-span-7 text-justify mr-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum vel voluptatibus nisi ullam eius ipsam consequuntur nesciunt. Sunt corrupti error laborum ipsa, soluta atque. Itaque aut eius voluptates alias illo?</span>
-                                                                </div>
+                                                {rdvs.data.filter((rdv: any) => {
+                                                    return (search.toLowerCase() === "" ? rdv :
+                                                        rdv.nom.toLowerCase().includes(search))
+                                                }).map((rdv: any, index: any) => (
+                                                    <tr key={index}>
+                                                        <td className="p-4 text-sm font-medium text-gray-700 whitespace-nowrap text-center">
+                                                            {index + 1}
+                                                        </td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">{rdv.date}</td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">{rdv.nom} {rdv.postnom} {rdv.prenom}</td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">{rdv.phone}</td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center font-semibold capitalize">
+                                                            {
+                                                                rdv.status == "A venir" ?
+                                                                    <span className="bg-blue-50 text-blue-500 p-3">{rdv.status}</span> :
+                                                                    rdv.status == "effectue" ?
+                                                                        <span className="bg-green-50 text-green-500 p-3">{rdv.status}</span> :
+                                                                        rdv.status == "annule" ?
+                                                                            <span className="bg-red-50 text-red-500 p-3">{rdv.status}</span> :
+                                                                            rdv.status == "repporte" ?
+                                                                                <span className="bg-blue-50 text-blue-500 p-3">{rdv.status}</span> : ''
+                                                            }
+                                                        </td>
+                                                        <td className="">
+                                                            <div className="w-96 md:w-full p-4 text-sm text-gray-700 text-center capitalize ">
+                                                                {rdv.objet}
                                                             </div>
-                                                        </Modal>
-                                                        
-                                                        <span onClick={Edit} className="bg-green-500 hover:bg-green-700 text-white mt-1 p-2 mx-1 rounded-md text-sm">  <FaRegEdit /></span>
-                                                        <Modal show={edit} onClose={closeModal}>
-                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                            <EditRdv />
-                                                        </Modal>
+                                                        </td>
 
-                                                        <span onClick={Disable} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
-                                                        <Modal show={disable} onClose={closeModal}>
-                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                            <RemoveRdv />
-                                                        </Modal>
-                                                   </td>
-                                                </tr>
+                                                        <td className="flex items-center justify-center px-2 h-full">
+                                                            <span onClick={() => Show(rdv.id)} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white mt-1 p-2 rounded-md text-sm">  <FaEye /></span>
+                                                            <Modal show={id == rdv.id ? view : false} onClose={closeModal}>
+                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                <div className="p-5 mt-4 ">
+                                                                    <h2 className="text-2xl font-bold text-gray-800 text-center w-full border-b-2 mb-4 pb-2">Détails du rendez-vous</h2>
+                                                                    <div className="grid grid-cols-12 gap-4 text-gray-700 text-md h-96 overflow-hidden overflow-y-scroll">
+                                                                        <span className="col-span-4 font-semibold">Nom</span> <span className="col-span-1">:</span> <span className="col-span-7 capitalize">{rdv.nom}</span>
+                                                                        <span className="col-span-4 font-semibold">Postnom </span> <span className="col-span-1">:</span> <span className="col-span-7 capitalize">{rdv.postnom}</span>
+                                                                        <span className="col-span-4 font-semibold">Prenom </span> <span className="col-span-1">:</span> <span className="col-span-7 capitalize">{rdv.prenom}</span>
+                                                                        <span className="col-span-4 font-semibold">Numéro de téléphone </span> <span className="col-span-1">:</span> <span className="col-span-7">{rdv.phone}</span>
+                                                                        <span className="col-span-4 font-semibold">Sexe </span> <span className="col-span-1">:</span> <span className="col-span-7">{rdv.sexe}</span>
+                                                                        <span className="col-span-4 font-semibold">email </span> <span className="col-span-1">:</span> <span className="col-span-7">{rdv.email}</span>
+                                                                        <span className="col-span-4 font-semibold">Date </span> <span className="col-span-1">:</span> <span className="col-span-7">{rdv.date}</span>
+                                                                        <span className="col-span-4 font-semibold">Status </span> <span className="col-span-1">:</span> <span className="col-span-7"><span className="bg-red-100 text-red-500 p-3">{rdv.status}</span></span>
+                                                                        <span className="col-span-4 font-semibold">Objet </span> <span className="col-span-1">:</span> <span className="col-span-7 text-justify mr-1">{rdv.objet}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </Modal>
+
+                                                            <span onClick={() => Edit(rdv.id)} className="bg-green-500 hover:bg-green-700 text-white mt-1 p-2 mx-1 rounded-md text-sm">  <FaRegEdit /></span>
+                                                            <Modal show={id == rdv.id ? edit : false} onClose={closeModal}>
+                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                <EditRdv edit={{
+                                                                    'id': rdv.id,
+                                                                    'status': rdv.status,
+                                                                }} />
+                                                            </Modal>
+
+                                                            <span onClick={() => Disable(rdv.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                            <Modal show={id == rdv.id ? disable : false} onClose={closeModal}>
+                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
+                                                                    <h2 className="text-lg font-medium text-gray-900">
+                                                                        Etês vous sûr de vouloir supprimer ce rende-vousz?
+                                                                    </h2>
+
+                                                                    <div className="mt-6 flex justify-end">
+
+                                                                        <DangerButton className="ml-3" onClick={DeleteRdv}>
+                                                                            Supprimer
+                                                                        </DangerButton>
+
+                                                                    </div>
+                                                                </div>
+                                                            </Modal>
+                                                        </td>
+                                                    </tr>
+
+                                                ))}
 
                                             </tbody>
                                         </table>
@@ -171,41 +232,25 @@ export default function Rdv({ auth }: PageProps<{ data: [] }>) {
                                 </div>
                             </div>
                         </div>
+                        <div className="w-full flex justify-center">
+                            <nav className='mt-8'>
+                                {rdvs.links.map((link: { url: string; active: any; label: string; }) => (
+                                    <Link
+                                        key={link.url}
+                                        href={link.url}
+                                        className={link.active ? 'text-white bg-red-500 py-2 px-3 rounded-sm' : 'text-gray-800 py-2 px-3 m-2 rounded-sm bg-gray-50'}
+                                    >
+                                        <span>
+                                            {link.label.replace('&laquo;', '').replace('&raquo;', '')}
+                                        </span>
 
-                        <div className="flex items-center justify-between mt-6">
-                            <a href="#" className="flex items-center px-5 py-2 text-sm text-white capitalize transition-colors duration-200 border rounded-md gap-x-2 bg-gray-900  hover:bg-gray-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5 rtl:-scale-x-100">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                                </svg>
-
-                                <span>
-                                    previous
-                                </span>
-                            </a>
-
-                            <div className="items-center hidden md:flex gap-x-3">
-                                <a href="#" className="px-2 py-1 text-sm text-blue-500 rounded-300 bg-blue-100/60">1</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">2</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">3</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">...</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">12</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">13</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">14</a>
-                            </div>
-
-                            <a href="#" className="flex items-center px-5 py-2 text-sm text-white capitalize transition-colors duration-200 border rounded-md gap-x-2 bg-gray-900  hover:bg-gray-800">
-                                <span>
-                                    Next
-                                </span>
-
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5 rtl:-scale-x-100">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                                </svg>
-                            </a>
+                                    </Link>
+                                ))}
+                            </nav>
                         </div>
                     </section>
                 </div>
-            </div>
-        </AuthenticatedLayout>
+            </div >
+        </AuthenticatedLayout >
     );
 }

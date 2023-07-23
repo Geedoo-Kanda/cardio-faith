@@ -17,12 +17,14 @@ class RendezVous extends Model
     protected $fillable = [
         'nom',
         'email',
-        'post_nom',
+        'postnom',
         'status',
         'disable',
         'prenom',
         'sexe',
+        'date',
         'phone',
         'objet',
+        'user_id',
     ];
 }

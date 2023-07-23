@@ -2,20 +2,39 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
+import axios from 'axios';
 import { Calendar } from 'primereact/calendar';
 import { FormEventHandler } from 'react';
+import { toast } from 'react-toastify';
 
-export default function EditRdv() {
+export default function EditRdv({ edit }) {
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        status: '',
+        status: edit.status,
         date: '',
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('register'));
+        const id = toast.loading("Chargement...")
+        axios.put('/admin/rendez-vous/' + edit.id, data)
+            .then(() => {
+                toast.update(id, {
+                    render: "Rendez-vous modifié",
+                    type: toast.TYPE.SUCCESS,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+                reset()
+            }).catch(() => {
+                toast.update(id, {
+                    render: "Oups, veillez récommencer",
+                    type: toast.TYPE.ERROR,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+            });
     };
 
     return (
@@ -32,14 +51,14 @@ export default function EditRdv() {
                         <option selected>Choisir</option>
                         <option value="effectue">Effectué</option>
                         <option value="annule">Annulé</option>
-                        <option value="reporte">Reporté</option>
+                        <option value="repporte">Reporté</option>
                     </select>
 
                     <InputError message={errors.status} className="mt-2" />
                 </div>
                 {
-                    data.status == 'reporte' ?
-                        <div>
+                    data.status == 'repporte' ?
+                        <div className='mt-3'>
                             <InputLabel htmlFor="date" value="Nouvelle date du rendez-vous*" />
 
                             <Calendar value={data.date} onChange={(e) => setData('date', e.target.value)} dateFormat="dd/mm/yy" className="mt-1 block w-full h-11" />

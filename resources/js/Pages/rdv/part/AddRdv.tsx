@@ -37,10 +37,10 @@ export default function AddRdv() {
         e.preventDefault();
 
         const id = toast.loading("Chargement...")
-        axios.post(route('task.store'), data)
+        axios.post(route('rendez-vous.store'), data)
             .then(() => {
                 toast.update(id, {
-                    render: "Tâche ajoutée",
+                    render: "Rendez-vous ajouté",
                     type: toast.TYPE.SUCCESS,
                     autoClose: 3000,
                     isLoading: false
@@ -110,7 +110,7 @@ export default function AddRdv() {
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="email" value="Email" />
+                        <InputLabel htmlFor="email" value="Email*" />
 
                         <TextInput
                             id="email"

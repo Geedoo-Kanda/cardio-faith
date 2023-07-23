@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RendezVous;
-use DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,12 +17,44 @@ class RendezVousController extends Controller
         //
     }
 
+    public function indexView()
+    {
+        $rdvs = RendezVous::where('disable', 'false')->orderBy('id', 'DESC')->paginate(50);
+
+        return Inertia::render('rdv/index', [
+            'rdvs' => $rdvs,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'postnom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'sexe' => 'required|string|max:255',
+            'date' => 'required|string|max:255',
+            'email' => 'required|string|max:255',
+            'objet' => 'required|string|max:9000',
+        ]);
+
+        $rendezVous = RendezVous::create([
+            'nom' => $request->nom,
+            'postnom' => $request->postnom,
+            'prenom' => $request->prenom,
+            'phone' => $request->phone,
+            'sexe' => $request->sexe,
+            'date' => $request->date,
+            'email' => $request->email,
+            'objet' => $request->objet,
+            'user_id' => Auth::user()->id,
+        ]);
+
+        return response($rendezVous, 201);
     }
 
     /**
@@ -38,7 +70,22 @@ class RendezVousController extends Controller
      */
     public function update(Request $request, RendezVous $rendezVous)
     {
-        //
+        $request->validate([
+            'status' => 'required|string|max:255',
+        ]);
+
+        if($request->date){
+            $req = RendezVous::where('id', $rendezVous->id)->update([
+                'status' => $request->status,
+                'date' => $request->date,
+            ]);
+        }else{
+            $req = RendezVous::where('id', $rendezVous->id)->update([
+                'status' => $request->status,
+            ]);
+        }
+
+        return response($req, 201);
     }
 
     /**
@@ -46,15 +93,8 @@ class RendezVousController extends Controller
      */
     public function destroy(RendezVous $rendezVous)
     {
-        //
-    }
+        $req = RendezVous::where('id', $rendezVous->id)->update(['disable' => 'true']);
 
-    public function indexView()
-    {
-        $data = DB::table('rendez_vouses')->orderBy('id', 'DESC')->get();
-
-        return Inertia::render('rdv/index', [
-            'data' => $data,
-        ]);
+        return response($req, 201);
     }
 }

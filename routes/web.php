@@ -19,19 +19,25 @@ use App\Http\Controllers\CaisseController;
 |
 */
 
-Route::prefix('rendez-vous')->group(function () {
-    Route::get('/liste', [RendezVousController::class, 'indexView'])->name('rendez-vous.indexView');
-    Route::post('/', [RendezVousController::class, 'store'])->name('rendez-vous.store');
-    Route::get('/delete/{rendez-vous}', [RendezVousController::class, 'destroy'])->name('rendez-vous.destroy');
-    Route::put('/{rendez-vous}', [RendezVousController::class, 'update'])->name('rendez-vous.update');
-});
-
-Route::prefix('fiches')->group(function () {
-    Route::get('/liste', [FicheMedicaleController::class, 'indexView'])->name('fiches.indexView');
-});
-
-Route::prefix('caisse')->group(function () {
-    Route::get('/liste', [CaisseController::class, 'indexView'])->name('caisse.indexView');
+Route::prefix('admin')->group(function () {
+    Route::prefix('rendez-vous')->group(function () {
+        Route::get('/liste', [RendezVousController::class, 'indexView'])->name('rendez-vous.indexView');
+        Route::post('/', [RendezVousController::class, 'store'])->name('rendez-vous.store');
+        Route::get('/delete/{rendezVous}', [RendezVousController::class, 'destroy'])->name('rendez-vous.destroy');
+        Route::put('/{rendezVous}', [RendezVousController::class, 'update'])->name('rendez-vous.update');
+    });
+    
+    Route::prefix('fiches')->group(function () {
+        Route::get('/liste', [FicheMedicaleController::class, 'indexView'])->name('fiches.indexView');
+        Route::post('/', [FicheMedicaleController::class, 'store'])->name('rfiches.store');
+        Route::get('/delete/{fiches}', [FicheMedicaleController::class, 'destroy'])->name('rfiches.destroy');
+        Route::put('/{fiches}', [FicheMedicaleController::class, 'update'])->name('rfiches.update');
+    });
+    
+    Route::prefix('caisse')->group(function () {
+        Route::get('/liste', [CaisseController::class, 'indexView'])->name('caisse.indexView');
+    });
+    
 });
 
 Route::get('/', function () {
