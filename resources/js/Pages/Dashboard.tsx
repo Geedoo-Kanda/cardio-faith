@@ -8,7 +8,7 @@ export default function Dashboard({ auth }: PageProps) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
+            header={<h2 className="font-semibold text-xl text-white leading-tight">Dashboard</h2>}
         >
             <Head title="Dashboard" />
 
@@ -79,7 +79,7 @@ export default function Dashboard({ auth }: PageProps) {
                             </p>
                         </div>
                         <div className="bg-white rounded-md p-4 shadow-md">
-                            <h2 className="font-bold text-xl text-gray-900"> <AiFillDollarCircle className='inline-flex text-red-500 text-3xl' />Somme dibiter</h2>
+                            <h2 className="font-bold text-xl text-gray-900"> <AiFillDollarCircle className='inline-flex text-red-500 text-3xl' />Somme debiter</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
                                 50
                                 <span className="text-sm rounded-md ml-2">

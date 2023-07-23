@@ -1,5 +1,4 @@
 import { AiOutlineClose } from "react-icons/ai";
-import { FaEye, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 import { BiPlusMedical } from "react-icons/bi";
@@ -7,31 +6,45 @@ import { PageProps } from '@/types';
 import { useState } from 'react';
 import 'reactjs-popup/dist/index.css';
 import Modal from '@/Components/Modal';
+import AddCaiise from "./part/AddCaisse";
+import { FaTrashAlt } from "react-icons/fa";
+import RemoveCaisse from "./part/RevomeCaisse";
 
 
-export default function Rdv({ auth, data }: PageProps<{ data: [] }>) {
-    const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+export default function Caiise({ auth, data }: PageProps<{ data: [] }>) {
+    const [add, setadd] = useState(false);
+    const [disable, setDisable] = useState(false);
     const [search, setSearch] = useState("");
 
-    const confirmUserDeletion = () => {
-        setConfirmingUserDeletion(true);
+    const Add = () => {
+        setadd(true);
     };
 
+    const Disable = () => {
+        setDisable(true);
+    };
+
+
     const closeModal = () => {
-        setConfirmingUserDeletion(false);
+        setadd(false);
+        setDisable(false);
     };
 
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Rendez-vous</h2>}
+            header={<h2 className="font-semibold text-xl text-white leading-tight">Caisse</h2>}
         >
-            <Head title="Rendez vous" />
+            <Head title="Caisse" />
 
             <div className="py-12 px-4">
                 <div className="flex flex-wrap items-center justify-between md:px-4 mb-10">
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-4 rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter un rendez-vous</Link>
+                <div>
+                        <Modal show={add} onClose={closeModal}>
+                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                            <AddCaiise />
+                        </Modal>
+                        <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter une opération</span>
                     </div>
                     <div className="max-w-xs w-full">
                         <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm text-red-500 rounded-full w-full h-12" placeholder="Recherche..." />
@@ -118,9 +131,12 @@ export default function Rdv({ auth, data }: PageProps<{ data: [] }>) {
                                                     </td>
 
                                                     <td className="flex items-center justify-center px-2 h-full">
-                                                        {/* <Link href={`/datacy/edit/`} className="bg-green-500 hover:bg-green-700 text-white mt-1 p-2 mx-1 rounded-md text-sm">  <FaRegEdit /></Link> */}
-                                                        <Link href={`/product/product/`} className="bg-red-500 hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></Link>
-                                                    </td>
+                                                    <span onClick={Disable} className="bg-red-500 ml-2 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                        <Modal show={disable} onClose={closeModal}>
+                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                            <RemoveCaisse />
+                                                        </Modal>
+                                                            </td>
                                                 </tr>
                                                
                                             </tbody>

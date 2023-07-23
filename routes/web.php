@@ -21,6 +21,9 @@ use App\Http\Controllers\CaisseController;
 
 Route::prefix('rendez-vous')->group(function () {
     Route::get('/liste', [RendezVousController::class, 'indexView'])->name('rendez-vous.indexView');
+    Route::post('/', [RendezVousController::class, 'store'])->name('rendez-vous.store');
+    Route::get('/delete/{rendez-vous}', [RendezVousController::class, 'destroy'])->name('rendez-vous.destroy');
+    Route::put('/{rendez-vous}', [RendezVousController::class, 'update'])->name('rendez-vous.update');
 });
 
 Route::prefix('fiches')->group(function () {

@@ -7,31 +7,57 @@ import { PageProps } from '@/types';
 import { useState } from 'react';
 import 'reactjs-popup/dist/index.css';
 import Modal from '@/Components/Modal';
+import AddRdv from './part/AddRdv';
+import EditRdv from "./part/EditRdv";
+import RemoveRdv from "./part/RevomeRdv";
 
 
-export default function Rdv({ auth, data }: PageProps<{ data: [] }>) {
-    const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+export default function Rdv({ auth }: PageProps<{ data: [] }>) {
+    const [view, setview] = useState(false);
+    const [add, setadd] = useState(false);
+    const [edit, setedit] = useState(false);
+    const [disable, setDisable] = useState(false);
     const [search, setSearch] = useState("");
 
-    const confirmUserDeletion = () => {
-        setConfirmingUserDeletion(true);
+
+
+    const Show = () => {
+        setview(true);
+    };
+    const Add = () => {
+        setadd(true);
+    };
+    const Edit = () => {
+        setedit(true);
     };
 
+    const Disable = () => {
+        setDisable(true);
+    };
+
+
     const closeModal = () => {
-        setConfirmingUserDeletion(false);
+        setview(false);
+        setadd(false);
+        setedit(false);
+        setDisable(false);
     };
 
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Rendez-vous</h2>}
+            header={<h2 className="font-semibold text-xl text-white leading-tight">Rendez-vous</h2>}
         >
             <Head title="Rendez vous" />
 
             <div className="py-12 px-4">
                 <div className="flex flex-wrap items-center justify-between md:px-4 mb-10">
                     <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-4 rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter un rendez-vous</Link>
+                        <Modal show={add} onClose={closeModal}>
+                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                            <AddRdv />
+                        </Modal>
+                        <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter un rendez-vous</span>
                     </div>
                     <div className="max-w-xs w-full">
                         <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm text-red-500 rounded-full w-full h-12" placeholder="Recherche..." />
@@ -53,8 +79,8 @@ export default function Rdv({ auth, data }: PageProps<{ data: [] }>) {
                     </div>
                 </div>
 
-                <div className="mt-4">
-                    <section className="container px-4 mx-auto">
+                <div>
+                    <section className="container px-4 mx-auto mt-4">
                         <div className="flex flex-col">
 
                             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -106,8 +132,8 @@ export default function Rdv({ auth, data }: PageProps<{ data: [] }>) {
                                                     </td>
 
                                                     <td className="flex items-center justify-center px-2 h-full">
-                                                        <span onClick={confirmUserDeletion} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white mt-1 p-2 rounded-md text-sm">  <FaEye /></span>
-                                                        <Modal show={confirmingUserDeletion} onClose={closeModal}>
+                                                        <span onClick={Show} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white mt-1 p-2 rounded-md text-sm">  <FaEye /></span>
+                                                        <Modal show={view} onClose={closeModal}>
                                                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                                                             <div className="p-5 mt-4 ">
                                                                 <h2 className="text-2xl font-bold text-gray-800 text-center w-full border-b-2 mb-4 pb-2">Détails du rendez-vous</h2>
@@ -119,16 +145,26 @@ export default function Rdv({ auth, data }: PageProps<{ data: [] }>) {
                                                                     <span className="col-span-4 font-semibold">Sexe </span> <span className="col-span-1">:</span> <span className="col-span-7">M</span>
                                                                     <span className="col-span-4 font-semibold">email </span> <span className="col-span-1">:</span> <span className="col-span-7">geedookanda06@gmail.com</span>
                                                                     <span className="col-span-4 font-semibold">Date </span> <span className="col-span-1">:</span> <span className="col-span-7">16/07/2024 à 14h 40</span>
-                                                                    <span className="col-span-4 font-semibold">Status </span> <span className="col-span-1">:</span> <span className="col-span-7">En entente</span>
+                                                                    <span className="col-span-4 font-semibold">Status </span> <span className="col-span-1">:</span> <span className="col-span-7"><span className="bg-red-100 text-red-500 p-3">En entente</span></span>
                                                                     <span className="col-span-4 font-semibold">Objet </span> <span className="col-span-1">:</span> <span className="col-span-7 text-justify mr-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum vel voluptatibus nisi ullam eius ipsam consequuntur nesciunt. Sunt corrupti error laborum ipsa, soluta atque. Itaque aut eius voluptates alias illo?</span>
                                                                 </div>
                                                             </div>
                                                         </Modal>
-                                                        <Link href={`/datacy/edit/`} className="bg-green-500 hover:bg-green-700 text-white mt-1 p-2 mx-1 rounded-md text-sm">  <FaRegEdit /></Link>
-                                                        <Link href={`/product/product/`} className="bg-red-500 hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></Link>
-                                                    </td>
+                                                        
+                                                        <span onClick={Edit} className="bg-green-500 hover:bg-green-700 text-white mt-1 p-2 mx-1 rounded-md text-sm">  <FaRegEdit /></span>
+                                                        <Modal show={edit} onClose={closeModal}>
+                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                            <EditRdv />
+                                                        </Modal>
+
+                                                        <span onClick={Disable} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                        <Modal show={disable} onClose={closeModal}>
+                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                            <RemoveRdv />
+                                                        </Modal>
+                                                   </td>
                                                 </tr>
-                                               
+
                                             </tbody>
                                         </table>
                                     </div>
