@@ -3,22 +3,39 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
-import { Calendar } from 'primereact/calendar';
+import axios from 'axios';
 import { FormEventHandler } from 'react';
+import { toast } from 'react-toastify';
 
 export default function AddCaiise() {
 
     const { data, setData, post, processing, errors, reset } = useForm({
         operation: '',
-        devise: '',
         montant: '',
         libele: '',
     });
 
     const AddSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-
-        post(route('register'));
+        
+        const id = toast.loading("Chargement...")
+        axios.post(route('caisse.store'), data)
+            .then(() => {
+                toast.update(id, {
+                    render: "Operation ajoutée",
+                    type: toast.TYPE.SUCCESS,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+                reset()
+            }).catch(() => {
+                toast.update(id, {
+                    render: "Oups, veillez récommencer",
+                    type: toast.TYPE.ERROR,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+            });
     };
 
     return (
@@ -30,15 +47,11 @@ export default function AddCaiise() {
                     <div>
                         <InputLabel htmlFor="operation" value="Opération*" />
 
-                        <TextInput
-                            id="operation"
-                            name="operation"
-                            value={data.operation}
-                            className="mt-1 block w-full"
-                            autoComplete="operation"
-                            onChange={(e) => setData('operation', e.target.value)}
-                            required
-                        />
+                        <select name='operation' id="operation" value={data.operation} onChange={(e) => setData('operation', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                            <option selected>Choisir</option>
+                            <option value="retrait">Retrait</option>
+                            <option value="depot">Depot</option>
+                        </select>
 
                         <InputError message={errors.operation} className="mt-2" />
                     </div>
@@ -58,27 +71,14 @@ export default function AddCaiise() {
 
                         <InputError message={errors.montant} className="mt-2" />
                     </div>
-                    <div>
-                        <InputLabel htmlFor="devise" value="Devise*" />
-
-                        <select name='devise' id="devise" value={data.devise} onChange={(e) => setData('devise', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
-                            <option selected>Choisir</option>
-                            <option value="usd">USD</option>
-                            <option value="cdf">CDF</option>
-                        </select>
-
-                        <InputError message={errors.devise} className="mt-2" />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="libele" value="Libele*" />
-
-                        <textarea name='libele' id="libele" value={data.libele} onChange={(e) => setData('libele', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Écrivez ici..."></textarea>
-                        <InputError message={errors.libele} className="mt-2" />
-                    </div>
 
                 </div>
+                <div className='mt-3'>
+                    <InputLabel htmlFor="libele" value="Libele*" />
 
+                    <textarea name='libele' id="libele" value={data.libele} onChange={(e) => setData('libele', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Écrivez ici..."></textarea>
+                    <InputError message={errors.libele} className="mt-2" />
+                </div>
                 <div className="flex items-center justify-end mt-4">
 
                     <PrimaryButton className="ml-4 bg-red-500" disabled={processing}>

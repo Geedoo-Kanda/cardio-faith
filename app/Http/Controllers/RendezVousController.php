@@ -5,7 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\RendezVous;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Exports\RendezVousExport;
+use Maatwebsite\Excel\Facades\Excel;
+use DateTimeImmutable;
 use Inertia\Inertia;
+use Carbon\Carbon;
+
 
 class RendezVousController extends Controller
 {
@@ -55,6 +60,23 @@ class RendezVousController extends Controller
         ]);
 
         return response($rendezVous, 201);
+    }
+
+    public function export($delai, $mois = null, $annee = null)
+    {
+        if($delai == 'annee'){
+            $date = new DateTimeImmutable($annee);
+            $req = $date->format('Y');
+
+            return Excel::download(new RendezVousExport($req), 'rapport des rendez-vous de '.$req.'.xlsx');
+        }elseif($delai == 'mois'){
+
+            $date = new DateTimeImmutable($mois);
+            $req = $date->format('Y-m');
+
+            return Excel::download(new RendezVousExport($req), 'rapport des rendez-vous de '.$req.'.xlsx');
+        }
+
     }
 
     /**

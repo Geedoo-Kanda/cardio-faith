@@ -1,45 +1,76 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { FaEye, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { BiPlusMedical } from "react-icons/bi";
 import { PageProps } from '@/types';
 import { useState } from 'react';
 import 'reactjs-popup/dist/index.css';
 import Modal from '@/Components/Modal';
 import AddFiche from "./part/AddFiche";
-import RemoveFiche from "./part/RemoveFiche";
+import dayjs from "dayjs";
+import axios from "axios";
+import { toast } from "react-toastify";
+import DangerButton from "@/Components/DangerButton";
+import { RiFileExcel2Line } from "react-icons/ri";
+import ExportFiche from "./part/ExportFiche";
 
 
-export default function Fiche({ auth, data }: PageProps<{ data: [] }>) {
+export default function Fiche({ auth, fiches }: PageProps<{ fiches: [] }>) {
     const [view, setview] = useState(false);
     const [add, setadd] = useState(false);
-    const [edit, setedit] = useState(false);
     const [disable, setDisable] = useState(false);
+    const [exporter, setexporter] = useState(false);
+    const [id, setid] = useState('');
     const [search, setSearch] = useState("");
 
-
-
-    const Show = () => {
+    function Show(p: any) {
         setview(true);
+        setid(p)
+    };
+
+    function Disable(p: any) {
+        setDisable(true);
+        setid(p)
     };
     const Add = () => {
         setadd(true);
     };
-    const Edit = () => {
-        setedit(true);
-    };
 
-    const Disable = () => {
-        setDisable(true);
+    const Exporter = () => {
+        setexporter(true);
     };
-
 
     const closeModal = () => {
         setview(false);
         setadd(false);
-        setedit(false);
+        setexporter(false);
         setDisable(false);
+        router.reload({ only: ['fiches'] })
+    };
+
+    const DeleteFiche = () => {
+        const etat = toast.loading("Chargement...")
+        axios.get('/admin/fiche/delete/' + id)
+            .then(() => {
+                toast.update(etat, {
+                    render: "Fiche supprimée",
+                    type: toast.TYPE.SUCCESS,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+                setDisable(false);
+                router.reload({ only: ['fiches'] })
+
+            }).catch(() => {
+                toast.update(etat, {
+                    render: "Oups, veillez récommencer",
+                    type: toast.TYPE.ERROR,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+            }
+            )
     };
 
     return (
@@ -52,14 +83,21 @@ export default function Fiche({ auth, data }: PageProps<{ data: [] }>) {
             <div className="py-12 px-4">
                 <div className="flex flex-wrap items-center justify-between md:px-4 mb-10">
                     <div>
-                    <Modal show={add} onClose={closeModal}>
-                        <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                        <AddFiche />
-                    </Modal>
+                        <Modal show={add} onClose={closeModal}>
+                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                            <AddFiche />
+                        </Modal>
                         <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter une fiche</span>
                     </div>
+                    <div>
+                        <Modal show={exporter} onClose={closeModal}>
+                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                            <ExportFiche />
+                        </Modal>
+                        <span onClick={Exporter} className="p-4 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2"/>Exporter les données</span>
+                    </div>
                     <div className="max-w-xs w-full">
-                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm text-red-500 rounded-full w-full h-12" placeholder="Recherche..." />
+                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
                     </div>
                 </div>
 
@@ -120,77 +158,104 @@ export default function Fiche({ auth, data }: PageProps<{ data: [] }>) {
                                                 </tr>
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
-                                                <tr>
-                                                    <td className="p-4 text-sm font-medium text-gray-700 whitespace-nowrap text-center">
-                                                        <div className="inline-flex items-center gap-x-3">
-                                                            <input type="checkbox" className="text-blue-500 border-gray-500 rounded " />
-                                                            <span>1</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">15/06/2023 à 12h 30</td>
-                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">Geedoo kanda</td>
-                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">M</td>
-                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">Kinshasa, le 06/05/2000</td>
-                                                    <td className="p-4 text-sm text-gray-700 text-center">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore ea a ab.</td>
-                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">Celibataire</td>
+                                                {fiches.data.filter((fiche: any) => {
+                                                    return (search.toLowerCase() === "" ? fiche :
+                                                        fiche.nom.toLowerCase().includes(search))
+                                                }).map((fiche: any, index: any) => (
+                                                    <tr key={index}>
+                                                        <td className="p-4 text-sm font-medium text-gray-700 whitespace-nowrap text-center">
+                                                            {index + 1}
+                                                        </td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
+                                                            {dayjs(new Date(fiche.created_at)).format("DD/MM/YYYY")}
+                                                        </td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">
+                                                            {fiche.nom} {fiche.postnom} {fiche.prenom}
+                                                        </td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
+                                                            {fiche.sexe}
+                                                        </td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
+                                                            {fiche.lieu_naissance},  {dayjs(new Date(fiche.date_naissance)).format(" le DD-MM-YYYY")}
+                                                        </td>
+                                                        <td className="p-4 text-sm text-gray-700 text-center">
+                                                            {fiche.adresse}
+                                                        </td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
+                                                            {fiche.situation_familliale}
+                                                        </td>
 
-                                                    <td className="flex items-center justify-center px-2 h-full">
-                                                        <span onClick={Show} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white mt-1 p-2 rounded-md text-sm">  <FaEye /></span>
-                                                        <Modal show={view} onClose={closeModal}>
-                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                            <div className="p-5 mt-4 ">
-                                                                <h2 className="text-2xl font-bold text-gray-800 text-center w-full border-b-2 mb-4 pb-2">Détails du patient</h2>
-                                                                <div className=" text-gray-700 text-md h-96 overflow-hidden overflow-y-scroll">
-                                                                    <h3 className="font-bold text-lg text-red-500 mb-3">1. Coordonnées</h3>
-                                                                    <div className="grid grid-cols-12 gap-4">
-                                                                        <span className="col-span-4 font-semibold">Nom</span> <span className="col-span-1">:</span> <span className="col-span-7">Kanda</span>
-                                                                        <span className="col-span-4 font-semibold">Postnom </span> <span className="col-span-1">:</span> <span className="col-span-7">Geddoo</span>
-                                                                        <span className="col-span-4 font-semibold">Prenom </span> <span className="col-span-1">:</span> <span className="col-span-7">Heritier</span>
-                                                                        <span className="col-span-4 font-semibold">Lieu et date de naissance </span> <span className="col-span-1">:</span> <span className="col-span-7">Kinshasa, le 06/05/2000</span>
-                                                                        <span className="col-span-4 font-semibold">Sexe </span> <span className="col-span-1">:</span> <span className="col-span-7">M</span>
-                                                                        <span className="col-span-4 font-semibold">Adresse </span> <span className="col-span-1">:</span> <span className="col-span-7">245 noiki, gombe gare centrale</span>
-                                                                        <span className="col-span-4 font-semibold">situation familliale </span> <span className="col-span-1">:</span> <span className="col-span-7">Celibataire</span>
-                                                                        <span className="col-span-4 font-semibold">Nombre d'enfant/s </span> <span className="col-span-1">:</span> <span className="col-span-7">0</span>
-                                                                        <span className="col-span-4 font-semibold">Nombre de grossesse/s </span> <span className="col-span-1">:</span> <span className="col-span-7">0</span>
-                                                                        <span className="col-span-4 font-semibold">N° de Sécu </span> <span className="col-span-1">:</span> <span className="col-span-7">012345678901234567890123</span>
-                                                                        <span className="col-span-4 font-semibold">Taille </span> <span className="col-span-1">:</span> <span className="col-span-7">1.85 metre</span>
-                                                                        <span className="col-span-4 font-semibold">Poids</span> <span className="col-span-1">:</span> <span className="col-span-7">70 kg</span>
-                                                                        <span className="col-span-4 font-semibold">Groupe sanguin </span> <span className="col-span-1">:</span> <span className="col-span-7">AA</span>
-                                                                        <span className="col-span-4 font-semibold">Fumeur </span> <span className="col-span-1">:</span> <span className="col-span-7">Oui, 5 cigarettes/jour</span>
+                                                        <td className="flex items-center justify-center px-2 h-full">
+                                                            <span onClick={() => Show(fiche.id)} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white mt-1 p-2 rounded-md text-sm mr-2">  <FaEye /></span>
+                                                            <Modal show={id == fiche.id ? view : false} onClose={closeModal}>
+                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                <div className="p-5 mt-4 ">
+                                                                    <h2 className="text-2xl font-bold text-gray-800 text-center w-full border-b-2 mb-4 pb-2">Détails du patient</h2>
+                                                                    <div className=" text-gray-700 text-md h-96 overflow-hidden overflow-y-scroll">
+                                                                        <h3 className="font-bold text-lg text-red-500 mb-3">1. Coordonnées</h3>
+                                                                        <div className="grid grid-cols-12 gap-4">
+                                                                            <span className="col-span-4 font-semibold">Nom</span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.nom}</span>
+                                                                            <span className="col-span-4 font-semibold">Postnom </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.postnom}</span>
+                                                                            <span className="col-span-4 font-semibold">Prenom </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.prenom}</span>
+                                                                            <span className="col-span-4 font-semibold">Lieu et date de naissance </span> <span className="col-span-1">:</span> <span className="col-span-7">
+                                                                                {fiche.lieu_naissance},  {dayjs(new Date(fiche.date_naissance)).format(" le DD-MM-YYYY")}
+                                                                            </span>
+                                                                            <span className="col-span-4 font-semibold">Sexe </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.sexe}</span>
+                                                                            <span className="col-span-4 font-semibold">Adresse </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.adresse}</span>
+                                                                            <span className="col-span-4 font-semibold">situation familliale </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.situation_familliale}</span>
+                                                                            <span className="col-span-4 font-semibold">Nombre d'enfant/s </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.nbr_enfants}</span>
+                                                                            <span className="col-span-4 font-semibold">Nombre de grossesse/s </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.nbr_grosses}</span>
+                                                                            <span className="col-span-4 font-semibold">N° de Sécu </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.num_secu}</span>
+                                                                            <span className="col-span-4 font-semibold">Taille </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.taille}</span>
+                                                                            <span className="col-span-4 font-semibold">Poids</span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.poids}</span>
+                                                                            <span className="col-span-4 font-semibold">Groupe sanguin </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.groupe_saguin}</span>
+                                                                            <span className="col-span-4 font-semibold">Fumeur </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.fumeur},
+                                                                                {
+                                                                                    fiche.fumeur === 'Oui' ?
+                                                                                        fiche.nbr_cigarette + 'cigarettes/jour' : ''
+                                                                                }
+                                                                            </span>
 
-                                                                    </div>
-                                                                    <h3 className="font-bold text-lg text-red-500 mb-3 mt-8">2. Antécédents</h3>
-                                                                    <div className="grid grid-cols-12 gap-4">
-                                                                        <span className="col-span-4 font-semibold">Antécédents familiaux </span> <span className="col-span-1">:</span> <span className="col-span-7">Aucun</span>
-                                                                        <span className="col-span-4 font-semibold">Maladie infantiles contractées </span> <span className="col-span-1">:</span> <span className="col-span-7">Rougeole, appolo</span>
-                                                                        <span className="col-span-4 font-semibold">Antécédents médicaux </span> <span className="col-span-1">:</span> <span className="col-span-7">Aucun</span>
-                                                                        <span className="col-span-4 font-semibold">Alergies </span> <span className="col-span-1">:</span> <span className="col-span-7">noisette, lait, plume et chat</span>
-                                                                        <span className="col-span-4 font-semibold">Intolérance médicamenteuse </span> <span className="col-span-1">:</span> <span className="col-span-7">Aucun</span>
-                                                                        <span className="col-span-4 font-semibold">Traitement régulier </span> <span className="col-span-1">:</span> <span className="col-span-7">Aucun</span>
-                                                                        <span className="col-span-4 font-semibold">Vaccins </span> <span className="col-span-1">:</span> <span className="col-span-7">Aucun</span>
-                                                                    </div>
+                                                                        </div>
+                                                                        <h3 className="font-bold text-lg text-red-500 mb-3 mt-8">2. Antécédents</h3>
+                                                                        <div className="grid grid-cols-12 gap-4">
+                                                                            <span className="col-span-4 font-semibold">Antécédents familiaux </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.antecedents_familiaux}</span>
+                                                                            <span className="col-span-4 font-semibold">Maladie infantiles contractées </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.maladie_infatiles_contractees}</span>
+                                                                            <span className="col-span-4 font-semibold">Antécédents médicaux </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.antecedent_medicaux}</span>
+                                                                            <span className="col-span-4 font-semibold">Alergies </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.allergies}</span>
+                                                                            <span className="col-span-4 font-semibold">Intolérance médicamenteuse </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.intolerance_medicamenteuse}</span>
+                                                                            <span className="col-span-4 font-semibold">Traitement régulier </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.traitement_regulier}</span>
+                                                                            <span className="col-span-4 font-semibold">Vaccins </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.vaccin}</span>
+                                                                        </div>
 
-                                                                    <h3 className="font-bold text-lg text-red-500 mb-3 mt-8">3. Compte rendu</h3>
-                                                                    <div className="text-justify mr-2 indent-8">
-                                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum vel voluptatibus nisi ullam eius ipsam consequuntur nesciunt. Sunt corrupti error laborum ipsa, soluta atque. Itaque aut eius voluptates alias illo?
-                                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum vel voluptatibus nisi ullam eius ipsam consequuntur nesciunt. Sunt corrupti error laborum ipsa, soluta atque. Itaque aut eius voluptates alias illo?
-                                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum vel voluptatibus nisi ullam eius ipsam consequuntur nesciunt. Sunt corrupti error laborum ipsa, soluta atque. Itaque aut eius voluptates alias illo?
-                                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum vel voluptatibus nisi ullam eius ipsam consequuntur nesciunt. Sunt corrupti error laborum ipsa, soluta atque. Itaque aut eius voluptates alias illo?
-                                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum vel voluptatibus nisi ullam eius ipsam consequuntur nesciunt. Sunt corrupti error laborum ipsa, soluta atque. Itaque aut eius voluptates alias illo?
-                                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum vel voluptatibus nisi ullam eius ipsam consequuntur nesciunt. Sunt corrupti error laborum ipsa, soluta atque. Itaque aut eius voluptates alias illo?
+                                                                        <h3 className="font-bold text-lg text-red-500 mb-3 mt-8">3. Compte rendu</h3>
+                                                                        <div className="text-justify mr-2 indent-8">
+                                                                            {fiche.conclusion}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </Modal>
+                                                            </Modal>
 
-                                                        <span onClick={Disable} className="bg-red-500 ml-2 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
-                                                        <Modal show={disable} onClose={closeModal}>
-                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                            <RemoveFiche />
-                                                        </Modal>
-                                                    </td>
-                                                </tr>
+                                                            <span onClick={() => Disable(fiche.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                            <Modal show={id == fiche.id ? disable : false} onClose={closeModal}>
+                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
+                                                                    <h2 className="text-lg font-medium text-gray-900">
+                                                                        Etês vous sûr de vouloir supprimer cette fiche?
+                                                                    </h2>
 
+                                                                    <div className="mt-6 flex justify-end">
+
+                                                                        <DangerButton className="ml-3" onClick={DeleteFiche}>
+                                                                            Supprimer
+                                                                        </DangerButton>
+
+                                                                    </div>
+                                                                </div>
+                                                            </Modal>
+                                                        </td>
+                                                    </tr>
+                                                ))}
                                             </tbody>
                                         </table>
                                     </div>
@@ -198,36 +263,21 @@ export default function Fiche({ auth, data }: PageProps<{ data: [] }>) {
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-between mt-6">
-                            <a href="#" className="flex items-center px-5 py-2 text-sm text-white capitalize transition-colors duration-200 border rounded-md gap-x-2 bg-gray-900  hover:bg-gray-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5 rtl:-scale-x-100">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                                </svg>
+                        <div className="w-full flex justify-center">
+                            <nav className='mt-8'>
+                                {fiches.links.map((link: { url: string; active: any; label: string; }) => (
+                                    <Link
+                                        key={link.url}
+                                        href={link.url}
+                                        className={link.active ? 'text-white bg-red-500 py-2 px-3 rounded-sm' : 'text-gray-800 py-2 px-3 m-2 rounded-sm bg-gray-50'}
+                                    >
+                                        <span>
+                                            {link.label.replace('&laquo;', '').replace('&raquo;', '')}
+                                        </span>
 
-                                <span>
-                                    previous
-                                </span>
-                            </a>
-
-                            <div className="items-center hidden md:flex gap-x-3">
-                                <a href="#" className="px-2 py-1 text-sm text-blue-500 rounded-300 bg-blue-100/60">1</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">2</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">3</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">...</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">12</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">13</a>
-                                <a href="#" className="px-2 py-1 text-sm text-gray-600 rounded-md hover:bg-blue-100/60">14</a>
-                            </div>
-
-                            <a href="#" className="flex items-center px-5 py-2 text-sm text-white capitalize transition-colors duration-200 border rounded-md gap-x-2 bg-gray-900  hover:bg-gray-800">
-                                <span>
-                                    Next
-                                </span>
-
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5 rtl:-scale-x-100">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                                </svg>
-                            </a>
+                                    </Link>
+                                ))}
+                            </nav>
                         </div>
                     </section>
                 </div>

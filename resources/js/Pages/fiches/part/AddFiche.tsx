@@ -3,8 +3,10 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
+import axios from 'axios';
 import { Calendar } from 'primereact/calendar';
 import { FormEventHandler } from 'react';
+import { toast } from 'react-toastify';
 
 export default function AddFiche() {
 
@@ -13,21 +15,20 @@ export default function AddFiche() {
         postnom: '',
         prenom: '',
         adresse: '',
-        lieu: '',
+        lieu_naissance: '',
         sexe: '',
-        date: '',
+        date_naissance: '',
         situation_familliale: '',
-        nbr_enfant: '',
+        nbr_enfants: '',
         nbr_grosses: '',
-        secu_social: '',
-        objet: '',
+        num_secu: '',
         taille: '',
         poids: '',
-        medecin: '',
+        medecin_traitant: '',
         fumeur: '',
-        cigarette: '',
+        nbr_cigarette: '',
         groupe_saguin: '',
-        antecedent_familiaux: '',
+        antecedents_familiaux: '',
         maladie_infatiles_contractees: '',
         antecedent_medicaux: '',
         allergies: '',
@@ -40,14 +41,31 @@ export default function AddFiche() {
     const AddSubmit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('register'));
+        const id = toast.loading("Chargement...")
+        axios.post(route('fiches.store'), data)
+            .then(() => {
+                toast.update(id, {
+                    render: "Rendez-vous ajouté",
+                    type: toast.TYPE.SUCCESS,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+                reset()
+            }).catch(() => {
+                toast.update(id, {
+                    render: "Oups, veillez récommencer",
+                    type: toast.TYPE.ERROR,
+                    autoClose: 3000,
+                    isLoading: false
+                });
+            });
     };
 
     return (
         <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-gray-700 text-center w-full mb-4 pb-2">Ajouter une fiche</h2>
 
-            <form onSubmit={AddSubmit}>
+            <form onSubmit={AddSubmit} method='post'>
                 <div className='overflow-hidden overflow-y-scroll h-96'>
                 <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -67,7 +85,7 @@ export default function AddFiche() {
                         <InputError message={errors.nom} className="mt-2" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="postnom" value="Postnom" />
+                        <InputLabel htmlFor="postnom" value="Postnom*" />
 
                         <TextInput
                             id="postnom"
@@ -136,43 +154,42 @@ export default function AddFiche() {
                         <InputError message={errors.sexe} className="mt-2" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="lieu" value="Lieu de naissance*" />
+                        <InputLabel htmlFor="lieu_naissance" value="Lieu de naissance*" />
 
                         <TextInput
-                            id="lieu"
+                            id="lieu_naissance"
                             type="text"
-                            name="lieu"
-                            value={data.lieu}
+                            name="lieu_naissance"
+                            value={data.lieu_naissance}
                             className="mt-1 block w-full"
-                            autoComplete="lieu"
-                            onChange={(e) => setData('lieu', e.target.value)}
+                            autoComplete="lieu_naissance"
+                            onChange={(e) => setData('lieu_naissance', e.target.value)}
                             required
                         />
 
-                        <InputError message={errors.lieu} className="mt-2" />
+                        <InputError message={errors.lieu_naissance} className="mt-2" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="date" value="Date de naissance*" />
+                        <InputLabel htmlFor="date_naissance" value="Date de naissance*" />
 
-                        <Calendar value={data.date} onChange={(e) => setData('date', e.target.value)} dateFormat="dd/mm/yy" className="mt-1 block w-full h-11" />
+                        <Calendar value={data.date_naissance} onChange={(e) => setData('date_naissance', e.target.value)} dateFormat="dd/mm/yy" className="mt-1 block w-full h-11" />
 
-                        <InputError message={errors.date} className="mt-2" />
+                        <InputError message={errors.date_naissance} className="mt-2" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="nbr_enfant" value="Nombre d'enfant/s" />
+                        <InputLabel htmlFor="nbr_enfants" value="Nombre d'enfant/s" />
 
                         <TextInput
-                            id="nbr_enfant"
+                            id="nbr_enfants"
                             type="number"
-                            name="nbr_enfant"
-                            value={data.nbr_enfant}
+                            name="nbr_enfants"
+                            value={data.nbr_enfants}
                             className="mt-1 block w-full"
-                            autoComplete="nbr_enfant"
-                            onChange={(e) => setData('nbr_enfant', e.target.value)}
-                            required
+                            autoComplete="nbr_enfants"
+                            onChange={(e) => setData('nbr_enfants', e.target.value)}
                         />
 
-                        <InputError message={errors.nbr_enfant} className="mt-2" />
+                        <InputError message={errors.nbr_enfants} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="nbr_grosses" value="Nombre de grosse/s" />
@@ -185,42 +202,41 @@ export default function AddFiche() {
                             className="mt-1 block w-full"
                             autoComplete="nbr_grosses"
                             onChange={(e) => setData('nbr_grosses', e.target.value)}
-                            required
                         />
 
                         <InputError message={errors.nbr_grosses} className="mt-2" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="secu_social" value="N° DE Sécu*" />
+                        <InputLabel htmlFor="num_secu" value="N° DE Sécu*" />
 
                         <TextInput
-                            id="secu_social"
+                            id="num_secu"
                             type="number"
-                            name="secu_social"
-                            value={data.secu_social}
+                            name="num_secu"
+                            value={data.num_secu}
                             className="mt-1 block w-full"
-                            autoComplete="secu_social"
-                            onChange={(e) => setData('secu_social', e.target.value)}
+                            autoComplete="num_secu"
+                            onChange={(e) => setData('num_secu', e.target.value)}
                             required
                         />
 
-                        <InputError message={errors.lieu} className="mt-2" />
+                        <InputError message={errors.lieu_naissance} className="mt-2" />
                     </div>
                     <div>
-                        <InputLabel htmlFor="medecin" value="Medecin traitant*" />
+                        <InputLabel htmlFor="medecin_traitant" value="Medecin traitant*" />
 
                         <TextInput
-                            id="medecin"
+                            id="medecin_traitant"
                             type="text"
-                            name="medecin"
-                            value={data.medecin}
+                            name="medecin_traitant"
+                            value={data.medecin_traitant}
                             className="mt-1 block w-full"
-                            autoComplete="medecin"
-                            onChange={(e) => setData('medecin', e.target.value)}
+                            autoComplete="medecin_traitant"
+                            onChange={(e) => setData('medecin_traitant', e.target.value)}
                             required
                         />
 
-                        <InputError message={errors.lieu} className="mt-2" />
+                        <InputError message={errors.lieu_naissance} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="poids" value="Poids*" />
@@ -236,7 +252,7 @@ export default function AddFiche() {
                             required
                         />
 
-                        <InputError message={errors.lieu} className="mt-2" />
+                        <InputError message={errors.lieu_naissance} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="taille" value="Taille*" />
@@ -252,12 +268,12 @@ export default function AddFiche() {
                             required
                         />
 
-                        <InputError message={errors.lieu} className="mt-2" />
+                        <InputError message={errors.lieu_naissance} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="groupe_saguin" value="Groupe sanguin*" />
 
-                        <select name='groupe_sanguin' id="groupe_sanguin" value={data.groupe_sanguin} onChange={(e) => setData('groupe_sanguin', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                        <select name='groupe_saguin' id="groupe_saguin" value={data.groupe_saguin} onChange={(e) => setData('groupe_saguin', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
                             <option selected>Choisir</option>
                             <option value="a">A</option>
                             <option value="b">B</option>
@@ -281,35 +297,35 @@ export default function AddFiche() {
                     {
                         data.fumeur == "oui" ?
                             <div>
-                                <InputLabel htmlFor="cigarette" value="Nombre de cigarette/jour" />
+                                <InputLabel htmlFor="nbr_cigarette" value="Nombre de cigarette/jour" />
 
                                 <TextInput
-                                    id="cigarette"
+                                    id="nbr_cigarette"
                                     type="number"
-                                    name="cigarette"
-                                    value={data.cigarette}
+                                    name="nbr_cigarette"
+                                    value={data.nbr_cigarette}
                                     className="mt-1 block w-full"
                                     autoComplete="username"
-                                    onChange={(e) => setData('cigarette', e.target.value)}
+                                    onChange={(e) => setData('nbr_cigarette', e.target.value)}
                                 />
 
-                                <InputError message={errors.lieu} className="mt-2" />
+                                <InputError message={errors.lieu_naissance} className="mt-2" />
                             </div> : ''
                     }
                     <div>
-                        <InputLabel htmlFor="antecedent_familiaux" value="Antécédents familiaux" />
+                        <InputLabel htmlFor="antecedents_familiaux" value="Antécédents familiaux" />
 
                         <TextInput
-                            id="antecedent_familiaux"
+                            id="antecedents_familiaux"
                             type="text"
-                            name="antecedent_familiaux"
-                            value={data.antecedent_familiaux}
+                            name="antecedents_familiaux"
+                            value={data.antecedents_familiaux}
                             className="mt-1 block w-full"
-                            autoComplete="antecedent_familiaux"
-                            onChange={(e) => setData('antecedent_familiaux', e.target.value)}
+                            autoComplete="antecedents_familiaux"
+                            onChange={(e) => setData('antecedents_familiaux', e.target.value)}
                         />
 
-                        <InputError message={errors.antecedent_familiaux} className="mt-2" />
+                        <InputError message={errors.antecedents_familiaux} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="maladie_infatiles_contractees" value="Maladie infatiles contractées" />

@@ -34,7 +34,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+    if(Auth::user()->acces == 0 || Auth::user()->disable == 'true'){
+        return redirect('/');
+    }else{
         return redirect()->intended(RouteServiceProvider::HOME);
+    }
+
     }
 
     /**

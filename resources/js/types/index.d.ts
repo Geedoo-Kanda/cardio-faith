@@ -5,6 +5,7 @@ export interface User {
     phone: string;
     acces: number;
     adresse: string;
+    disable: string;
     email_verified_at: string;
 }
 

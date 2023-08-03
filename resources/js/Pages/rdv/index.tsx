@@ -1,3 +1,4 @@
+import { RiFileExcel2Line } from "react-icons/ri"; 
 import { AiOutlineClose } from "react-icons/ai";
 import { FaEye, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -9,15 +10,17 @@ import 'reactjs-popup/dist/index.css';
 import Modal from '@/Components/Modal';
 import AddRdv from './part/AddRdv';
 import EditRdv from "./part/EditRdv";
-import RemoveRdv from "./part/RevomeRdv";
 import axios from "axios";
-import { toast } from "react-toastify";
 import DangerButton from "@/Components/DangerButton";
+import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import ExportRdv from "./part/ExportRdv";
 
 
 export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
     const [view, setview] = useState(false);
     const [add, setadd] = useState(false);
+    const [exporter, setexporter] = useState(false);
     const [id, setid] = useState('');
     const [edit, setedit] = useState(false);
     const [disable, setDisable] = useState(false);
@@ -39,12 +42,17 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
         setadd(true);
     };
 
+    const Exporter = () => {
+        setexporter(true);
+    };
+
     const closeModal = () => {
         setview(false);
         setadd(false);
+        setexporter(false);
         setedit(false);
         setDisable(false);
-
+        router.reload({ only: ['rdvs'] })
     };
 
     const DeleteRdv = () => {
@@ -86,6 +94,13 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
                             <AddRdv />
                         </Modal>
                         <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter un rendez-vous</span>
+                    </div>
+                    <div>
+                        <Modal show={exporter} onClose={closeModal}>
+                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                            <ExportRdv />
+                        </Modal>
+                        <span onClick={Exporter} className="p-4 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2"/>Exporter les données</span>
                     </div>
                     <div className="max-w-xs w-full">
                         <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
@@ -154,7 +169,9 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
                                                         <td className="p-4 text-sm font-medium text-gray-700 whitespace-nowrap text-center">
                                                             {index + 1}
                                                         </td>
-                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">{rdv.date}</td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
+                                                            {dayjs(new Date(rdv.date)).format("dddd, MMMM D, YYYY")}
+                                                            </td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">{rdv.nom} {rdv.postnom} {rdv.prenom}</td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">{rdv.phone}</td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center font-semibold capitalize">

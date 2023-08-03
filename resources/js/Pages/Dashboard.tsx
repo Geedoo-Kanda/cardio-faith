@@ -4,7 +4,7 @@ import { PageProps } from '@/types';
 import { AiFillDollarCircle, AiOutlineBarChart } from "react-icons/ai";
 
 
-export default function Dashboard({ auth }: PageProps) {
+export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, rdv_repporte, depot, retrait, solde }: PageProps<{ depot: number, retrait:number, solde: string, rdv_venir: number, rdv_annule: number, rdv_effectue: number, rdv_repporte: number }>) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -21,7 +21,7 @@ export default function Dashboard({ auth }: PageProps) {
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Tous les rendez-vous</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                50
+                                {rdv_annule + rdv_effectue + rdv_repporte + rdv_venir}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
@@ -30,7 +30,7 @@ export default function Dashboard({ auth }: PageProps) {
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"> <AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous à venir</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                50
+                                {rdv_venir}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
@@ -39,16 +39,16 @@ export default function Dashboard({ auth }: PageProps) {
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous effectués</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                50
+                                {rdv_effectue}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
                             </p>
                         </div>
                         <div className="bg-white rounded-md p-4 shadow-md">
-                            <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous manqués</h2>
+                            <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous repporté</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                50
+                                {rdv_repporte}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
@@ -57,7 +57,7 @@ export default function Dashboard({ auth }: PageProps) {
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"> <AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous annulés</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                50
+                                {rdv_annule}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
@@ -72,7 +72,7 @@ export default function Dashboard({ auth }: PageProps) {
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"><AiFillDollarCircle className='inline-flex text-red-500 text-3xl' /> Solde total</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                50
+                                {solde}
                                 <span className="text-sm rounded-md ml-2">
                                     Dollar
                                 </span>
@@ -81,7 +81,7 @@ export default function Dashboard({ auth }: PageProps) {
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"> <AiFillDollarCircle className='inline-flex text-red-500 text-3xl' />Somme debiter</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                50
+                                {depot}
                                 <span className="text-sm rounded-md ml-2">
                                     Dollar
                                 </span>
@@ -90,7 +90,7 @@ export default function Dashboard({ auth }: PageProps) {
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"><AiFillDollarCircle className='inline-flex text-red-500 text-3xl' /> Somme crediter</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                50
+                                {retrait}
                                 <span className="text-sm rounded-md ml-2">
                                     Dollar
                                 </span>

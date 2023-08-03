@@ -5,18 +5,18 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import { User } from '@/types';
-//theme
-import "primereact/resources/themes/lara-light-indigo/theme.css";     
-    
-//core
-import "primereact/resources/primereact.min.css"; 
+
+import { ToastContainer } from 'react-toastify';
 
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
+    if(user.acces == 0 || user.disable == 'true'){
+        window.location.replace(route('/'));
+    }
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
         <div className="min-h-screen bg-gray-100 ">
-            <nav className="bg-gray-800 border-b border-gray-500">
+            <nav className="bg-gray-800 border-b border-gray-500 w-full">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
@@ -37,7 +37,13 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                     Fiches
                                 </NavLink>
                                 <NavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
-                                    Caisse
+                                    Caisses
+                                </NavLink>
+                                <NavLink href={route('user.indexView')} active={route().current('user.indexView')}>
+                                    Utilisateurs
+                                </NavLink>
+                                <NavLink href={route('message.indexView')} active={route().current('message.indexView')}>
+                                    Messages
                                 </NavLink>
                             </div>
                         </div>
@@ -119,6 +125,12 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                         <ResponsiveNavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
                             Caisse
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('user.indexView')} active={route().current('user.indexView')}>
+                            Utilsateurs
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('message.indexView')} active={route().current('message.indexView')}>
+                            Messages
+                        </ResponsiveNavLink>
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
@@ -146,6 +158,8 @@ export default function Authenticated({ user, header, children }: PropsWithChild
             )}
 
             <main>{children}</main>
+
+            <ToastContainer />
         </div>
     );
 }
