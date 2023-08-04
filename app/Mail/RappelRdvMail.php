@@ -3,7 +3,7 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -30,7 +30,7 @@ class RappelRdvMail extends Mailable
     {
         return new Envelope(
             from: new Address('geedookanda06@gmail.com', 'Geedoo kanda'),
-            subject: $this->user['objet'],
+            subject: 'Rappel du rendez-vous'
         );
     }
 

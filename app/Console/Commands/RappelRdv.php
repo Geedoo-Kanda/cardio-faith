@@ -5,8 +5,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\RendezVous;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\MailNotify;
-use App\Mail\RappelMail;
+use App\Mail\RappelRdvMail;
+
+use DateTimeImmutable;
 
 class RappelRdv extends Command
 {
@@ -29,10 +30,14 @@ class RappelRdv extends Command
      */
     public function handle()
     {
+        $now = new DateTimeImmutable(now());
+        $rapel = $now->format('Y-m-d');
 
-        $users = RendezVous::where('date', 'like', '%'.date("Y-m-d").'%');
+        $users = RendezVous::where('status', 'A venir')->orWhere('status', 'repporte')
+        ->where('date', 'like', '%'.$rapel.'%')->get();
         foreach ($users as $user) {
-            Mail::to('geedookanda06@gmail.com')->queue(new RappelMail($user));
+            Mail::to($user->email)->queue(new RappelRdvMail($user));
         }
+
     }
 }

@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:rappel-rdv')->everyFiveSeconds()->emailOutputOnFailure('geedookanda06@gmail.com');
+
+        $schedule->command('app:rappel-rdv')->everyMinute();
 
     }
 

@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+@php
+    use DateTimeImmutable as DateTimeImmutable;
+@endphp
 
 <head>
     <meta charset="UTF-8">
@@ -27,17 +30,9 @@
         médtical
     </div>
 
-    <div
-        style=" display: grid; grid-column: 50% 50%; font-size: 18px; line-height: 25px; color: rgb(55 65 81; font-weight: 600;">
-        <p>Adresse : </p>
-        <p><b>N° 443, 11 ème rue LIMETE Quartier Indistriel Kinshsa, République Democratique du Congo</b></p>
-        <p>Telephone :</p>
-        <p> <b><a href="tel:+243 82 83 11 735">+243 82 83 11 735</a></b></p>
-        <p>Facebook : </p>
-        <p><b><a href="https://web.facebook.com/Up-for-My-Church-110061315045828/?_rdc=1&_rdr">Up for my
-                    church</a></b></p>
-        <p>Instragram : </p>
-        <p><b><a href="https://www.instagram.com/upformychurch/">upformychurch</a></b></p>
+    <div style="font-size: 18px; line-height: 25px; color: rgb(55 65 81; font-weight: 600;">
+        <p>Adresse : <b>25, Avenue de l'OUA, Q/Basoko, C/Ngaliema. Ville province de Kinshasa</b></p>
+        <p>Telephone : <b><a href="tel:+243859039494">243 85 90 39 494</a></b></p>
     </div>
 </body>
 
