@@ -14,18 +14,25 @@ import { toast } from "react-toastify";
 import DangerButton from "@/Components/DangerButton";
 import { RiFileExcel2Line } from "react-icons/ri";
 import ExportFiche from "./part/ExportFiche";
+import EditFiche from "./part/EditFiche";
 
 
-export default function Fiche({ auth, fiches }: PageProps<{ fiches: [] }>) {
+export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches: any, compteRendus: any }>) {
     const [view, setview] = useState(false);
     const [add, setadd] = useState(false);
     const [disable, setDisable] = useState(false);
     const [exporter, setexporter] = useState(false);
+    const [edit, setedit] = useState(false);
     const [id, setid] = useState('');
     const [search, setSearch] = useState("");
 
     function Show(p: any) {
         setview(true);
+        setid(p)
+    };
+
+    function Edit(p: any) {
+        setedit(true);
         setid(p)
     };
 
@@ -43,10 +50,11 @@ export default function Fiche({ auth, fiches }: PageProps<{ fiches: [] }>) {
 
     const closeModal = () => {
         setview(false);
+        setedit(false);
         setadd(false);
         setexporter(false);
         setDisable(false);
-        router.reload({ only: ['fiches'] })
+        router.reload({ only: ['fiches', 'compteRendus'] })
     };
 
     const DeleteFiche = () => {
@@ -94,27 +102,13 @@ export default function Fiche({ auth, fiches }: PageProps<{ fiches: [] }>) {
                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                             <ExportFiche />
                         </Modal>
-                        <span onClick={Exporter} className="p-4 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2"/>Exporter les données</span>
+                        <span onClick={Exporter} className="p-4 md:mt-0 mt-8 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2" />Exporter les données</span>
                     </div>
                     <div className="max-w-xs w-full">
                         <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
                     </div>
                 </div>
 
-                <div className="flex items-center justify-end">
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Hier</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-500 text-white mr-1 text-xs">Aujourd'hui</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Demain</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Cette semaine</Link>
-                    </div>
-                </div>
 
                 <div className="mt-4">
                     <section className="container px-4 mx-auto">
@@ -229,30 +223,53 @@ export default function Fiche({ auth, fiches }: PageProps<{ fiches: [] }>) {
                                                                         </div>
 
                                                                         <h3 className="font-bold text-lg text-red-500 mb-3 mt-8">3. Compte rendu</h3>
-                                                                        <div className="text-justify mr-2 indent-8">
-                                                                            {fiche.conclusion}
+                                                                        <div className="text-justify mr-2">
+                                                                            {compteRendus.map((compteRendu: any, index: any) => (
+                                                                                compteRendu.fiche_id == fiche.id ?
+                                                                                    <>
+                                                                                        <b className="text-gray-600 font-bold mb-2">{dayjs(new Date(fiche.created_at)).format("DD-MM-YYYY")}</b>
+                                                                                        <p className="mb-4">{compteRendu.description}</p>
+                                                                                    </>
+                                                                                    : ''
+                                                                            ))}
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </Modal>
+                                                            {
+                                                                auth.user.acces == 1 || auth.user.acces == 3 ?
+                                                                    <>
+                                                                        <span onClick={() => Edit(fiche.id)} className="bg-green-500 hover:bg-green-700 text-white mt-1 p-2 mx-1 rounded-md text-sm">  <FaRegEdit /></span>
+                                                                        <Modal show={id == fiche.id ? edit : false} onClose={closeModal}>
+                                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                            <EditFiche edit={{
+                                                                                'id': fiche.id,
+                                                                            }} />
+                                                                        </Modal>
+                                                                    </> : ''
+                                                            }
+                                                            {
+                                                                auth.user.acces == 1 ?
+                                                                    <>
+                                                                        <span onClick={() => Disable(fiche.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                                        <Modal show={id == fiche.id ? disable : false} onClose={closeModal}>
+                                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                            <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
+                                                                                <h2 className="text-lg font-medium text-gray-900">
+                                                                                    Etês vous sûr de vouloir supprimer cette fiche?
+                                                                                </h2>
 
-                                                            <span onClick={() => Disable(fiche.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
-                                                            <Modal show={id == fiche.id ? disable : false} onClose={closeModal}>
-                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                                <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
-                                                                    <h2 className="text-lg font-medium text-gray-900">
-                                                                        Etês vous sûr de vouloir supprimer cette fiche?
-                                                                    </h2>
+                                                                                <div className="mt-6 flex justify-end">
 
-                                                                    <div className="mt-6 flex justify-end">
+                                                                                    <DangerButton className="ml-3" onClick={DeleteFiche}>
+                                                                                        Supprimer
+                                                                                    </DangerButton>
 
-                                                                        <DangerButton className="ml-3" onClick={DeleteFiche}>
-                                                                            Supprimer
-                                                                        </DangerButton>
-
-                                                                    </div>
-                                                                </div>
-                                                            </Modal>
+                                                                                </div>
+                                                                            </div>
+                                                                        </Modal>
+                                                                    </> : ''
+                                                            }
                                                         </td>
                                                     </tr>
                                                 ))}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompteRendu;
 use App\Models\FicheMedicale;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
@@ -23,9 +24,11 @@ class FicheMedicaleController extends Controller
     public function indexView()
     {
         $fiches = FicheMedicale::where('disable', 'false')->orderBy('id', 'DESC')->paginate(50);
+        $compteRendus = CompteRendu::where('disable', 'false')->orderBy('id', 'DESC')->get();
 
         return Inertia::render('fiches/index', [
             'fiches' => $fiches,
+            'compteRendus' => $compteRendus,
         ]);
     }
 
@@ -60,7 +63,6 @@ class FicheMedicaleController extends Controller
             // 'intolerance_medicamenteuse' => 'string|max:255',
             // 'traitement_regulier' => 'string|max:255',
             // 'vaccin' => 'string|max:255',
-            'conclusion' => 'required|string|max:9000',
         ]);
 
         $fiche = FicheMedicale::create([
@@ -89,7 +91,6 @@ class FicheMedicaleController extends Controller
             'intolerance_medicamenteuse' => $request->intolerance_medicamenteuse,
             'traitement_regulier' => $request->traitement_regulier,
             'vaccin' => $request->vaccin,
-            'conclusion' => $request->conclusion,
             'user_id' => Auth::user()->id,
         ]); 
 

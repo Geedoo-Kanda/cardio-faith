@@ -29,7 +29,6 @@
             <th><b>Intolerence medicamenteuse</b></th>
             <th><b>Traitement regulier</b></th>
             <th><b>Vaccin</b></th>
-            <th><b>Compte rendu</b></th>
             <th><b>Employé</b></th>
         </tr>
     </thead>
@@ -67,7 +66,6 @@
                 <td>{{ $fiche->intolerance_medicamenteuse }}</td>
                 <td>{{ $fiche->traitement_regulier }}</td>
                 <td>{{ $fiche->vaccin }}</td>
-                <td>{{ $fiche->conclusion }}</td>
                 <td>{{ $fiche->name }}</td>
             </tr>
         @endforeach

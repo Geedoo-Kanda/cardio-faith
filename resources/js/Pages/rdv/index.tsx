@@ -1,4 +1,4 @@
-import { RiFileExcel2Line } from "react-icons/ri"; 
+import { RiFileExcel2Line } from "react-icons/ri";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaEye, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -6,7 +6,6 @@ import { Head, Link, router } from '@inertiajs/react';
 import { BiPlusMedical } from "react-icons/bi";
 import { PageProps } from '@/types';
 import { useState } from 'react';
-import 'reactjs-popup/dist/index.css';
 import Modal from '@/Components/Modal';
 import AddRdv from './part/AddRdv';
 import EditRdv from "./part/EditRdv";
@@ -17,7 +16,7 @@ import dayjs from "dayjs";
 import ExportRdv from "./part/ExportRdv";
 
 
-export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
+export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: any }>) {
     const [view, setview] = useState(false);
     const [add, setadd] = useState(false);
     const [exporter, setexporter] = useState(false);
@@ -100,7 +99,7 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                             <ExportRdv />
                         </Modal>
-                        <span onClick={Exporter} className="p-4 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2"/>Exporter les données</span>
+                        <span onClick={Exporter} className="p-4 md:mt-0 mt-8 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2" />Exporter les données</span>
                     </div>
                     <div className="max-w-xs w-full">
                         <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
@@ -108,18 +107,15 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
                 </div>
 
                 <div className="flex items-center justify-end">
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Hier</Link>
+                <div>
+                        <Link href={route('rendez-vous.indexView')} className={`p-3 rounded-sm ${location.pathname =='/admin/rendez-vous/liste' ? 'bg-red-500 text-white' : 'bg-white text-red-500' }  mr-1 text-xs`}>Tous</Link>
                     </div>
                     <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-500 text-white mr-1 text-xs">Aujourd'hui</Link>
+                        <Link href={route('rendez-vous.today')} className={`p-3 rounded-sm ${location.pathname == '/admin/rendez-vous/today' ? 'bg-red-500 text-white' : 'bg-white text-red-500' }  mr-1 text-xs`}>Aujourd'hui</Link>
                     </div>
                     <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Demain</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Cette semaine</Link>
-                    </div>
+                        <Link href={route('rendez-vous.tomorrow')} className={`p-3 rounded-sm ${location.pathname == '/admin/rendez-vous/tomorrow' ? 'bg-red-500 text-white' : 'bg-white text-red-500' }  mr-1 text-xs`}>Demain</Link>
+                    </div> 
                 </div>
 
                 <div>
@@ -171,7 +167,7 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
                                                         </td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
                                                             {dayjs(new Date(rdv.date)).format("dddd, MMMM D, YYYY")}
-                                                            </td>
+                                                        </td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">{rdv.nom} {rdv.postnom} {rdv.prenom}</td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">{rdv.phone}</td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center font-semibold capitalize">
@@ -221,23 +217,27 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: [] }>) {
                                                                 }} />
                                                             </Modal>
 
-                                                            <span onClick={() => Disable(rdv.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
-                                                            <Modal show={id == rdv.id ? disable : false} onClose={closeModal}>
-                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                                <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
-                                                                    <h2 className="text-lg font-medium text-gray-900">
-                                                                        Etês vous sûr de vouloir supprimer ce rende-vousz?
-                                                                    </h2>
+                                                            {
+                                                                auth.user.acces == 1 ?
+                                                                    <>
+                                                                        <span onClick={() => Disable(rdv.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                                        <Modal show={id == rdv.id ? disable : false} onClose={closeModal}>
+                                                                            <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                            <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
+                                                                                <h2 className="text-lg font-medium text-gray-900">
+                                                                                    Etês vous sûr de vouloir supprimer ce rende-vousz?
+                                                                                </h2>
 
-                                                                    <div className="mt-6 flex justify-end">
+                                                                                <div className="mt-6 flex justify-end">
 
-                                                                        <DangerButton className="ml-3" onClick={DeleteRdv}>
-                                                                            Supprimer
-                                                                        </DangerButton>
+                                                                                    <DangerButton className="ml-3" onClick={DeleteRdv}>
+                                                                                        Supprimer
+                                                                                    </DangerButton>
 
-                                                                    </div>
-                                                                </div>
-                                                            </Modal>
+                                                                                </div>
+                                                                            </div>
+                                                                        </Modal></> : ''
+                                                            }
                                                         </td>
                                                     </tr>
 

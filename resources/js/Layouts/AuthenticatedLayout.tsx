@@ -9,7 +9,7 @@ import { User } from '@/types';
 import { ToastContainer } from 'react-toastify';
 
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
-    if(user.acces == 0 || user.disable == 'true'){
+    if (user.acces == 0 || user.disable == 'true') {
         window.location.replace(route('/'));
     }
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -22,29 +22,39 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
-                                    <ApplicationLogo  className='h-16 w-auto'/>
+                                    <ApplicationLogo className='h-16 w-auto' />
                                 </Link>
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
-                                </NavLink>
-                                <NavLink href={route('rendez-vous.indexView')} active={route().current('rendez-vous.indexView')}>
-                                    Rendez-vous
-                                </NavLink>
+                                {
+                                    user.acces == 1 || user.acces == 2 ?
+                                        <>
+                                            <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                                Dashboard
+                                            </NavLink>
+                                            <NavLink href={route('rendez-vous.indexView')} active={route().current('rendez-vous.indexView')}>
+                                                Rendez-vous
+                                            </NavLink>
+                                            <NavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
+                                                Caisse
+                                            </NavLink>
+                                            <NavLink href={route('message.indexView')} active={route().current('message.indexView')}>
+                                                Messages
+                                            </NavLink>
+                                        </> : ''
+                                }
                                 <NavLink href={route('fiches.indexView')} active={route().current('fiches.indexView')}>
                                     Fiches
                                 </NavLink>
-                                <NavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
-                                    Caisses
-                                </NavLink>
-                                <NavLink href={route('user.indexView')} active={route().current('user.indexView')}>
-                                    Utilisateurs
-                                </NavLink>
-                                <NavLink href={route('message.indexView')} active={route().current('message.indexView')}>
-                                    Messages
-                                </NavLink>
+                                {
+                                    user.acces == 1 ?
+                                        <NavLink href={route('user.indexView')} active={route().current('user.indexView')}>
+                                            Utilsateurs
+                                        </NavLink>
+                                        : ''
+                                }
+
                             </div>
                         </div>
 
@@ -113,24 +123,34 @@ export default function Authenticated({ user, header, children }: PropsWithChild
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('rendez-vous.indexView')} active={route().current('rendez-vous.indexView')}>
-                            Rendez-vous
-                        </ResponsiveNavLink>
+                        {
+                            user.acces == 1 || user.acces == 2 ?
+                                <>
+                                    <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                        Dashboard
+                                    </ResponsiveNavLink>
+                                    <ResponsiveNavLink href={route('rendez-vous.indexView')} active={route().current('rendez-vous.indexView')}>
+                                        Rendez-vous
+                                    </ResponsiveNavLink>
+                                    <ResponsiveNavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
+                                        Caisse
+                                    </ResponsiveNavLink>
+                                    <ResponsiveNavLink href={route('message.indexView')} active={route().current('message.indexView')}>
+                                        Messages
+                                    </ResponsiveNavLink>
+                                </> : ''
+                        }
                         <ResponsiveNavLink href={route('fiches.indexView')} active={route().current('fiches.indexView')}>
                             Fiches
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
-                            Caisse
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('user.indexView')} active={route().current('user.indexView')}>
-                            Utilsateurs
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('message.indexView')} active={route().current('message.indexView')}>
-                            Messages
-                        </ResponsiveNavLink>
+                        {
+                            user.acces == 1 ?
+                                <ResponsiveNavLink href={route('user.indexView')} active={route().current('user.indexView')}>
+                                    Utilsateurs
+                                </ResponsiveNavLink>
+                                : ''
+                        }
+
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">

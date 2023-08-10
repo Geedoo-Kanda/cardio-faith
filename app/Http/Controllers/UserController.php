@@ -35,7 +35,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+        ]);
+
+        if($request->role == 'manager'){
+            $req = User::where('id', $request->nom)->update(['acces' => 1]);
+
+            return response($req, 201);
+        }elseif($request->role == 'secretaire'){
+
+            $req = User::where('id', $request->nom)->update(['acces' => 2]);
+
+            return response($req, 201);
+        }elseif($request->role == 'docteur'){
+
+            $req = User::where('id', $request->nom)->update(['acces' => 3]);
+
+            return response($req, 201);
+        }
+
     }
 
     /**
@@ -43,9 +63,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $req = User::where('id', $user->id)->update(['acces' => 2]);
-
-        return response($req, 201);
+      
     }
 
     /**

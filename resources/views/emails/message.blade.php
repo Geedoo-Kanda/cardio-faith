@@ -13,7 +13,7 @@
 
 <body style=" width: 100%;">
     @php
-        $photo = 'https://upformychurch.com/public/img/UMC.png';
+        $photo = 'https://cardiofaith.com/storage/app/public/images/logo.png';
     @endphp
     <div style="width: 100%; display: flex; justify-content: center;  align-items: center">
         <img src="{{ $photo }}" alt="icon" style=" height: 100px;  width: auto; background-size: cover">

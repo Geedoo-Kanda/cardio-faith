@@ -16,7 +16,7 @@ import ExportCaisse from "./part/ExportCaisse";
 import { RiFileExcel2Line } from "react-icons/ri";
 
 
-export default function Caisse({ auth, caisses }: PageProps<{ caisses: [] }>) {
+export default function Caisse({ auth, caisses }: PageProps<{ caisses: any }>) {
     const [add, setadd] = useState(false);
     const [disable, setDisable] = useState(false);
     const [exporter, setexporter] = useState(false);
@@ -100,27 +100,14 @@ export default function Caisse({ auth, caisses }: PageProps<{ caisses: [] }>) {
                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                             <ExportCaisse />
                         </Modal>
-                        <span onClick={Exporter} className="p-4 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2"/>Exporter les données</span>
+                        <span onClick={Exporter} className="p-4 md:mt-0 mt-8 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2" />Exporter les données</span>
                     </div>
                     <div className="max-w-xs w-full">
                         <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherchez un montant" />
                     </div>
                 </div>
 
-                <div className="flex items-center justify-end">
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Hier</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-500 text-white mr-1 text-xs">Aujourd'hui</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Demain</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Cette semaine</Link>
-                    </div>
-                </div>
+
 
                 <div className="mt-4">
                     <section className="container px-4 mx-auto">
@@ -158,9 +145,12 @@ export default function Caisse({ auth, caisses }: PageProps<{ caisses: [] }>) {
                                                     <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
                                                         Libele
                                                     </th>
-                                                    <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
-                                                        Options
-                                                    </th>
+                                                    {
+                                                        auth.user.acces == 1 ?
+                                                            <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
+                                                                Options
+                                                            </th> : ''
+                                                    }
                                                 </tr>
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
@@ -179,7 +169,7 @@ export default function Caisse({ auth, caisses }: PageProps<{ caisses: [] }>) {
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">
                                                             {Users.map((user: any, index) => (
                                                                 caisse.user_id == user.id ?
-                                                                user.name : ''
+                                                                    user.name : ''
 
                                                             ))}
                                                         </td>
@@ -192,25 +182,28 @@ export default function Caisse({ auth, caisses }: PageProps<{ caisses: [] }>) {
                                                             </div>
                                                         </td>
 
-                                                        <td className="flex items-center justify-center px-2 h-full">
-                                                            <span onClick={() => Disable(caisse.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
-                                                            <Modal show={id == caisse.id ? disable : false} onClose={closeModal}>
-                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                                <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
-                                                                    <h2 className="text-lg font-medium text-gray-900">
-                                                                        Etês vous sûr de vouloir supprimer cette operation?
-                                                                    </h2>
+                                                        {
+                                                            auth.user.acces == 1 ?
+                                                                <td className="flex items-center justify-center px-2 h-full">
+                                                                    <span onClick={() => Disable(caisse.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                                    <Modal show={id == caisse.id ? disable : false} onClose={closeModal}>
+                                                                        <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                        <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
+                                                                            <h2 className="text-lg font-medium text-gray-900">
+                                                                                Etês vous sûr de vouloir supprimer cette operation?
+                                                                            </h2>
 
-                                                                    <div className="mt-6 flex justify-end">
+                                                                            <div className="mt-6 flex justify-end">
 
-                                                                        <DangerButton className="ml-3" onClick={DeleteCaisse}>
-                                                                            Supprimer
-                                                                        </DangerButton>
+                                                                                <DangerButton className="ml-3" onClick={DeleteCaisse}>
+                                                                                    Supprimer
+                                                                                </DangerButton>
 
-                                                                    </div>
-                                                                </div>
-                                                            </Modal>
-                                                        </td>
+                                                                            </div>
+                                                                        </div>
+                                                                    </Modal>
+                                                                </td> : ''
+                                                        }
                                                     </tr>
 
                                                 ))}

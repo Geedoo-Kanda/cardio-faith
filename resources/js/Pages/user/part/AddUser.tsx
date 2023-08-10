@@ -12,6 +12,7 @@ export default function AddUser() {
 
     const { data, setData, post, processing, errors, reset } = useForm({
         nom: '',
+        role: '',
     });
 
     const [Users, setUsers] = useState([]);
@@ -32,7 +33,7 @@ export default function AddUser() {
         e.preventDefault();
 
         const id = toast.loading("Chargement...")
-        axios.get('/admin/users/show/' + data.nom)
+        axios.post(route('user.store'), data)
             .then(() => {
                 toast.update(id, {
                     render: "Rendez-vous ajouté",
@@ -68,6 +69,18 @@ export default function AddUser() {
                     </select>
 
                     <InputError message={errors.nom} className="mt-2" />
+                </div>
+                <div className='mt-3'>
+                    <InputLabel htmlFor="role" value="Role*" />
+
+                    <select name='role' id="role" value={data.role} onChange={(e) => setData('role', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                        <option selected>Choisir</option>
+                        <option value="manager">Manager</option>
+                            <option value="secretaire">Secretaire</option>
+                            <option value="docteur">Docteur/Infirmier</option>
+                    </select>
+
+                    <InputError message={errors.role} className="mt-2" />
                 </div>
                 <div className="flex items-center justify-end mt-4">
 

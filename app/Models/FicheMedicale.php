@@ -40,7 +40,6 @@ class FicheMedicale extends Model
         'intolerance_medicamenteuse',
         'traitement_regulier',
         'vaccin',
-        'conclusion',
         'num_dossier',
         'user_id'
     ];    

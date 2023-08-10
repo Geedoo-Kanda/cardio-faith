@@ -11,6 +11,7 @@ use App\Models\Caisse;
 use App\Http\Controllers\FicheMedicaleController;
 use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CompteRenduController;
 use App\Http\Controllers\MessageController;
 /*
 |--------------------------------------------------------------------------
@@ -34,9 +35,15 @@ Route::prefix('admin')->group(function () {
         Route::get('/delete/{user}', [UserController::class, 'destroy'])->name('user.destroy');
         Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
     });
+
+    Route::prefix('compte-rendu')->group(function () {
+        Route::put('/{fiche}', [CompteRenduController::class, 'update'])->name('compte-rendu.update');
+    });
     
     Route::prefix('rendez-vous')->group(function () {
         Route::get('/liste', [RendezVousController::class, 'indexView'])->name('rendez-vous.indexView');
+        Route::get('/today', [RendezVousController::class, 'today'])->name('rendez-vous.today');
+        Route::get('/tomorrow', [RendezVousController::class, 'tomorrow'])->name('rendez-vous.tomorrow');
         Route::post('/', [RendezVousController::class, 'store'])->name('rendez-vous.store');
         Route::get('/export/{delai}/{mois?}/{annee?}', [RendezVousController::class, 'export'])
         ->name('rendez-vous.export');

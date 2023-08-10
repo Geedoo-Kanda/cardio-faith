@@ -5,21 +5,19 @@ import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
 import { Calendar } from 'primereact/calendar';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function AddRdv() {
 
-    const { data, setData, post, processing, errors, reset } = useForm({
-        nom: '',
-        postnom: '',
-        prenom: '',
-        phone: '',
-        email: '',
-        sexe: '',
-        date: '',
-        objet: '',
-    });
+    const [nom, setnom] = useState('');
+    const [postnom, setpostnom] = useState('');
+    const [prenom, setprenom] = useState('');
+    const [phone, setphone] = useState('');
+    const [email, setemail] = useState('');
+    const [sexe, setsexe] = useState('');
+    const [objet, setobjet] = useState('');
+    const [date, setdate] = useState<any | null>(null);
 
 
     let today = new Date();
@@ -36,6 +34,8 @@ export default function AddRdv() {
     const AddSubmit: FormEventHandler = (e) => {
         e.preventDefault();
 
+       let data = {nom, postnom, prenom, phone, email, sexe, objet, date}
+
         const id = toast.loading("Chargement...")
         axios.post(route('rendez-vous.store'), data)
             .then(() => {
@@ -45,7 +45,14 @@ export default function AddRdv() {
                     autoClose: 3000,
                     isLoading: false
                 });
-                reset()
+                setnom('')
+                setpostnom('')
+                setprenom('')
+                setphone('')
+                setemail('')
+                setsexe('')
+                setobjet('')
+                setdate('')
             }).catch(() => {
                 toast.update(id, {
                     render: "Oups, veillez récommencer",
@@ -68,15 +75,14 @@ export default function AddRdv() {
                         <TextInput
                             id="nom"
                             name="nom"
-                            value={data.nom}
+                            value={nom}
                             className="mt-1 block w-full"
                             autoComplete="nom"
                             isFocused={true}
-                            onChange={(e) => setData('nom', e.target.value)}
+                            onChange={(e) => setnom(e.target.value)}
                             required
                         />
 
-                        <InputError message={errors.nom} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="postnom" value="Postnom*" />
@@ -84,14 +90,13 @@ export default function AddRdv() {
                         <TextInput
                             id="postnom"
                             name="postnom"
-                            value={data.postnom}
+                            value={postnom}
                             className="mt-1 block w-full"
                             autoComplete="postnom"
-                            onChange={(e) => setData('postnom', e.target.value)}
+                            onChange={(e) => setpostnom(e.target.value)}
                             required
                         />
 
-                        <InputError message={errors.postnom} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="prenom" value="Prenom*" />
@@ -99,14 +104,13 @@ export default function AddRdv() {
                         <TextInput
                             id="prenom"
                             name="prenom"
-                            value={data.prenom}
+                            value={prenom}
                             className="mt-1 block w-full"
                             autoComplete="prenom"
-                            onChange={(e) => setData('prenom', e.target.value)}
+                            onChange={(e) => setprenom(e.target.value)}
                             required
                         />
 
-                        <InputError message={errors.prenom} className="mt-2" />
                     </div>
 
                     <div>
@@ -116,14 +120,12 @@ export default function AddRdv() {
                             id="email"
                             type="email"
                             name="email"
-                            value={data.email}
+                            value={email}
                             className="mt-1 block w-full"
                             autoComplete="username"
-                            onChange={(e) => setData('email', e.target.value)}
-                            required
+                            onChange={(e) => setemail(e.target.value)}
                         />
 
-                        <InputError message={errors.email} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="phone" value="Phone*" />
@@ -131,45 +133,41 @@ export default function AddRdv() {
                         <TextInput
                             id="phone"
                             name="phone"
-                            value={data.phone}
+                            value={phone}
                             className="mt-1 block w-full"
                             autoComplete="phone"
-                            onChange={(e) => setData('phone', e.target.value)}
+                            onChange={(e) => setphone(e.target.value)}
                             required
                         />
 
-                        <InputError message={errors.phone} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="sexe" value="Sexe*" />
 
-                        <select name='sexe' id="sexe" value={data.sexe} onChange={(e) => setData('sexe', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                        <select name='sexe' id="sexe" value={sexe} onChange={(e) => setsexe(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
                             <option selected>Choisir</option>
                             <option value="M">Masculin</option>
                             <option value="F">Feminin</option>
                         </select>
 
-                        <InputError message={errors.sexe} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="date" value="Date du rendez-vous*" />
 
-                        <Calendar value={data.date} onChange={(e) => setData('date', e.target.value)} minDate={minDate} dateFormat="dd/mm/yy" readOnlyInput className="mt-1 block w-full h-11" />
+                        <Calendar value={date} onChange={(e) => setdate(e.target.value)} minDate={minDate} dateFormat="dd/mm/yy" readOnlyInput className="mt-1 block w-full h-11" />
 
-                        <InputError message={errors.date} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="objet" value="Objet de la reunion*" />
 
-                        <textarea name='objet' id="objet" value={data.objet} onChange={(e) => setData('objet', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Écrivez ici..."></textarea>
-                        <InputError message={errors.objet} className="mt-2" />
+                        <textarea name='objet' id="objet" value={objet} onChange={(e) => setobjet(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Écrivez ici..."></textarea>
                     </div>
 
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
 
-                    <PrimaryButton className="ml-4 bg-red-500" disabled={processing}>
+                    <PrimaryButton className="ml-4 bg-red-500">
                         Enregister
                     </PrimaryButton>
                 </div>

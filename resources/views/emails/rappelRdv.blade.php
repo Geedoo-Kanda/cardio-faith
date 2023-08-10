@@ -13,7 +13,7 @@
 
 <body style=" width: 100%;">
     @php
-        $photo = 'https://upformychurch.com/public/img/UMC.png';
+        $photo = 'https://cardiofaith.com/storage/app/public/images/logo.png';
         $date1 = new DateTimeImmutable($user->date);
         $date2 = $date1->format('d-m-Y');
     @endphp

@@ -14,7 +14,7 @@ import DangerButton from "@/Components/DangerButton";
 import dayjs from "dayjs";
 
 
-export default function Message({ auth, messages }: PageProps<{ messages: [] }>) {
+export default function Message({ auth, messages }: PageProps<{ messages: any }>) {
     const [add, setadd] = useState(false);
     const [id, setid] = useState('');
     const [disable, setDisable] = useState(false);
@@ -94,21 +94,6 @@ export default function Message({ auth, messages }: PageProps<{ messages: [] }>)
                     </div>
                 </div>
 
-                <div className="flex items-center justify-end">
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Hier</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-500 text-white mr-1 text-xs">Aujourd'hui</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Demain</Link>
-                    </div>
-                    <div>
-                        <Link href={route('rendez-vous.indexView')} className="p-3 rounded-sm bg-red-100 text-red-500 mr-1 text-xs">Cette semaine</Link>
-                    </div>
-                </div>
-
                 <div>
                     <section className="container px-4 mx-auto mt-4">
                         <div className="flex flex-col">
@@ -137,9 +122,12 @@ export default function Message({ auth, messages }: PageProps<{ messages: [] }>)
                                                     <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
                                                         Message
                                                     </th>
-                                                    <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
-                                                        Options
-                                                    </th>
+                                                    {
+                                                        auth.user.acces == 1 ?
+                                                            <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
+                                                                Options
+                                                            </th> : ''
+                                                    }
                                                 </tr>
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
@@ -168,27 +156,30 @@ export default function Message({ auth, messages }: PageProps<{ messages: [] }>)
                                                                 {message.message}
                                                             </div>
                                                         </td>
+                                                        {
+                                                            auth.user.acces == 1 ?
+                                                                <td className="flex items-center justify-center px-2 h-full">
+                                                                    <span onClick={() => Disable(message.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                                    <Modal show={id == message.id ? disable : false} onClose={closeModal}>
+                                                                        <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                        <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
+                                                                            <h2 className="text-lg font-medium text-gray-900">
+                                                                                Etês vous sûr de vouloir supprimer ce message?
+                                                                            </h2>
+
+                                                                            <div className="mt-6 flex justify-end">
+
+                                                                                <DangerButton className="ml-3" onClick={DeleteUser}>
+                                                                                    Supprimer
+                                                                                </DangerButton>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </Modal>
+                                                                </td> : ''
+                                                        }
 
 
-                                                        <td className="flex items-center justify-center px-2 h-full">
-                                                            <span onClick={() => Disable(message.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
-                                                            <Modal show={id == message.id ? disable : false} onClose={closeModal}>
-                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                                <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
-                                                                    <h2 className="text-lg font-medium text-gray-900">
-                                                                        Etês vous sûr de vouloir supprimer ce message?
-                                                                    </h2>
-
-                                                                    <div className="mt-6 flex justify-end">
-
-                                                                        <DangerButton className="ml-3" onClick={DeleteUser}>
-                                                                            Supprimer
-                                                                        </DangerButton>
-
-                                                                    </div>
-                                                                </div>
-                                                            </Modal>
-                                                        </td>
                                                     </tr>
 
                                                 ))}

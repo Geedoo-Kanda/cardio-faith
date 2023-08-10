@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 use App\Exports\RendezVousExport;
 use Maatwebsite\Excel\Facades\Excel;
 use DateTimeImmutable;
+use DateInterval;
 use Inertia\Inertia;
-use Carbon\Carbon;
-
 
 class RendezVousController extends Controller
 {
@@ -31,6 +30,36 @@ class RendezVousController extends Controller
         ]);
     }
 
+    public function today()
+    {
+        $date = new DateTimeImmutable(now());
+        $demain = $date->sub(new DateInterval('P1D'));
+        $req = $demain->format('Y-m-d');
+        
+        $rdvs = RendezVous::where('date', 'like', '%'.$req.'%')->where('disable', 'false')
+        ->orderBy('id', 'DESC')->paginate(50);
+
+        return Inertia::render('rdv/index', [
+            'rdvs' => $rdvs,
+        ]);
+    }
+
+
+    public function tomorrow()
+    {
+
+        $date = new DateTimeImmutable(now());
+        $req = $date->format('Y-m-d');
+
+
+        $rdvs = RendezVous::where('date', 'like', '%'.$req.'%')->where('disable', 'false')
+        ->orderBy('id', 'DESC')->paginate(50);
+
+        return Inertia::render('rdv/index', [
+            'rdvs' => $rdvs,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -43,7 +72,6 @@ class RendezVousController extends Controller
             'phone' => 'required|string|max:255',
             'sexe' => 'required|string|max:255',
             'date' => 'required|string|max:255',
-            'email' => 'required|string|max:255',
             'objet' => 'required|string|max:9000',
         ]);
 

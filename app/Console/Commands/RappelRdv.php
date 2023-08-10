@@ -33,8 +33,8 @@ class RappelRdv extends Command
         $now = new DateTimeImmutable(now());
         $rapel = $now->format('Y-m-d');
 
-        $users = RendezVous::where('status', 'A venir')->orWhere('status', 'repporte')
-        ->where('date', 'like', '%'.$rapel.'%')->get();
+        $users = RendezVous::where('date', 'like', $rapel.'%')->where('status', 'A venir')
+        ->orWhere('status', 'repporte')->get();
         foreach ($users as $user) {
             Mail::to($user->email)->queue(new RappelRdvMail($user));
         }
