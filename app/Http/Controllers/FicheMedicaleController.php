@@ -41,20 +41,21 @@ class FicheMedicaleController extends Controller
             'nom' => 'required|string|max:255',
             'postnom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
-            'adresse' => 'required|string|max:255',
-            'sexe' => 'required|string|max:255',
-            'num_dossier' => 'required|string|max:255',
+            // 'adresse' => 'required|string|max:255',
+            // 'sexe' => 'required|string|max:255',
+            // 'num_dossier' => 'required|string|max:255',
+            // 'num_telephone' => 'required|string|max:255',
             'date_naissance' => 'required|string|max:255',
-            'lieu_naissance' => 'required|string|max:255',
-            'situation_familliale' => 'required|string|max:255',
+            // 'lieu_naissance' => 'required|string|max:255',
+            // 'situation_familliale' => 'required|string|max:255',
             // 'nbr_enfants' => 'string|max:255',
             // 'nbr_grosses' => 'string|max:255',
-            'num_secu' => 'required|string|max:255',
-            'medecin_traitant' => 'required|string|max:255',
-            'groupe_saguin' => 'required|string|max:255',
-            'taille' => 'required|string|max:255',
-            'poids' => 'required|string|max:255',
-            'fumeur' => 'required|string|max:255',
+            // 'num_secu' => 'required|string|max:255',
+            // 'medecin_traitant' => 'required|string|max:255',
+            // 'groupe_saguin' => 'required|string|max:255',
+            // 'taille' => 'required|string|max:255',
+            // 'poids' => 'required|string|max:255',
+            // 'fumeur' => 'required|string|max:255',
             // 'nbr_cigarette' => 'string|max:255',
             // 'antecedents_familiaux' => 'string|max:255',
             // 'maladie_infatiles_contractees' => 'string|max:255',
@@ -72,6 +73,7 @@ class FicheMedicaleController extends Controller
             'adresse' => $request->adresse,
             'sexe' => $request->sexe,
             'num_dossier' => $request->num_dossier,
+            'num_telephone' => $request->num_telephone,
             'date_naissance' => $request->date_naissance,
             'lieu_naissance' => $request->lieu_naissance,
             'situation_familliale' => $request->situation_familliale,
@@ -92,26 +94,25 @@ class FicheMedicaleController extends Controller
             'traitement_regulier' => $request->traitement_regulier,
             'vaccin' => $request->vaccin,
             'user_id' => Auth::user()->id,
-        ]); 
+        ]);
 
         return response($fiche, 201);
     }
 
     public function export($delai, $mois = null, $annee = null)
     {
-        if($delai == 'annee'){
+        if ($delai == 'annee') {
             $date = new DateTimeImmutable($annee);
             $req = $date->format('Y');
 
-            return Excel::download(new FicheExport($req), 'rapport des fiches de '.$req.'.xlsx');
-        }elseif($delai == 'mois'){
+            return Excel::download(new FicheExport($req), 'rapport des fiches de ' . $req . '.xlsx');
+        } elseif ($delai == 'mois') {
 
             $date = new DateTimeImmutable($mois);
             $req = $date->format('Y-m');
 
-            return Excel::download(new FicheExport($req), 'rapport des fiches de '.$req.'.xlsx');
+            return Excel::download(new FicheExport($req), 'rapport des fiches de ' . $req . '.xlsx');
         }
-
     }
 
     /**
@@ -127,7 +128,68 @@ class FicheMedicaleController extends Controller
      */
     public function update(Request $request, FicheMedicale $ficheMedicale)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'postnom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            // 'adresse' => 'required|string|max:255',
+            // 'sexe' => 'required|string|max:255',
+            // 'num_dossier' => 'required|string|max:255',
+            // 'num_telephone' => 'required|string|max:255',
+            'date_naissance' => 'required|string|max:255',
+            // 'lieu_naissance' => 'required|string|max:255',
+            // 'situation_familliale' => 'required|string|max:255',
+            // 'nbr_enfants' => 'string|max:255',
+            // 'nbr_grosses' => 'string|max:255',
+            // 'num_secu' => 'required|string|max:255',
+            // 'medecin_traitant' => 'required|string|max:255',
+            // 'groupe_saguin' => 'required|string|max:255',
+            // 'taille' => 'required|string|max:255',
+            // 'poids' => 'required|string|max:255',
+            // 'fumeur' => 'required|string|max:255',
+            // 'nbr_cigarette' => 'string|max:255',
+            // 'antecedents_familiaux' => 'string|max:255',
+            // 'maladie_infatiles_contractees' => 'string|max:255',
+            // 'antecedent_medicaux' => 'string|max:255',
+            // 'allergies' => 'string|max:255',
+            // 'intolerance_medicamenteuse' => 'string|max:255',
+            // 'traitement_regulier' => 'string|max:255',
+            // 'vaccin' => 'string|max:255',
+        ]);
+
+        $fiche = FicheMedicale::where('id', $ficheMedicale->id)->update(
+            [
+                'nom' => $request->nom,
+                'postnom' => $request->postnom,
+                'prenom' => $request->prenom,
+                'adresse' => $request->adresse,
+                // 'sexe' => $request->sexe,
+                'num_dossier' => $request->num_dossier,
+                'num_telephone' => $request->num_telephone,
+                'date_naissance' => $request->date_naissance,
+                'lieu_naissance' => $request->lieu_naissance,
+                'situation_familliale' => $request->situation_familliale,
+                'nbr_enfants' => $request->nbr_enfants,
+                'nbr_grosses' => $request->nbr_grosses,
+                'num_secu' => $request->num_secu,
+                'medecin_traitant' => $request->medecin_traitant,
+                'groupe_saguin' => $request->groupe_saguin,
+                'taille' => $request->taille,
+                'poids' => $request->poids,
+                'fumeur' => $request->fumeur,
+                'nbr_cigarette' => $request->nbr_cigarette,
+                'antecedents_familiaux' => $request->antecedents_familiaux,
+                'maladie_infatiles_contractees' => $request->maladie_infatiles_contractees,
+                'antecedent_medicaux' => $request->antecedent_medicaux,
+                'allergies' => $request->allergies,
+                'intolerance_medicamenteuse' => $request->intolerance_medicamenteuse,
+                'traitement_regulier' => $request->traitement_regulier,
+                'vaccin' => $request->vaccin,
+
+            ]
+        );
+
+        return response($fiche, 201);
     }
 
     /**
@@ -135,8 +197,8 @@ class FicheMedicaleController extends Controller
      */
     public function destroy(FicheMedicale $ficheMedicale)
     {
-        //
+        $req = FicheMedicale::where('id', $ficheMedicale->id)->update(['disable' => 'true']);
+
+        return response($req, 201);
     }
-
-
 }

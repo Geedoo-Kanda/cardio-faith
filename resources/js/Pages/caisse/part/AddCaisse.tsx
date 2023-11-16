@@ -4,20 +4,26 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
-import { FormEventHandler } from 'react';
+import { Calendar } from 'primereact/calendar';
+import { FormEventHandler, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function AddCaiise() {
 
-    const { data, setData, post, processing, errors, reset } = useForm({
-        operation: '',
-        montant: '',
-        libele: '',
-    });
+    const [operation, setoperation] = useState('');
+    const [montant, setmontant] = useState('');
+    const [libele, setlibele] = useState('');
+    const [date, setdate] = useState<any | null>(null);
 
     const AddSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        
+
+        let data = {
+            operation,
+            montant,
+            libele,
+            date
+        }
         const id = toast.loading("Chargement...")
         axios.post(route('caisse.store'), data)
             .then(() => {
@@ -27,7 +33,10 @@ export default function AddCaiise() {
                     autoClose: 3000,
                     isLoading: false
                 });
-                reset()
+                setdate('')
+                setlibele('')
+                setmontant('')
+                setoperation('')
             }).catch(() => {
                 toast.update(id, {
                     render: "Oups, veillez récommencer",
@@ -47,13 +56,12 @@ export default function AddCaiise() {
                     <div>
                         <InputLabel htmlFor="operation" value="Opération*" />
 
-                        <select name='operation' id="operation" value={data.operation} onChange={(e) => setData('operation', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                        <select name='operation' id="operation" value={operation} onChange={(e) => setoperation(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
                             <option selected>Choisir</option>
                             <option value="retrait">Retrait</option>
                             <option value="depot">Depot</option>
                         </select>
 
-                        <InputError message={errors.operation} className="mt-2" />
                     </div>
                     <div>
                         <InputLabel htmlFor="montant" value="Montant*" />
@@ -62,26 +70,30 @@ export default function AddCaiise() {
                             id="montant"
                             type="number"
                             name="montant"
-                            value={data.montant}
+                            value={montant}
                             className="mt-1 block w-full"
                             autoComplete="username"
-                            onChange={(e) => setData('montant', e.target.value)}
+                            onChange={(e) => setmontant(e.target.value)}
                             required
                         />
 
-                        <InputError message={errors.montant} className="mt-2" />
                     </div>
+                    <div>
+                        <InputLabel htmlFor="date" value="Date*" />
 
-                </div>
-                <div className='mt-3'>
-                    <InputLabel htmlFor="libele" value="Libele*" />
+                        <Calendar value={date} onChange={(e) => setdate(e.target.value)} dateFormat="dd/mm/yy" className="mt-1 block w-full h-11" />
 
-                    <textarea name='libele' id="libele" value={data.libele} onChange={(e) => setData('libele', e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Écrivez ici..."></textarea>
-                    <InputError message={errors.libele} className="mt-2" />
+                    </div>
+                    <div>
+                        <InputLabel htmlFor="libele" value="Libele*" />
+
+                        <textarea name='libele' id="libele" value={libele} onChange={(e) => setlibele(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Écrivez ici..."></textarea>
+                    </div>
                 </div>
+
                 <div className="flex items-center justify-end mt-4">
 
-                    <PrimaryButton className="ml-4 bg-red-500" disabled={processing}>
+                    <PrimaryButton className="ml-4 bg-red-500">
                         Enregister
                     </PrimaryButton>
                 </div>

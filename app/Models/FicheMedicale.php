@@ -41,6 +41,7 @@ class FicheMedicale extends Model
         'traitement_regulier',
         'vaccin',
         'num_dossier',
+        'num_telephone',
         'user_id'
     ];    
 }

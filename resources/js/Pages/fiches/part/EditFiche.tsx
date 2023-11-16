@@ -1,24 +1,55 @@
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
+import TextInput from '@/Components/TextInput';
 import axios from 'axios';
 import { Calendar } from 'primereact/calendar';
 import { FormEventHandler, useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function EditRdv({ edit } : any) {
+export default function EditFiche({ edit } : any) {
 
-    const [conclusion, setconclusion] = useState(edit.conclusion);   
+    const [nom, setnom] = useState(edit.nom);
+    const [postnom, setpostnom] = useState(edit.postnom);
+    const [prenom, setprenom] = useState(edit.prenom);
+    const [adresse, setadresse] = useState(edit.adresse);
+    const [sexe, setsexe] = useState(edit.sexe);
+    const [date_naissance, setdate_naissance] = useState<any | null>(new Date(edit.date_naissance));
+    const [lieu_naissance, setlieu_naissance] = useState(edit.lieu_naissance);
+    const [situation_familliale, setsituation_familliale] = useState(edit.situation_familliale);
+    const [nbr_enfants, setnbr_enfants] = useState(edit.nbr_enfants);
+    const [nbr_grosses, setnbr_grosses] = useState(edit.nbr_grosses);
+    const [num_dossier, setnum_dossier] = useState(edit.num_dossier);
+    const [num_telephone, setnum_telephone] = useState(edit.num_telephone);
+    const [num_secu, setnum_secu] = useState(edit.num_secu);
+    const [taille, settaille] = useState(edit.taille);
+    const [poids, setpoids] = useState(edit.poids);
+    const [medecin_traitant, setmedecin_traitant] = useState(edit.medecin_traitant);
+    const [fumeur, setfumeur] = useState(edit.fumeur);
+    const [nbr_cigarette, setnbr_cigarette] = useState(edit.nbr_cigarette);
+    const [groupe_saguin, setgroupe_saguin] = useState(edit.groupe_saguin);
+    const [antecedents_familiaux, setantecedents_familiaux] = useState(edit.antecedents_familiaux);
+    const [maladie_infatiles_contractees, setmaladie_infatiles_contractees] = useState(edit.maladie_infatiles_contractees);
+    const [antecedent_medicaux, setantecedent_medicaux] = useState(edit.antecedent_medicaux);
+    const [allergies, setallergies] = useState(edit.allergies);
+    const [intolerance_medicamenteuse, setintolerance_medicamenteuse] = useState(edit.intolerance_medicamenteuse);
+    const [traitement_regulier, settraitement_regulier] = useState(edit.traitement_regulier);
+    const [vaccin, setvaccin] = useState(edit.vaccin);
 
-    const submit: FormEventHandler = (e) => {
+
+    const AddSubmit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        let data = {conclusion}
+        let data = {
+            nom, postnom, prenom, adresse, sexe, date_naissance, lieu_naissance, situation_familliale, nbr_enfants, nbr_grosses,
+            num_secu, taille, poids, medecin_traitant, fumeur, nbr_cigarette, groupe_saguin, antecedents_familiaux, maladie_infatiles_contractees, 
+            antecedent_medicaux, allergies, intolerance_medicamenteuse, traitement_regulier, vaccin, num_dossier, num_telephone
+        }
 
         const id = toast.loading("Chargement...")
-        axios.put('/admin/compte-rendu/' + edit.id, data)
+        axios.put('/admin/fiches/' + edit.id, data)
             .then(() => {
                 toast.update(id, {
-                    render: "Compte rendu ajouté",
+                    render: "Compte rendu modifié",
                     type: toast.TYPE.SUCCESS,
                     autoClose: 3000,
                     isLoading: false
@@ -35,22 +66,376 @@ export default function EditRdv({ edit } : any) {
 
     return (
         <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-gray-700 text-center w-full mb-4 pb-2">Ajouter un compte rendu</h2>
+            <h2 className="text-2xl font-bold text-gray-700 text-center w-full mb-4 pb-2">Modifier une fiche</h2>
 
-        <form onSubmit={submit}>
-        <div className='mt-4'>
-                        <InputLabel htmlFor="conclusion" value="Compte rendu*" />
+            <form onSubmit={AddSubmit} method='post'>
+                <div className='overflow-hidden overflow-y-scroll h-96'>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <InputLabel htmlFor="nom" value="Nom*" />
 
-                        <textarea name='conclusion' id="conclusion" value={conclusion} onChange={(e) => setconclusion(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm h-32" placeholder="Écrivez ici..."></textarea>
+                            <TextInput
+                                id="nom"
+                                name="nom"
+                                value={nom}
+                                className="mt-1 block w-full"
+                                autoComplete="nom"
+                                isFocused={true}
+                                onChange={(e) => setnom(e.target.value)}
+                                required
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="postnom" value="Postnom*" />
+
+                            <TextInput
+                                id="postnom"
+                                name="postnom"
+                                value={postnom}
+                                className="mt-1 block w-full"
+                                autoComplete="postnom"
+                                onChange={(e) => setpostnom(e.target.value)}
+                                required
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="prenom" value="Prenom*" />
+
+                            <TextInput
+                                id="prenom"
+                                name="prenom"
+                                value={prenom}
+                                className="mt-1 block w-full"
+                                autoComplete="prenom"
+                                onChange={(e) => setprenom(e.target.value)}
+                                required
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="num_dossier" value="N° de dossier" />
+
+                            <TextInput
+                                id="num_dossier"
+                                type="number"
+                                name="num_dossier"
+                                value={num_dossier}
+                                className="mt-1 block w-full"
+                                autoComplete="num_dossier"
+                                onChange={(e) => setnum_dossier(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="num_telephone" value="N° de téléphone" />
+
+                            <TextInput
+                                id="num_telephone"
+                                type="number"
+                                name="num_telephone"
+                                value={num_telephone}
+                                className="mt-1 block w-full"
+                                autoComplete="num_telephone"
+                                onChange={(e) => setnum_telephone(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="adresse" value="Adresse" />
+
+                            <TextInput
+                                id="adresse"
+                                name="adresse"
+                                value={adresse}
+                                className="mt-1 block w-full"
+                                autoComplete="adresse"
+                                onChange={(e) => setadresse(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="situation_familliale" value="Situation familliale" />
+
+                            <select name='situation_familliale' id="situation_familliale" value={situation_familliale} onChange={(e) => setsituation_familliale(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                                <option selected>Choisir</option>
+                                <option value="celibataire">Celibataire</option>
+                                <option value="marie/e">Marie/e</option>
+                                <option value="divorce/e">Divorce/e</option>
+                                <option value="veuf/ve">Veuf/ve</option>
+                            </select>
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="sexe" value="Sexe" />
+
+                            <select name='sexe' id="sexe" value={sexe} onChange={(e) => setsexe(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                                <option selected>Choisir</option>
+                                <option value="M">Masculin</option>
+                                <option value="F">Feminin</option>
+                            </select>
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="lieu_naissance" value="Lieu de naissance" />
+
+                            <TextInput
+                                id="lieu_naissance"
+                                type="text"
+                                name="lieu_naissance"
+                                value={lieu_naissance}
+                                className="mt-1 block w-full"
+                                autoComplete="lieu_naissance"
+                                onChange={(e) => setlieu_naissance(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="date_naissance" value="Date de naissance*" />
+
+                            <Calendar value={date_naissance} onChange={(e) => setdate_naissance(e.target.value)} dateFormat="dd/mm/yy" className="mt-1 block w-full h-11" />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="nbr_enfants" value="Nombre d'enfant/s" />
+
+                            <TextInput
+                                id="nbr_enfants"
+                                type="number"
+                                name="nbr_enfants"
+                                value={nbr_enfants}
+                                className="mt-1 block w-full"
+                                autoComplete="nbr_enfants"
+                                onChange={(e) => setnbr_enfants(e.target.value)}
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="nbr_grosses" value="Nombre de grosse/s" />
+
+                            <TextInput
+                                id="nbr_grosses"
+                                type="number"
+                                name="nbr_grosses"
+                                value={nbr_grosses}
+                                className="mt-1 block w-full"
+                                autoComplete="nbr_grosses"
+                                onChange={(e) => setnbr_grosses(e.target.value)}
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="num_secu" value="N° de Sécu" />
+
+                            <TextInput
+                                id="num_secu"
+                                type="number"
+                                name="num_secu"
+                                value={num_secu}
+                                className="mt-1 block w-full"
+                                autoComplete="num_secu"
+                                onChange={(e) => setnum_secu(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="medecin_traitant" value="Medecin traitant" />
+
+                            <TextInput
+                                id="medecin_traitant"
+                                type="text"
+                                name="medecin_traitant"
+                                value={medecin_traitant}
+                                className="mt-1 block w-full"
+                                autoComplete="medecin_traitant"
+                                onChange={(e) => setmedecin_traitant(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="poids" value="Poids" />
+
+                            <TextInput
+                                id="poids"
+                                type="number"
+                                name="poids"
+                                value={poids}
+                                className="mt-1 block w-full"
+                                autoComplete="poids"
+                                onChange={(e) => setpoids(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="taille" value="Taille" />
+
+                            <TextInput
+                                id="taille"
+                                type="number"
+                                name="taille"
+                                value={taille}
+                                className="mt-1 block w-full"
+                                autoComplete="taille"
+                                onChange={(e) => settaille(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="groupe_saguin" value="Groupe sanguin" />
+
+                            <select name='groupe_saguin' id="groupe_saguin" value={groupe_saguin} onChange={(e) => setgroupe_saguin(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                                <option selected>Choisir</option>
+                                <option value="a">A</option>
+                                <option value="b">B</option>
+                                <option value="ab">AB</option>
+                                <option value="o">O</option>
+                            </select>
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="fumeur" value="Fumeur" />
+
+                            <select name='fumeur' id="fumeur" value={fumeur} onChange={(e) => setfumeur(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                                <option selected>Choisir</option>
+                                <option value="oui">Oui</option>
+                                <option value="non">Non</option>
+                            </select>
+
+                        </div>
+                        {
+                            fumeur == "oui" ?
+                                <div>
+                                    <InputLabel htmlFor="nbr_cigarette" value="Nombre de cigarette/jour" />
+
+                                    <TextInput
+                                        id="nbr_cigarette"
+                                        type="number"
+                                        name="nbr_cigarette"
+                                        value={nbr_cigarette}
+                                        className="mt-1 block w-full"
+                                        autoComplete="username"
+                                        onChange={(e) => setnbr_cigarette(e.target.value)}
+                                    />
+
+                                </div> : ''
+                        }
+                        <div>
+                            <InputLabel htmlFor="antecedents_familiaux" value="Antécédents familiaux" />
+
+                            <TextInput
+                                id="antecedents_familiaux"
+                                type="text"
+                                name="antecedents_familiaux"
+                                value={antecedents_familiaux}
+                                className="mt-1 block w-full"
+                                autoComplete="antecedents_familiaux"
+                                onChange={(e) => setantecedents_familiaux(e.target.value)}
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="maladie_infatiles_contractees" value="Maladie infatiles contractées" />
+
+                            <TextInput
+                                id="maladie_infatiles_contractees"
+                                type="text"
+                                name="maladie_infatiles_contractees"
+                                value={maladie_infatiles_contractees}
+                                className="mt-1 block w-full"
+                                autoComplete="maladie_infatiles_contractees"
+                                onChange={(e) => setmaladie_infatiles_contractees(e.target.value)}
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="antecedent_medicaux" value="Antécédents medicaux" />
+
+                            <TextInput
+                                id="antecedent_medicaux"
+                                type="text"
+                                name="antecedent_medicaux"
+                                value={antecedent_medicaux}
+                                className="mt-1 block w-full"
+                                autoComplete="antecedent_medicaux"
+                                onChange={(e) => setantecedent_medicaux(e.target.value)}
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="allergies" value="Allergies" />
+
+                            <TextInput
+                                id="allergies"
+                                type="text"
+                                name="allergies"
+                                value={allergies}
+                                className="mt-1 block w-full"
+                                autoComplete="allergies"
+                                onChange={(e) => setallergies(e.target.value)}
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="intolerance_medicamenteuse" value="Intolérance médicamenteuse" />
+
+                            <TextInput
+                                id="intolerance_medicamenteuse"
+                                type="text"
+                                name="intolerance_medicamenteuse"
+                                value={intolerance_medicamenteuse}
+                                className="mt-1 block w-full"
+                                autoComplete="intolerance_medicamenteuse"
+                                onChange={(e) => setintolerance_medicamenteuse(e.target.value)}
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="traitement_regulier" value="Traitement regulier" />
+
+                            <TextInput
+                                id="traitement_regulier"
+                                type="text"
+                                name="traitement_regulier"
+                                value={traitement_regulier}
+                                className="mt-1 block w-full"
+                                autoComplete="traitement_regulier"
+                                onChange={(e) => settraitement_regulier(e.target.value)}
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="vaccin" value="Vaccin" />
+
+                            <TextInput
+                                id="vaccin"
+                                type="text"
+                                name="vaccin"
+                                value={vaccin}
+                                className="mt-1 block w-full"
+                                autoComplete="vaccin"
+                                onChange={(e) => setvaccin(e.target.value)}
+                            />
+
+                        </div>
                     </div>
+                </div>
 
-            <div className="flex items-center justify-end mt-4">
+                <div className="flex items-center justify-end mt-4">
 
-                <PrimaryButton className="ml-4 bg-red-500">
-                    Enregister
-                </PrimaryButton>
-            </div>
-        </form>
-    </div>
+                    <PrimaryButton className="ml-4 bg-red-500">
+                        Enregister
+                    </PrimaryButton>
+                </div>
+            </form>
+        </div>
     );
 }

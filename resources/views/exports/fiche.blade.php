@@ -10,6 +10,7 @@
             <th><b>Postnom</b></th>
             <th><b>Prenom</b></th>
             <th><b>Sexe</b></th>
+            <th><b>Telephone</b></th>
             <th><b>Lieu et date de naissance</b></th>
             <th><b>Adresse</b></th>
             <th><b>Situation familiale</b></th>
@@ -41,6 +42,7 @@
                 <td>{{ $fiche->postnom }}</td>
                 <td>{{ $fiche->prenom }}</td>
                 <td>{{ $fiche->sexe }}</td>
+                <td>{{ $fiche->num_telephone }}</td>
                 <td>{{ $fiche->lieu_naissance }},
                     @php
                         $date1 = new DateTimeImmutable($fiche->date_naissance);

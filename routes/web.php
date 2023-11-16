@@ -54,8 +54,8 @@ Route::prefix('admin')->group(function () {
     Route::prefix('fiches')->group(function () {
         Route::get('/liste', [FicheMedicaleController::class, 'indexView'])->name('fiches.indexView');
         Route::post('/', [FicheMedicaleController::class, 'store'])->name('fiches.store');
-        Route::get('/delete/{fiches}', [FicheMedicaleController::class, 'destroy'])->name('fiches.destroy');
-        Route::put('/{fiches}', [FicheMedicaleController::class, 'update'])->name('fiches.update');
+        Route::get('/delete/{ficheMedicale}', [FicheMedicaleController::class, 'destroy'])->name('fiches.destroy');
+        Route::put('/{ficheMedicale}', [FicheMedicaleController::class, 'update'])->name('fiches.update');
         Route::get('/export/{delai}/{mois?}/{annee?}', [FicheMedicaleController::class, 'export'])
         ->name('fiches.export');
     });
@@ -85,6 +85,10 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
+});
+
+Route::get('/sitemap', function () {
+    return view('sitemap');
 });
 
 Route::get('/dashboard', function () {

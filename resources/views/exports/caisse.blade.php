@@ -5,7 +5,8 @@
     <thead>
         <tr class="font-bold">
             <th>#</th>
-            <th><b>Date</b></th>
+            <th><b>Date de l'operation</b></th>
+            <th><b>Date de l'enregistrement</b></th>
             <th><b>Operation</b></th>
             <th><b>Montant</b></th>
             <th><b>Solde</b></th>
@@ -17,6 +18,13 @@
         @foreach ($caisse as $cais)
             <tr>
                 <td>{{ $loop->iteration }}</td>
+                <td>
+                    @php
+                        $date3 = new DateTimeImmutable($cais->date);
+                        $date4 = $date3->format('d-m-Y');
+                    @endphp
+                    {{ $date4 }}
+                </td>
                 <td>
                     @php
                         $date1 = new DateTimeImmutable($cais->created_at);

@@ -15,6 +15,7 @@ import DangerButton from "@/Components/DangerButton";
 import { RiFileExcel2Line } from "react-icons/ri";
 import ExportFiche from "./part/ExportFiche";
 import EditFiche from "./part/EditFiche";
+import AddCompteRendu from "./part/AddCompteRendu";
 
 
 export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches: any, compteRendus: any }>) {
@@ -23,6 +24,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
     const [disable, setDisable] = useState(false);
     const [exporter, setexporter] = useState(false);
     const [edit, setedit] = useState(false);
+    const [addCr, setaddCr] = useState(false);
     const [id, setid] = useState('');
     const [search, setSearch] = useState("");
 
@@ -33,6 +35,11 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
 
     function Edit(p: any) {
         setedit(true);
+        setid(p)
+    };
+
+    function AddCR(p: any) {
+        setaddCr(true);
         setid(p)
     };
 
@@ -51,6 +58,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
     const closeModal = () => {
         setview(false);
         setedit(false);
+        setaddCr(false);
         setadd(false);
         setexporter(false);
         setDisable(false);
@@ -59,7 +67,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
 
     const DeleteFiche = () => {
         const etat = toast.loading("Chargement...")
-        axios.get('/admin/fiche/delete/' + id)
+        axios.get('/admin/fiches/delete/' + id)
             .then(() => {
                 toast.update(etat, {
                     render: "Fiche supprimée",
@@ -67,9 +75,8 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                     autoClose: 3000,
                     isLoading: false
                 });
-                setDisable(false);
                 router.reload({ only: ['fiches'] })
-
+                setDisable(false);
             }).catch(() => {
                 toast.update(etat, {
                     render: "Oups, veillez récommencer",
@@ -105,7 +112,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                         <span onClick={Exporter} className="p-4 md:mt-0 mt-8 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2" />Exporter les données</span>
                     </div>
                     <div className="max-w-xs w-full">
-                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
+                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche le nom..." />
                     </div>
                 </div>
 
@@ -138,6 +145,9 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                                         Sexe
                                                     </th>
                                                     <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
+                                                        Telephone
+                                                    </th>
+                                                    <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
                                                         Lieu et date de naissance
                                                     </th>
                                                     <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
@@ -154,7 +164,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                             <tbody className="bg-white divide-y divide-gray-200">
                                                 {fiches.data.filter((fiche: any) => {
                                                     return (search.toLowerCase() === "" ? fiche :
-                                                        fiche.nom.toLowerCase().includes(search))
+                                                        fiche.nom.toLowerCase().includes(search.toLowerCase()))
                                                 }).map((fiche: any, index: any) => (
                                                     <tr key={index}>
                                                         <td className="p-4 text-sm font-medium text-gray-700 whitespace-nowrap text-center">
@@ -170,6 +180,9 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                                             {fiche.sexe}
                                                         </td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
+                                                            {fiche.num_telephone}
+                                                        </td>
+                                                        <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
                                                             {fiche.lieu_naissance},  {dayjs(new Date(fiche.date_naissance)).format(" le DD-MM-YYYY")}
                                                         </td>
                                                         <td className="p-4 text-sm text-gray-700 text-center">
@@ -180,7 +193,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                                         </td>
 
                                                         <td className="flex items-center justify-center px-2 h-full">
-                                                            <span onClick={() => Show(fiche.id)} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white mt-1 p-2 rounded-md text-sm mr-2">  <FaEye /></span>
+                                                            <span onClick={() => Show(fiche.id)} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white mt-1 p-2 rounded-md text-sm">  <FaEye /></span>
                                                             <Modal show={id == fiche.id ? view : false} onClose={closeModal}>
                                                                 <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                                                                 <div className="p-5 mt-4 ">
@@ -195,6 +208,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                                                                 {fiche.lieu_naissance},  {dayjs(new Date(fiche.date_naissance)).format(" le DD-MM-YYYY")}
                                                                             </span>
                                                                             <span className="col-span-4 font-semibold">Sexe </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.sexe}</span>
+                                                                            <span className="col-span-4 font-semibold">Telephone </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.num_telephone}</span>
                                                                             <span className="col-span-4 font-semibold">Adresse </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.adresse}</span>
                                                                             <span className="col-span-4 font-semibold">situation familliale </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.situation_familliale}</span>
                                                                             <span className="col-span-4 font-semibold">Nombre d'enfant/s </span> <span className="col-span-1">:</span> <span className="col-span-7">{fiche.nbr_enfants}</span>
@@ -236,18 +250,54 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                                                     </div>
                                                                 </div>
                                                             </Modal>
+                                                           
+                                                            <span onClick={() => Edit(fiche.id)} className="bg-green-500 hover:bg-green-700 text-white mt-1 ml-1 p-2 rounded-md text-sm">   <FaRegEdit /></span>
+                                                            <Modal show={id == fiche.id ? edit : false} onClose={closeModal}>
+                                                                <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                <EditFiche edit={{
+                                                                    'id': fiche.id,
+                                                                    'nom': fiche.nom,
+                                                                    'postnom': fiche.postnom,
+                                                                    'prenom': fiche.prenom,
+                                                                    'num_dossier': fiche.num_dossier,
+                                                                    'num_telephone': fiche.num_telephone,
+                                                                    'adresse': fiche.adresse,
+                                                                    'situation_familliale': fiche.situation_familliale,
+                                                                    'sexe': fiche.sexe,
+                                                                    'lieu_naissance': fiche.lieu_naissance,
+                                                                    'date_naissance': fiche.date_naissance,
+                                                                    'nbr_enfants': fiche.nbr_enfants,
+                                                                    'nbr_grosses': fiche.nbr_grosses,
+                                                                    'num_secu': fiche.num_secu,
+                                                                    'medecin_traitant': fiche.medecin_traitant,
+                                                                    'poids': fiche.poids,
+                                                                    'taille': fiche.taille,
+                                                                    'groupe_saguin': fiche.groupe_saguin,
+                                                                    'fumeur': fiche.fumeur,
+                                                                    'nbr_cigarette': fiche.nbr_cigarette,
+                                                                    'antecedents_familiaux': fiche.antecedents_familiaux,
+                                                                    'antecedent_medicaux': fiche.antecedent_medicaux,
+                                                                    'maladie_infatiles_contractees': fiche.maladie_infatiles_contractees,
+                                                                    'allergies': fiche.allergies,
+                                                                    'intolerance_medicamenteuse': fiche.intolerance_medicamenteuse,
+                                                                    'traitement_regulier': fiche.traitement_regulier,
+                                                                    'vaccin': fiche.vaccin,
+                                                                }} />
+                                                            </Modal>
+
                                                             {
                                                                 auth.user.acces == 1 || auth.user.acces == 3 ?
                                                                     <>
-                                                                        <span onClick={() => Edit(fiche.id)} className="bg-green-500 hover:bg-green-700 text-white mt-1 p-2 mx-1 rounded-md text-sm">  <FaRegEdit /></span>
-                                                                        <Modal show={id == fiche.id ? edit : false} onClose={closeModal}>
+                                                                        <span onClick={() => AddCR(fiche.id)} className="bg-blue-500 hover:bg-blue-700 text-white mt-1 p-2 mx-1 rounded-md text-sm"><BiPlusMedical /></span>
+                                                                        <Modal show={id == fiche.id ? addCr : false} onClose={closeModal}>
                                                                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
-                                                                            <EditFiche edit={{
+                                                                            <AddCompteRendu edit={{
                                                                                 'id': fiche.id,
                                                                             }} />
                                                                         </Modal>
                                                                     </> : ''
                                                             }
+                                                           
                                                             {
                                                                 auth.user.acces == 1 ?
                                                                     <>

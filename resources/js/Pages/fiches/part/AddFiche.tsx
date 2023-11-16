@@ -19,6 +19,7 @@ export default function AddFiche() {
     const [nbr_enfants, setnbr_enfants] = useState('');
     const [nbr_grosses, setnbr_grosses] = useState('');
     const [num_dossier, setnum_dossier] = useState('');
+    const [num_telephone, setnum_telephone] = useState('');
     const [num_secu, setnum_secu] = useState('');
     const [taille, settaille] = useState('');
     const [poids, setpoids] = useState('');
@@ -41,7 +42,7 @@ export default function AddFiche() {
         let data = {
             nom, postnom, prenom, adresse, sexe, date_naissance, lieu_naissance, situation_familliale, nbr_enfants, nbr_grosses,
             num_secu, taille, poids, medecin_traitant, fumeur, nbr_cigarette, groupe_saguin, antecedents_familiaux, maladie_infatiles_contractees, 
-            antecedent_medicaux, allergies, intolerance_medicamenteuse, traitement_regulier, vaccin, num_dossier
+            antecedent_medicaux, allergies, intolerance_medicamenteuse, traitement_regulier, vaccin, num_dossier, num_telephone
         }
 
         const id = toast.loading("Chargement...")
@@ -114,7 +115,7 @@ export default function AddFiche() {
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="num_dossier" value="N° De dossier*" />
+                            <InputLabel htmlFor="num_dossier" value="N° de dossier" />
 
                             <TextInput
                                 id="num_dossier"
@@ -124,12 +125,27 @@ export default function AddFiche() {
                                 className="mt-1 block w-full"
                                 autoComplete="num_dossier"
                                 onChange={(e) => setnum_dossier(e.target.value)}
-                                required
+                                
                             />
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="adresse" value="Adresse*" />
+                            <InputLabel htmlFor="num_telephone" value="N° de téléphone" />
+
+                            <TextInput
+                                id="num_telephone"
+                                type="number"
+                                name="num_telephone"
+                                value={num_telephone}
+                                className="mt-1 block w-full"
+                                autoComplete="num_telephone"
+                                onChange={(e) => setnum_telephone(e.target.value)}
+                                
+                            />
+
+                        </div>
+                        <div>
+                            <InputLabel htmlFor="adresse" value="Adresse" />
 
                             <TextInput
                                 id="adresse"
@@ -138,12 +154,12 @@ export default function AddFiche() {
                                 className="mt-1 block w-full"
                                 autoComplete="adresse"
                                 onChange={(e) => setadresse(e.target.value)}
-                                required
+                                
                             />
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="situation_familliale" value="Situation familliale*" />
+                            <InputLabel htmlFor="situation_familliale" value="Situation familliale" />
 
                             <select name='situation_familliale' id="situation_familliale" value={situation_familliale} onChange={(e) => setsituation_familliale(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
                                 <option selected>Choisir</option>
@@ -155,7 +171,7 @@ export default function AddFiche() {
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="sexe" value="Sexe*" />
+                            <InputLabel htmlFor="sexe" value="Sexe" />
 
                             <select name='sexe' id="sexe" value={sexe} onChange={(e) => setsexe(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
                                 <option selected>Choisir</option>
@@ -165,7 +181,7 @@ export default function AddFiche() {
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="lieu_naissance" value="Lieu de naissance*" />
+                            <InputLabel htmlFor="lieu_naissance" value="Lieu de naissance" />
 
                             <TextInput
                                 id="lieu_naissance"
@@ -175,7 +191,7 @@ export default function AddFiche() {
                                 className="mt-1 block w-full"
                                 autoComplete="lieu_naissance"
                                 onChange={(e) => setlieu_naissance(e.target.value)}
-                                required
+                                
                             />
 
                         </div>
@@ -214,7 +230,7 @@ export default function AddFiche() {
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="num_secu" value="N° de Sécu*" />
+                            <InputLabel htmlFor="num_secu" value="N° de Sécu" />
 
                             <TextInput
                                 id="num_secu"
@@ -224,12 +240,12 @@ export default function AddFiche() {
                                 className="mt-1 block w-full"
                                 autoComplete="num_secu"
                                 onChange={(e) => setnum_secu(e.target.value)}
-                                required
+                                
                             />
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="medecin_traitant" value="Medecin traitant*" />
+                            <InputLabel htmlFor="medecin_traitant" value="Medecin traitant" />
 
                             <TextInput
                                 id="medecin_traitant"
@@ -239,12 +255,12 @@ export default function AddFiche() {
                                 className="mt-1 block w-full"
                                 autoComplete="medecin_traitant"
                                 onChange={(e) => setmedecin_traitant(e.target.value)}
-                                required
+                                
                             />
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="poids" value="Poids*" />
+                            <InputLabel htmlFor="poids" value="Poids" />
 
                             <TextInput
                                 id="poids"
@@ -254,12 +270,12 @@ export default function AddFiche() {
                                 className="mt-1 block w-full"
                                 autoComplete="poids"
                                 onChange={(e) => setpoids(e.target.value)}
-                                required
+                                
                             />
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="taille" value="Taille*" />
+                            <InputLabel htmlFor="taille" value="Taille" />
 
                             <TextInput
                                 id="taille"
@@ -269,12 +285,12 @@ export default function AddFiche() {
                                 className="mt-1 block w-full"
                                 autoComplete="taille"
                                 onChange={(e) => settaille(e.target.value)}
-                                required
+                                
                             />
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="groupe_saguin" value="Groupe sanguin*" />
+                            <InputLabel htmlFor="groupe_saguin" value="Groupe sanguin" />
 
                             <select name='groupe_saguin' id="groupe_saguin" value={groupe_saguin} onChange={(e) => setgroupe_saguin(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
                                 <option selected>Choisir</option>
@@ -286,7 +302,7 @@ export default function AddFiche() {
 
                         </div>
                         <div>
-                            <InputLabel htmlFor="fumeur" value="Fumeur*" />
+                            <InputLabel htmlFor="fumeur" value="Fumeur" />
 
                             <select name='fumeur' id="fumeur" value={fumeur} onChange={(e) => setfumeur(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
                                 <option selected>Choisir</option>

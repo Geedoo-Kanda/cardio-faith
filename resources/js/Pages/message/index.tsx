@@ -90,7 +90,7 @@ export default function Message({ auth, messages }: PageProps<{ messages: any }>
                         <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Envoyez un message</span>
                     </div>
                     <div className="max-w-xs w-full">
-                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
+                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche l'objet..." />
                     </div>
                 </div>
 
@@ -133,7 +133,7 @@ export default function Message({ auth, messages }: PageProps<{ messages: any }>
                                             <tbody className="bg-white divide-y divide-gray-200">
                                                 {messages.data.filter((message: any) => {
                                                     return (search.toLowerCase() === "" ? message :
-                                                        message.objet.toLowerCase().includes(search))
+                                                        message.objet.toLowerCase().includes(search.toLowerCase()))
                                                 }).map((message: any, index: any) => (
                                                     <tr key={index}>
                                                         <td className="p-4 text-sm font-medium text-gray-700 whitespace-nowrap text-center">

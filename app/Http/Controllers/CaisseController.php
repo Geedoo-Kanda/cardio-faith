@@ -45,6 +45,7 @@ class CaisseController extends Controller
         $request->validate([
             'operation' => 'required|string|max:255',
             'montant' => 'required|string|max:255',
+            'date' => 'required|string|max:255',
             'libele' => 'required|string|max:9000',
         ]);
 
@@ -55,6 +56,7 @@ class CaisseController extends Controller
                 'operation' => $request->operation,
                 'montant' => $request->montant,
                 'libele' => $request->libele,
+                'date' => $request->date,
                 'solde' => $solde + $request->montant,
                 'user_id' => Auth::user()->id,
             ]);
@@ -63,6 +65,7 @@ class CaisseController extends Controller
                 'operation' => $request->operation,
                 'montant' => $request->montant,
                 'libele' => $request->libele,
+                'date' => $request->date,
                 'solde' => $solde - $request->montant,
                 'user_id' => Auth::user()->id,
             ]);

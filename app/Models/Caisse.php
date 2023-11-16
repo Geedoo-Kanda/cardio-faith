@@ -20,6 +20,7 @@ class Caisse extends Model
         'montant',
         'solde',
         'libele',
+        'date',
         'disable',
         'user_id',
     ];

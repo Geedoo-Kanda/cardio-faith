@@ -102,7 +102,7 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: any }>) {
                         <span onClick={Exporter} className="p-4 md:mt-0 mt-8 cursor-pointer rounded-md bg-green-600 text-white mr-5 text-sm"> <RiFileExcel2Line className="inline-flex text-2xl mr-2" />Exporter les données</span>
                     </div>
                     <div className="max-w-xs w-full">
-                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
+                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche le nom..." />
                     </div>
                 </div>
 
@@ -159,7 +159,7 @@ export default function Rdv({ auth, rdvs }: PageProps<{ rdvs: any }>) {
                                             <tbody className="bg-white divide-y divide-gray-200">
                                                 {rdvs.data.filter((rdv: any) => {
                                                     return (search.toLowerCase() === "" ? rdv :
-                                                        rdv.nom.toLowerCase().includes(search))
+                                                        rdv.nom.toLowerCase().includes(search.toLowerCase()))
                                                 }).map((rdv: any, index: any) => (
                                                     <tr key={index}>
                                                         <td className="p-4 text-sm font-medium text-gray-700 whitespace-nowrap text-center">

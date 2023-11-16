@@ -163,7 +163,7 @@ export default function Caisse({ auth, caisses }: PageProps<{ caisses: any }>) {
                                                             {index + 1}
                                                         </td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
-                                                            {dayjs(new Date(caisse.created_at)).format("dddd, MMMM D, YYYY")}
+                                                            {dayjs(new Date(caisse.date)).format("dddd, MMMM D, YYYY")}
 
                                                         </td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">
