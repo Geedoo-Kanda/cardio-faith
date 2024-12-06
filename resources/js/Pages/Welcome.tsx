@@ -1,351 +1,179 @@
 import { Link, Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import Dropdown from '@/Components/Dropdown';
+import Navbar from '@/Components/Navbar';
+import BarreLogo from '@/Components/BarreLogo';
+import FAQAccordion from '@/Components/FAQAccordion';
+import Footer from '@/Components/Footer';
 
 export default function Welcome({ auth, laravelVersion, phpVersion }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
     return (
-        <>
+        <main className='font-mono'>
             <Head title="Welcome" />
-            <div className="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-                <div className="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
-                    {auth.user ? (
-                        <>
-                            {
-                                auth.user.acces != 0 ?
-                                    auth.user.disable != 'true' ?
-                                        <Link
-                                            href={route('dashboard')}
-                                            className="inline-flex font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Dashboard
-                                        </Link>
-                                        : ''
-                                    : ''
-                            }
-                            <Dropdown.Link href={route('logout')} method="post" as="button" className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                                Log Out
-                            </Dropdown.Link>
-
-                        </>
-                    ) : (
-                        <>
-                            <Link
-                                href={route('login')}
-                                className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                            >
-                                Log in
-                            </Link>
-
-                            <Link
-                                href={route('register')}
-                                className="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                            >
-                                Register
-                            </Link>
-                        </>
-                    )}
+            <Navbar auth={auth} />
+            <div id='home' className='h-screen grid lg:grid-cols-2'>
+                <div className='rounded-br-[30%] lg:rounded-br-[0%] lg:rounded-tr-[30%] bg-red-600 text-white flex items-center'>
+                    <div className='p-8'>
+                        <h3 className='text-xl'>Cabinet Médical</h3>
+                        <h1 className=" mb-4 text-4xl font-sans font-bold">Cardio Faith : Votre partenaire en santé cardiaque.</h1>
+                        <p className='text-sm'>Nous offrons des soins spécialisés et personnalisés pour prévenir, diagnostiquer et traiter les maladies cardiovasculaires. Votre santé est notre priorité.</p>
+                        <div className='flex justify-center'>
+                            <a href='mailto:Cardio.faith@gmail.com' className="flex items-center justify-center mt-4 mb-2 mx-2 border rounded-full hover:bg-white cursor-pointer transition-transform duration-300 transform p-3 border-white relative group w-64">
+                                <span className="absolute flex left-2 transform group-hover:translate-x-[calc(100%-3rem)] transition-transform duration-1000 w-full ">
+                                    <div className="p-1 border-white duration-500 group-hover:border-red-600  group-hover:bg-red-600 group-hover:text-white border rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.15 13H5q-.425 0-.712-.288T4 12t.288-.712T5 11h11.15L13.3 8.15q-.3-.3-.288-.7t.288-.7q.3-.3.713-.312t.712.287L19.3 11.3q.15.15.213.325t.062.375t-.062.375t-.213.325l-4.575 4.575q-.3.3-.712.288t-.713-.313q-.275-.3-.288-.7t.288-.7z" /></svg>
+                                    </div>
+                                </span>
+                                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 font-semibold text-red-600 text-sm">
+                                    Maintenant!
+                                </span>
+                                <span className="opacity-100 group-hover:opacity-0 transition-opacity duration-500 font-semibold text-white text-sm absolute">
+                                    Prenez rendez-vous
+                                </span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-
-                <div className="max-w-7xl mx-auto p-6 lg:p-8">
-                    <div className="flex justify-center">
-                        <svg
-                            viewBox="0 0 62 65"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-16 w-auto bg-gray-100 dark:bg-gray-900"
-                        >
-                            <path
-                                d="M61.8548 14.6253C61.8778 14.7102 61.8895 14.7978 61.8897 14.8858V28.5615C61.8898 28.737 61.8434 28.9095 61.7554 29.0614C61.6675 29.2132 61.5409 29.3392 61.3887 29.4265L49.9104 36.0351V49.1337C49.9104 49.4902 49.7209 49.8192 49.4118 49.9987L25.4519 63.7916C25.3971 63.8227 25.3372 63.8427 25.2774 63.8639C25.255 63.8714 25.2338 63.8851 25.2101 63.8913C25.0426 63.9354 24.8666 63.9354 24.6991 63.8913C24.6716 63.8838 24.6467 63.8689 24.6205 63.8589C24.5657 63.8389 24.5084 63.8215 24.456 63.7916L0.501061 49.9987C0.348882 49.9113 0.222437 49.7853 0.134469 49.6334C0.0465019 49.4816 0.000120578 49.3092 0 49.1337L0 8.10652C0 8.01678 0.0124642 7.92953 0.0348998 7.84477C0.0423783 7.8161 0.0598282 7.78993 0.0697995 7.76126C0.0884958 7.70891 0.105946 7.65531 0.133367 7.6067C0.152063 7.5743 0.179485 7.54812 0.20192 7.51821C0.230588 7.47832 0.256763 7.43719 0.290416 7.40229C0.319084 7.37362 0.356476 7.35243 0.388883 7.32751C0.425029 7.29759 0.457436 7.26518 0.498568 7.2415L12.4779 0.345059C12.6296 0.257786 12.8015 0.211853 12.9765 0.211853C13.1515 0.211853 13.3234 0.257786 13.475 0.345059L25.4531 7.2415H25.4556C25.4955 7.26643 25.5292 7.29759 25.5653 7.32626C25.5977 7.35119 25.6339 7.37362 25.6625 7.40104C25.6974 7.43719 25.7224 7.47832 25.7523 7.51821C25.7735 7.54812 25.8021 7.5743 25.8196 7.6067C25.8483 7.65656 25.8645 7.70891 25.8844 7.76126C25.8944 7.78993 25.9118 7.8161 25.9193 7.84602C25.9423 7.93096 25.954 8.01853 25.9542 8.10652V33.7317L35.9355 27.9844V14.8846C35.9355 14.7973 35.948 14.7088 35.9704 14.6253C35.9792 14.5954 35.9954 14.5692 36.0053 14.5405C36.0253 14.4882 36.0427 14.4346 36.0702 14.386C36.0888 14.3536 36.1163 14.3274 36.1375 14.2975C36.1674 14.2576 36.1923 14.2165 36.2272 14.1816C36.2559 14.1529 36.292 14.1317 36.3244 14.1068C36.3618 14.0769 36.3942 14.0445 36.4341 14.0208L48.4147 7.12434C48.5663 7.03694 48.7383 6.99094 48.9133 6.99094C49.0883 6.99094 49.2602 7.03694 49.4118 7.12434L61.3899 14.0208C61.4323 14.0457 61.4647 14.0769 61.5021 14.1055C61.5333 14.1305 61.5694 14.1529 61.5981 14.1803C61.633 14.2165 61.6579 14.2576 61.6878 14.2975C61.7103 14.3274 61.7377 14.3536 61.7551 14.386C61.7838 14.4346 61.8 14.4882 61.8199 14.5405C61.8312 14.5692 61.8474 14.5954 61.8548 14.6253ZM59.893 27.9844V16.6121L55.7013 19.0252L49.9104 22.3593V33.7317L59.8942 27.9844H59.893ZM47.9149 48.5566V37.1768L42.2187 40.4299L25.953 49.7133V61.2003L47.9149 48.5566ZM1.99677 9.83281V48.5566L23.9562 61.199V49.7145L12.4841 43.2219L12.4804 43.2194L12.4754 43.2169C12.4368 43.1945 12.4044 43.1621 12.3682 43.1347C12.3371 43.1097 12.3009 43.0898 12.2735 43.0624L12.271 43.0586C12.2386 43.0275 12.2162 42.9888 12.1887 42.9539C12.1638 42.9203 12.1339 42.8916 12.114 42.8567L12.1127 42.853C12.0903 42.8156 12.0766 42.7707 12.0604 42.7283C12.0442 42.6909 12.023 42.656 12.013 42.6161C12.0005 42.5688 11.998 42.5177 11.9931 42.4691C11.9881 42.4317 11.9781 42.3943 11.9781 42.3569V15.5801L6.18848 12.2446L1.99677 9.83281ZM12.9777 2.36177L2.99764 8.10652L12.9752 13.8513L22.9541 8.10527L12.9752 2.36177H12.9777ZM18.1678 38.2138L23.9574 34.8809V9.83281L19.7657 12.2459L13.9749 15.5801V40.6281L18.1678 38.2138ZM48.9133 9.14105L38.9344 14.8858L48.9133 20.6305L58.8909 14.8846L48.9133 9.14105ZM47.9149 22.3593L42.124 19.0252L37.9323 16.6121V27.9844L43.7219 31.3174L47.9149 33.7317V22.3593ZM24.9533 47.987L39.59 39.631L46.9065 35.4555L36.9352 29.7145L25.4544 36.3242L14.9907 42.3482L24.9533 47.987Z"
-                                fill="#FF2D20"
-                            />
-                        </svg>
+                <div className='flex items-center justify-center bg-red-600 relative'>
+                    <div className='rounded-tl-[30%] lg:rounded-tl-[0%] lg:rounded-bl-[30%] bg-white h-full w-full flex justify-center items-center'>
+                        <img src="/heart.png" alt="logo" />
                     </div>
-
-                    <div className="mt-16">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                            <a
-                                href="https://laravel.com/docs"
-                                className="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
-                            >
-                                <div>
-                                    <div className="h-16 w-16 bg-red-50 dark:bg-red-800/20 flex items-center justify-center rounded-full">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            className="w-7 h-7 stroke-red-500"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-                                            />
-                                        </svg>
-                                    </div>
-
-                                    <h2 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">
-                                        Documentation
-                                    </h2>
-
-                                    <p className="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                                        Laravel has wonderful documentation covering every aspect of the framework.
-                                        Whether you are a newcomer or have prior experience with Laravel, we recommend
-                                        reading our documentation from beginning to end.
-                                    </p>
-                                </div>
-
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    className="self-center shrink-0 stroke-red-500 w-6 h-6 mx-6"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
-                                    />
-                                </svg>
-                            </a>
-
-                            <a
-                                href="https://laracasts.com"
-                                className="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
-                            >
-                                <div>
-                                    <div className="h-16 w-16 bg-red-50 dark:bg-red-800/20 flex items-center justify-center rounded-full">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            className="w-7 h-7 stroke-red-500"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"
-                                            />
-                                        </svg>
-                                    </div>
-
-                                    <h2 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">
-                                        Laracasts
-                                    </h2>
-
-                                    <p className="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                                        Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript
-                                        development. Check them out, see for yourself, and massively level up your
-                                        development skills in the process.
-                                    </p>
-                                </div>
-
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    className="self-center shrink-0 stroke-red-500 w-6 h-6 mx-6"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
-                                    />
-                                </svg>
-                            </a>
-
-                            <a
-                                href="https://laravel-news.com"
-                                className="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
-                            >
-                                <div>
-                                    <div className="h-16 w-16 bg-red-50 dark:bg-red-800/20 flex items-center justify-center rounded-full">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            className="w-7 h-7 stroke-red-500"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
-                                            />
-                                        </svg>
-                                    </div>
-
-                                    <h2 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">
-                                        Laravel News
-                                    </h2>
-
-                                    <p className="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                                        Laravel News is a community driven portal and newsletter aggregating all of the
-                                        latest and most important news in the Laravel ecosystem, including new package
-                                        releases and tutorials.
-                                    </p>
-                                </div>
-
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    className="self-center shrink-0 stroke-red-500 w-6 h-6 mx-6"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
-                                    />
-                                </svg>
-                            </a>
-
-                            <div className="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                                <div>
-                                    <div className="h-16 w-16 bg-red-50 dark:bg-red-800/20 flex items-center justify-center rounded-full">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            className="w-7 h-7 stroke-red-500"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M6.115 5.19l.319 1.913A6 6 0 008.11 10.36L9.75 12l-.387.775c-.217.433-.132.956.21 1.298l1.348 1.348c.21.21.329.497.329.795v1.089c0 .426.24.815.622 1.006l.153.076c.433.217.956.132 1.298-.21l.723-.723a8.7 8.7 0 002.288-4.042 1.087 1.087 0 00-.358-1.099l-1.33-1.108c-.251-.21-.582-.299-.905-.245l-1.17.195a1.125 1.125 0 01-.98-.314l-.295-.295a1.125 1.125 0 010-1.591l.13-.132a1.125 1.125 0 011.3-.21l.603.302a.809.809 0 001.086-1.086L14.25 7.5l1.256-.837a4.5 4.5 0 001.528-1.732l.146-.292M6.115 5.19A9 9 0 1017.18 4.64M6.115 5.19A8.965 8.965 0 0112 3c1.929 0 3.716.607 5.18 1.64"
-                                            />
-                                        </svg>
-                                    </div>
-
-                                    <h2 className="mt-6 text-xl font-semibold text-gray-900 dark:text-white">
-                                        Vibrant Ecosystem
-                                    </h2>
-
-                                    <p className="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                                        Laravel's robust library of first-party tools and libraries, such as{' '}
-                                        <a
-                                            href="https://forge.laravel.com"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Forge
-                                        </a>
-                                        ,{' '}
-                                        <a
-                                            href="https://vapor.laravel.com"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Vapor
-                                        </a>
-                                        ,{' '}
-                                        <a
-                                            href="https://nova.laravel.com"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Nova
-                                        </a>
-                                        , and{' '}
-                                        <a
-                                            href="https://envoyer.io"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Envoyer
-                                        </a>{' '}
-                                        help you take your projects to the next level. Pair them with powerful open
-                                        source libraries like{' '}
-                                        <a
-                                            href="https://laravel.com/docs/billing"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Cashier
-                                        </a>
-                                        ,{' '}
-                                        <a
-                                            href="https://laravel.com/docs/dusk"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Dusk
-                                        </a>
-                                        ,{' '}
-                                        <a
-                                            href="https://laravel.com/docs/broadcasting"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Echo
-                                        </a>
-                                        ,{' '}
-                                        <a
-                                            href="https://laravel.com/docs/horizon"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Horizon
-                                        </a>
-                                        ,{' '}
-                                        <a
-                                            href="https://laravel.com/docs/sanctum"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Sanctum
-                                        </a>
-                                        ,{' '}
-                                        <a
-                                            href="https://laravel.com/docs/telescope"
-                                            className="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                        >
-                                            Telescope
-                                        </a>
-                                        , and more.
-                                    </p>
-                                </div>
+                    <div className='absolute flex flex-wrap justify-around items-center w-full h-full'>
+                        <div className="backdrop-blur-sm bg-[#4f4f4f]/50 text-white p-3 rounded-md m-1">
+                            <div className="flex text-xs justify-between items-center w-40 sm:w-44 md:w-48 lg:w-56">
+                                <span>Tension artérielle</span>
+                                <svg className='animate-bounce' xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 48 48"><g fill="currentColor"><path d="m25 21.5l-1.5 5l1.5 2l1.5-2z" /><path fill-rule="evenodd" d="M34.001 17.633a17 17 0 0 1-2.606-1.614C29.852 14.846 28 12.949 28 10.449C28 8.221 29.684 6 32.188 6C33.35 6 34.29 6.464 35 7.157C35.709 6.464 36.65 6 37.813 6C40.316 6 42 8.223 42 10.448c0 2.423-1.861 4.323-3.389 5.503a18 18 0 0 1-2.61 1.667c.006 1.744.034 3.409.06 4.985c.06 3.455.11 6.484-.099 8.985c-.318 3.788-1.257 6.828-4.065 8.473c-2.761 1.617-6.841 2.225-10.22 1.814c-1.696-.206-3.315-.68-4.54-1.498c-.891-.595-1.598-1.396-1.93-2.4c-2.077-.095-4.143-.474-5.777-1.152c-1.765-.732-3.43-2-3.43-3.985V13.122h.003L6 13c0-2.761 4.477-5 10-5s10 2.239 10 5q0 .061-.003.122H26v5.949a7.001 7.001 0 0 1-.001 13.858c-.046 2.015-1.657 3.29-3.434 4.014c-1.47.598-3.28.928-5.13 1.026q.299.402.814.745c.87.582 2.15.991 3.67 1.176c3.051.371 6.667-.208 8.968-1.555c1.911-1.12 2.775-3.255 3.082-6.914c.201-2.402.152-5.262.095-8.638a358 358 0 0 1-.063-5.15M32.188 8C31.006 8 30 9.096 30 10.448c0 1.495 1.148 2.872 2.605 3.977a15 15 0 0 0 2.384 1.466q.195-.1.46-.249c.534-.299 1.24-.732 1.94-1.273C38.86 13.231 40 11.855 40 10.449C40 9.095 38.994 8 37.813 8c-.824 0-1.48.458-1.939 1.285L35 10.862l-.874-1.577C33.666 8.458 33.01 8 32.188 8M16 18c3.271 0 6.176-.785 8-2v3.07a7.001 7.001 0 0 0-.003 13.859c-.044.778-.673 1.545-2.186 2.161c-1.525.621-3.632.933-5.8.909a21 21 0 0 1-.92-.031V17.98q.45.02.909.02m8-5c0 .215-.226.948-1.823 1.747C20.699 15.485 18.518 16 16 16s-4.7-.515-6.177-1.253C8.226 13.948 8 13.215 8 13s.226-.948 1.823-1.747C11.301 10.515 13.482 10 16 10s4.7.515 6.177 1.253C23.774 12.052 24 12.785 24 13m1 18a5 5 0 1 0 0-10a5 5 0 0 0 0 10" clip-rule="evenodd" /></g></svg>
+                            </div>
+                            <div className='flex justify-center gap-2 items-center'>
+                                <h3 className='text-3xl font-sans font-semibold'>120/80</h3>
+                                <small className='text-xs'>mmHg</small>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="flex justify-center mt-16 px-6 sm:items-center sm:justify-between">
-                        <div className="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-left">
-                            <div className="flex items-center gap-4">
-                                <a
-                                    href="https://github.com/sponsors/taylorotwell"
-                                    className="group inline-flex items-center hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth="1.5"
-                                        className="-mt-px mr-1 w-5 h-5 stroke-gray-400 dark:stroke-gray-600 group-hover:stroke-gray-600 dark:group-hover:stroke-gray-400"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                                        />
-                                    </svg>
-                                    Sponsor
-                                </a>
+                        <div className="backdrop-blur-sm bg-[#4f4f4f]/50 text-white p-3 rounded-md m-1">
+                            <div className="flex text-xs justify-between items-center w-40 sm:w-44 md:w-48 lg:w-56">
+                                <span>Fréquence cardiaque</span>
+                                <svg className="animate-bounce" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"><path fill="currentColor" d="M72 144H32a8 8 0 0 1 0-16h35.72l13.62-20.44a8 8 0 0 1 13.32 0l25.34 38l9.34-14A8 8 0 0 1 136 128h24a8 8 0 0 1 0 16h-19.72l-13.62 20.44a8 8 0 0 1-13.32 0L88 126.42l-9.34 14A8 8 0 0 1 72 144M178 40c-20.65 0-38.73 8.88-50 23.89C116.73 48.88 98.65 40 78 40a62.07 62.07 0 0 0-62 62v2.25a8 8 0 1 0 16-.5V102a46.06 46.06 0 0 1 46-46c19.45 0 35.78 10.36 42.6 27a8 8 0 0 0 14.8 0c6.82-16.67 23.15-27 42.6-27a46.06 46.06 0 0 1 46 46c0 53.61-77.76 102.15-96 112.8c-10.83-6.31-42.63-26-66.68-52.21a8 8 0 1 0-11.8 10.82c31.17 34 72.93 56.68 74.69 57.63a8 8 0 0 0 7.58 0C136.21 228.66 240 172 240 102a62.07 62.07 0 0 0-62-62" /></svg>
+                            </div>
+                            <div className='flex justify-center gap-2 items-center'>
+                                <h3 className='text-3xl font-sans font-semibold'>60-100</h3>
+                                <small className='text-xs'>bpm</small>
                             </div>
                         </div>
-
-                        <div className="ml-4 text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
-                            Laravel v{laravelVersion} (PHP v{phpVersion})
+                        <div className="backdrop-blur-sm bg-[#4f4f4f]/50 text-white p-3 rounded-md m-1">
+                            <div className="flex text-xs justify-between items-center w-40 sm:w-44 md:w-48 lg:w-56">
+                                <span>Cholestérol LDL</span>
+                                <svg className='animate-bounce' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><g fill="currentColor"><path d="M25 14.333c0 .454-.37 1.108-1.514 1.707c-1.097.575-2.681.96-4.486.96s-3.389-.385-4.486-.96C13.37 15.441 13 14.787 13 14.333c0-.396.274-.942 1.136-1.489l-1.071-1.688c-1.138.72-2.065 1.801-2.065 3.177c0 1.571 1.197 2.751 2.586 3.479C15.023 18.564 16.94 19 19 19s3.977-.436 5.414-1.188c1.39-.728 2.586-1.908 2.586-3.479c0-1.376-.927-2.456-2.064-3.177l-1.072 1.688c.862.547 1.136 1.093 1.136 1.49" /><path fill-rule="evenodd" d="M6 15.5c0 2.976 1.873 5.632 4.803 7.374c-4.474 2.662-6.511 7.517-4.551 10.912c1.981 3.432 7.297 4.072 11.873 1.43c4.434-2.56 6.546-7.262 4.87-10.673C28.22 23.31 32 19.728 32 15.5C32 10.253 26.18 6 19 6S6 10.253 6 15.5m21.013 5.103C28.989 19.158 30 17.33 30 15.5s-1.01-3.658-2.988-5.103C25.037 8.954 22.212 8 19 8c-3.21 0-6.037.954-8.012 2.397C9.01 11.842 8 13.67 8 15.5s1.011 3.658 2.988 5.103C12.963 22.046 15.789 23 19 23s6.037-.954 8.012-2.397m-10.447 4.23q1.071.15 2.198.165c.197.186.372.402.516.652c.644 1.115.41 2.41-.167 3.47c-.587 1.077-1.603 2.083-2.88 2.82s-2.656 1.114-3.882 1.083c-1.207-.03-2.445-.474-3.088-1.589c-.563-.974-.453-2.094-.035-3.056l1.835.797c-.26.596-.212 1.01-.068 1.259c.163.283.584.57 1.406.59c.801.02 1.82-.232 2.832-.816s1.74-1.34 2.123-2.045c.393-.722.356-1.23.192-1.513c-.144-.25-.478-.497-1.124-.57z" clip-rule="evenodd" /><path d="M35.836 24.764c2.395.642 4.726-.294 5.208-2.09c.48-1.796-1.07-3.773-3.466-4.414c-2.395-.642-4.726.294-5.208 2.09c-.48 1.796 1.07 3.773 3.466 4.414" /><path fill-rule="evenodd" d="M42.245 36.457c-1.071 3.998-6.261 6.081-11.592 4.653s-8.784-5.828-7.713-9.826s6.261-6.081 11.592-4.653s8.785 5.828 7.713 9.826m-6.938-1.082c.832-.245 1.196-.655 1.29-1.006c.082-.309.01-.753-.417-1.291l1.565-1.245c.677.85 1.083 1.937.784 3.054c-.343 1.278-1.455 2.053-2.656 2.407c-1.22.36-2.705.353-4.186-.044s-2.77-1.133-3.647-2.055c-.863-.907-1.438-2.134-1.096-3.412c.3-1.117 1.194-1.855 2.206-2.253l.733 1.86c-.64.252-.924.601-1.007.91c-.094.35.015.888.613 1.517c.584.613 1.531 1.184 2.716 1.501c1.184.318 2.29.297 3.102.057" clip-rule="evenodd" /></g></svg>
+                            </div>
+                            <div className='flex justify-center gap-2 items-center'>
+                                <h3 className='text-3xl font-sans font-semibold'> 1,6</h3>
+                                <small className='text-xs'>g/L</small>
+                            </div>
+                        </div>
+                        <div className="backdrop-blur-sm bg-[#4f4f4f]/50 text-white p-3 rounded-md m-1">
+                            <div className="flex text-xs justify-between items-center w-40 sm:w-44 md:w-48 lg:w-56">
+                                <span>Glycémie</span>
+                                <svg className='animate-bounce' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><path d="M5.5 15.5C3.288 14.617 2 12.433 2 10.175C2 7.245 4.317 4.35 5.943 2.68c.883-.908 2.23-.908 3.114 0c.492.505.908 1.122 1.443 1.819M8 14.926c0-3.556 2.949-7.07 5.019-9.1c1.124-1.101 2.838-1.101 3.962 0c2.07 2.03 5.019 5.544 5.019 9.1C22 18.413 19.35 22 15 22s-7-3.587-7-7.074" /><path d="M18.5 15.5c0 2.21-1.5 3-3 3" /></g></svg>
+                            </div>
+                            <div className='flex justify-center gap-2 items-center'>
+                                <h3 className='text-3xl font-sans font-semibold'>0,7-1,1</h3>
+                                <small className='text-xs'>g/L</small>
+                            </div>
+                        </div>
+                        <div className="backdrop-blur-sm bg-[#4f4f4f]/50 text-white p-3 rounded-md m-1">
+                            <div className="flex text-xs justify-between items-center w-40 sm:w-44 md:w-48 lg:w-56">
+                                <span>Saturation en oxygène</span>
+                                <svg className="animate-bounce" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><path fill="currentColor" fill-rule="evenodd" d="M17 6h2V4h-6v2h2v2h-2.17a3.001 3.001 0 1 0 0 2H15v2.083A6 6 0 0 0 10 18v25a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V18a6 6 0 0 0-5-5.917V10h5V8h-5zm-1 8a4 4 0 0 0-4 4v2h8v-2a4 4 0 0 0-4-4m-4 28V22h8v20zM9 9a1 1 0 1 1 2 0a1 1 0 0 1-2 0m17 12a4 4 0 0 1 8 0v6a4 4 0 0 1-8 0zm4-2a2 2 0 0 0-2 2v6a2 2 0 1 0 4 0v-6a2 2 0 0 0-2-2m8 7h-3v-2h3a3 3 0 1 1 0 6a1 1 0 0 0-1 1v1h4v2h-5a1 1 0 0 1-1-1v-2a3 3 0 0 1 3-3a1 1 0 1 0 0-2" clip-rule="evenodd" /></svg>
+                            </div>
+                            <div className='flex justify-center gap-2 items-center'>
+                                <h3 className='text-3xl font-sans font-semibold'>95-100</h3>
+                                <small className='text-xs'>%</small>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div className='container mx-auto text-gray-800 px-2'>
+                <div id='about' className="grid md:grid-cols-2 gap-8 my-20 items-center">
+                    <div className="h-80 overflow-hidden w-full bg-cover bg-center rounded-md min-h-56 bg-[url('/about.jpg')]">
+                        <div className="bg-black/30 w-full h-full p-4">
+                        </div>
+                    </div>
+                    <div className="text-justify md:py-14">
+                        <span className="bg-red-100 text-red-600 py-2 px-8 rounded-full border border-red-600">About us</span>
+                        <div className="mt-4">
+                            <p className="my-3">
+                                <span className='text-red-600 font-semibold'>Cardio Faith</span> est un cabinet médical spécialisé dans la prise en charge des pathologies cardiovasculaires, dédié à améliorer la santé cardiaque de nos patients grâce à une expertise de pointe et des soins personnalisés. Nous croyons fermement que chaque battement de cœur mérite une attention particulière, et notre mission est d'assurer un suivi complet et de qualité pour prévenir, diagnostiquer et traiter les maladies cardiaques.
+                            </p>
+                            <p className="my-3">
+                                Nous offrons des soins de qualité en utilisant les meilleures pratiques médicales et des technologies modernes pour prévenir, diagnostiquer et traiter les maladies cardiovasculaires, tout en sensibilisant nos patients à l’importance de leur santé cardiaque.
+                            </p>
 
-            <style>{`
-                .bg-dots-darker {
-                    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
-                }
-                @media (prefers-color-scheme: dark) {
-                    .dark\\:bg-dots-lighter {
-                        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
-                    }
-                }
-            `}</style>
-        </>
+                        </div>
+                    </div>
+                </div>
+                <div id='services' className="grid md:grid-cols-2 xl:grid-cols-3 gap-8 my-20">
+                    <div className='col-span-full'>
+                        <span className="bg-red-100 text-red-600 py-2 px-8 rounded-full border border-red-600">Nos services</span>
+                    </div>
+                    <div className='text-center shadow-md rounded-md bg-gray-50 p-4 border group hover:bg-red-50 hover:border-red-200'>
+                        <div className="flex mb-2 justify-center">
+                            <div className="p-4 text-red-600 bg-red-100 group-hover:bg-red-600 group-hover:text-white rounded-full border border-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 256 256"><g fill="currentColor"><path d="M16 152h32v56H16a8 8 0 0 1-8-8v-40a8 8 0 0 1 8-8M192.54 40A39.12 39.12 0 0 0 156 64a39.12 39.12 0 0 0-36.54-24C97.67 40 80 58.31 80 80c0 14.56 7 27.71 16.73 40H140a20 20 0 0 1 0 40h4l37.78-8.68C203.82 135.07 232 109.23 232 80c0-21.69-17.67-40-39.46-40" opacity=".2" /><path d="M230.33 141.06a24.34 24.34 0 0 0-18.61-4.77C230.5 117.33 240 98.48 240 80c0-26.47-21.29-48-47.46-48A47.58 47.58 0 0 0 156 48.75A47.58 47.58 0 0 0 119.46 32C93.29 32 72 53.53 72 80c0 11 3.24 21.69 10.06 33a31.87 31.87 0 0 0-14.75 8.4L44.69 144H16a16 16 0 0 0-16 16v40a16 16 0 0 0 16 16h104a8 8 0 0 0 1.94-.24l64-16a7 7 0 0 0 1.19-.4L226 182.82l.44-.2a24.6 24.6 0 0 0 3.93-41.56ZM119.46 48a31.15 31.15 0 0 1 29.14 19a8 8 0 0 0 14.8 0a31.15 31.15 0 0 1 29.14-19C209.59 48 224 62.65 224 80c0 19.51-15.79 41.58-45.66 63.9l-11.09 2.55A28 28 0 0 0 140 112h-39.32C92.05 100.36 88 90.12 88 80c0-17.35 14.41-32 31.46-32M16 160h24v40H16Zm203.43 8.21l-38 16.18L119 200H56v-44.69l22.63-22.62A15.86 15.86 0 0 1 89.94 128H140a12 12 0 0 1 0 24h-28a8 8 0 0 0 0 16h32a8.3 8.3 0 0 0 1.79-.2l67-15.41l.31-.08a8.6 8.6 0 0 1 6.3 15.9Z" /></g></svg>
+                            </div>
+                        </div>
+                        <h2 className='text-lg font-semibold text-red-600'>Consultations en cardiologie</h2>
+                        <p className='text-sm'>Évaluation complète et diagnostic précis pour prendre soin de votre cœur.</p>
+                    </div>
+                    <div className='text-center shadow-md rounded-md bg-gray-50 p-4 border group hover:bg-red-50 hover:border-red-200'>
+                        <div className="flex mb-2 justify-center">
+                            <div className="p-4 text-red-600 bg-red-100 group-hover:bg-red-600 group-hover:text-white rounded-full border border-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 48 48"><g fill="currentColor"><path d="m25 21.5l-1.5 5l1.5 2l1.5-2z" /><path fill-rule="evenodd" d="M34.001 17.633a17 17 0 0 1-2.606-1.614C29.852 14.846 28 12.949 28 10.449C28 8.221 29.684 6 32.188 6C33.35 6 34.29 6.464 35 7.157C35.709 6.464 36.65 6 37.813 6C40.316 6 42 8.223 42 10.448c0 2.423-1.861 4.323-3.389 5.503a18 18 0 0 1-2.61 1.667c.006 1.744.034 3.409.06 4.985c.06 3.455.11 6.484-.099 8.985c-.318 3.788-1.257 6.828-4.065 8.473c-2.761 1.617-6.841 2.225-10.22 1.814c-1.696-.206-3.315-.68-4.54-1.498c-.891-.595-1.598-1.396-1.93-2.4c-2.077-.095-4.143-.474-5.777-1.152c-1.765-.732-3.43-2-3.43-3.985V13.122h.003L6 13c0-2.761 4.477-5 10-5s10 2.239 10 5q0 .061-.003.122H26v5.949a7.001 7.001 0 0 1-.001 13.858c-.046 2.015-1.657 3.29-3.434 4.014c-1.47.598-3.28.928-5.13 1.026q.299.402.814.745c.87.582 2.15.991 3.67 1.176c3.051.371 6.667-.208 8.968-1.555c1.911-1.12 2.775-3.255 3.082-6.914c.201-2.402.152-5.262.095-8.638a358 358 0 0 1-.063-5.15M32.188 8C31.006 8 30 9.096 30 10.448c0 1.495 1.148 2.872 2.605 3.977a15 15 0 0 0 2.384 1.466q.195-.1.46-.249c.534-.299 1.24-.732 1.94-1.273C38.86 13.231 40 11.855 40 10.449C40 9.095 38.994 8 37.813 8c-.824 0-1.48.458-1.939 1.285L35 10.862l-.874-1.577C33.666 8.458 33.01 8 32.188 8M16 18c3.271 0 6.176-.785 8-2v3.07a7.001 7.001 0 0 0-.003 13.859c-.044.778-.673 1.545-2.186 2.161c-1.525.621-3.632.933-5.8.909a21 21 0 0 1-.92-.031V17.98q.45.02.909.02m8-5c0 .215-.226.948-1.823 1.747C20.699 15.485 18.518 16 16 16s-4.7-.515-6.177-1.253C8.226 13.948 8 13.215 8 13s.226-.948 1.823-1.747C11.301 10.515 13.482 10 16 10s4.7.515 6.177 1.253C23.774 12.052 24 12.785 24 13m1 18a5 5 0 1 0 0-10a5 5 0 0 0 0 10" clip-rule="evenodd" /></g></svg>
+                            </div>
+                        </div>
+                        <h2 className='text-lg font-semibold text-red-600'>Examens spécialisés</h2>
+                        <p className='text-sm'>Électrocardiogrammes (ECG), échocardiographies, tests d'effort et plus.</p>
+                    </div>
+                    <div className='text-center shadow-md rounded-md bg-gray-50 p-4 border group hover:bg-red-50 hover:border-red-200'>
+                        <div className="flex mb-2 justify-center">
+                            <div className="p-4 text-red-600 bg-red-100 group-hover:bg-red-600 group-hover:text-white rounded-full border border-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 32 32"><path fill="currentColor" d="M23 23v3H8.5a4.5 4.5 0 0 1 0-9H9v-2h-.5a6.5 6.5 0 0 0 0 13H23v3h8v-8Zm6 6h-4v-4h4Z" /><path fill="currentColor" d="M21 22h-2v-3h-6v3h-2v-3a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2zm-5-6a3 3 0 1 1 3-3a3.003 3.003 0 0 1-3 3m0-4a1 1 0 1 0 1 1a1 1 0 0 0-1-1" /><path fill="currentColor" d="M23.5 4H9V1H1v8h8V6h14.5a4.5 4.5 0 0 1 0 9H23v2h.5a6.5 6.5 0 0 0 0-13M7 7H3V3h4Z" /></svg>
+                            </div>
+                        </div>
+                        <h2 className='text-lg font-semibold text-red-600'>Prévention et réadaptation</h2>
+                        <p className='text-sm'>Programmes personnalisés pour une vie saine et active.</p>
+                    </div>
+                </div>
+                <div className='grid lg:grid-cols-2 items-center'>
+                    <BarreLogo className='h-96 w-auto lg:block hidden' />
+                    <div className='text-xl'>
+                        <p>
+                            Prenez soin de votre cœur aujourd'hui pour garantir votre bien-être de demain – prenez rendez-vous avec nos experts en cardiologie et commencez dès maintenant à préserver votre santé cardiaque avec des soins personnalisés et de haute qualité.
+                        </p>
+                        <div className='flex justify-center'>
+                            <a href='mailto:Cardio.faith@gmail.com' className="flex items-center justify-center mt-4 mb-2 mx-2 border rounded-full hover:bg-red-600 cursor-pointer transition-transform duration-300 transform py-4 px-7 border-red-600 relative group w-64">
+                                <span className="absolute flex left-2 transform group-hover:translate-x-[calc(100%-3rem)] transition-transform duration-1000 w-full ">
+                                    <div className="p-1 border-red-600 text-red-600 duration-500 group-hover:border-red-600  group-hover:bg-white border rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.15 13H5q-.425 0-.712-.288T4 12t.288-.712T5 11h11.15L13.3 8.15q-.3-.3-.288-.7t.288-.7q.3-.3.713-.312t.712.287L19.3 11.3q.15.15.213.325t.062.375t-.062.375t-.213.325l-4.575 4.575q-.3.3-.712.288t-.713-.313q-.275-.3-.288-.7t.288-.7z" /></svg>
+                                    </div>
+                                </span>
+                                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 font-semibold text-white text-sm">
+                                    Maintenant!
+                                </span>
+                                <span className="opacity-100 group-hover:opacity-0 transition-opacity duration-500 font-semibold text-red-600 text-sm absolute">
+                                    Prenez rendez-vous
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id='faq' className='mt-14 grid lg:grid-cols-2 gap-2'>
+                    <FAQAccordion />
+                    <div>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15913.85767879498!2d15.2778401!3d-4.3235119!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a6a310011d5fed5%3A0x42de32292b16f315!2sCardiofaith!5e0!3m2!1sfr!2scd!4v1733487890346!5m2!1sfr!2scd" className='w-full mt-4' height={450} style={{ border: 0 }} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+            <Footer />
+        </main>
     );
 }

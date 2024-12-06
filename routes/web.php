@@ -41,6 +41,7 @@ Route::prefix('admin')->group(function () {
     });
     
     Route::prefix('rendez-vous')->group(function () {
+        Route::get('/', [RendezVousController::class, 'index'])->name('rendez-vous');
         Route::get('/liste', [RendezVousController::class, 'indexView'])->name('rendez-vous.indexView');
         Route::get('/today', [RendezVousController::class, 'today'])->name('rendez-vous.today');
         Route::get('/tomorrow', [RendezVousController::class, 'tomorrow'])->name('rendez-vous.tomorrow');
@@ -49,6 +50,9 @@ Route::prefix('admin')->group(function () {
         ->name('rendez-vous.export');
         Route::get('/delete/{rendezVous}', [RendezVousController::class, 'destroy'])->name('rendez-vous.destroy');
         Route::put('/{rendezVous}', [RendezVousController::class, 'update'])->name('rendez-vous.update');
+        Route::get('/chart/byMonth/{year}', [RendezVousController::class, 'countByMonth'])->name('rendez-vous.countByMonth');
+        Route::get('/all/years', [RendezVousController::class, 'getAllYears'])->name('rendez-vous.getAllYears');
+
     });
     
     Route::prefix('fiches')->group(function () {
@@ -74,6 +78,8 @@ Route::prefix('admin')->group(function () {
         Route::put('/{caisse}', [CaisseController::class, 'update'])->name('caisse.update');
         Route::get('/export/{delai}/{mois?}/{annee?}', [CaisseController::class, 'export'])
         ->name('rendez-vous.export');
+        Route::get('/chart/byMonth/{year}', [CaisseController::class, 'countByMonth'])->name('caisse.countByMonth');
+
     });
     
 });

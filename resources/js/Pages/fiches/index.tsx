@@ -102,7 +102,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                             <AddFiche />
                         </Modal>
-                        <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter une fiche</span>
+                        <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-600 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter une fiche</span>
                     </div>
                     <div>
                         <Modal show={exporter} onClose={closeModal}>
@@ -301,7 +301,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                                             {
                                                                 auth.user.acces == 1 ?
                                                                     <>
-                                                                        <span onClick={() => Disable(fiche.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                                        <span onClick={() => Disable(fiche.id)} className="bg-red-600 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
                                                                         <Modal show={id == fiche.id ? disable : false} onClose={closeModal}>
                                                                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                                                                             <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
@@ -336,7 +336,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                     <Link
                                         key={link.url}
                                         href={link.url}
-                                        className={link.active ? 'text-white bg-red-500 py-2 px-3 rounded-sm' : 'text-gray-800 py-2 px-3 m-2 rounded-sm bg-gray-50'}
+                                        className={link.active ? 'text-white bg-red-600 py-2 px-3 rounded-sm' : 'text-gray-800 py-2 px-3 m-2 rounded-sm bg-gray-50'}
                                     >
                                         <span>
                                             {link.label.replace('&laquo;', '').replace('&raquo;', '')}

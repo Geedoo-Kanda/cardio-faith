@@ -167,7 +167,7 @@ export default function AddRdv() {
 
                 <div className="flex items-center justify-end mt-4">
 
-                    <PrimaryButton className="ml-4 bg-red-500">
+                    <PrimaryButton className="ml-4 bg-red-600">
                         Enregister
                     </PrimaryButton>
                 </div>

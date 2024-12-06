@@ -84,7 +84,7 @@ export default function AddUser() {
                 </div>
                 <div className="flex items-center justify-end mt-4">
 
-                    <PrimaryButton className="ml-4 bg-red-500" disabled={processing}>
+                    <PrimaryButton className="ml-4 bg-red-600" disabled={processing}>
                         Enregister
                     </PrimaryButton>
                 </div>

@@ -72,7 +72,7 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                             <AddUser />
                         </Modal>
-                        <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-500 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter un utilisateur</span>
+                        <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-600 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter un utilisateur</span>
                     </div>
                     <div className="max-w-xs w-full">
                         <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
@@ -144,7 +144,7 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                                                         {
                                                             auth.user.acces == 1 ?
                                                                 <td className="flex items-center justify-center px-2 h-full">
-                                                                    <span onClick={() => Disable(user.id)} className="bg-red-500 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
+                                                                    <span onClick={() => Disable(user.id)} className="bg-red-600 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
                                                                     <Modal show={id == user.id ? disable : false} onClose={closeModal}>
                                                                         <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
                                                                         <div className="w-full mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md">
@@ -179,7 +179,7 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                                     <Link
                                         key={link.url}
                                         href={link.url}
-                                        className={link.active ? 'text-white bg-red-500 py-2 px-3 rounded-sm' : 'text-gray-800 py-2 px-3 m-2 rounded-sm bg-gray-50'}
+                                        className={link.active ? 'text-white bg-red-600 py-2 px-3 rounded-sm' : 'text-gray-800 py-2 px-3 m-2 rounded-sm bg-gray-50'}
                                     >
                                         <span>
                                             {link.label.replace('&laquo;', '').replace('&raquo;', '')}

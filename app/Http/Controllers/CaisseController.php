@@ -20,21 +20,51 @@ class CaisseController extends Controller
         //
     }
 
+    public function countByMonth($year)
+    {
+        // Récupérer tous les enregistrements de caisse de l'année spécifiée
+        $caisses = Caisse::whereYear('created_at', $year)->get();
+
+        // Grouper les caisses par mois et calculer les sommes des dépôts et retraits
+        $caissesParMois = $caisses->groupBy(function ($caisse) {
+            return $caisse->created_at->format('n'); // Format numérique du mois (1 à 12)
+        })->map(function ($caisses) {
+            $totalDepot = $caisses->where('operation', 'depot')->sum('montant');
+            $totalRetrait = $caisses->where('operation', 'retrait')->sum('montant');
+            return [
+                'totalDepot' => $totalDepot,
+                'totalRetrait' => $totalRetrait,
+            ];
+        });
+
+        // Formater les données pour le graphique
+        $chartData = [];
+        foreach ($caissesParMois as $moisNumerique => $data) {
+            $moisNom = date('F', mktime(0, 0, 0, $moisNumerique, 1)); // Nom du mois en anglais
+            $chartData[] = [
+                'name' => $moisNom,
+                'depot' => $data['totalDepot'],
+                'retrait' => $data['totalRetrait'],
+            ];
+        }
+
+        return response()->json($chartData);
+    }
+
     public function export($delai, $mois = null, $annee = null)
     {
-        if($delai == 'annee'){
+        if ($delai == 'annee') {
             $date = new DateTimeImmutable($annee);
             $req = $date->format('Y');
 
-            return Excel::download(new CaisseExport($req), 'rapport de la caisse de '.$req.'.xlsx');
-        }elseif($delai == 'mois'){
+            return Excel::download(new CaisseExport($req), 'rapport de la caisse de ' . $req . '.xlsx');
+        } elseif ($delai == 'mois') {
 
             $date = new DateTimeImmutable($mois);
             $req = $date->format('Y-m');
 
-            return Excel::download(new CaisseExport($req), 'rapport de la caisse de '.$req.'.xlsx');
+            return Excel::download(new CaisseExport($req), 'rapport de la caisse de ' . $req . '.xlsx');
         }
-
     }
 
     /**
@@ -51,7 +81,7 @@ class CaisseController extends Controller
 
         $solde  = Caisse::pluck('solde')->last();
 
-        if($request->operation == 'depot'){
+        if ($request->operation == 'depot') {
             $Caisse = Caisse::create([
                 'operation' => $request->operation,
                 'montant' => $request->montant,
@@ -60,7 +90,7 @@ class CaisseController extends Controller
                 'solde' => $solde + $request->montant,
                 'user_id' => Auth::user()->id,
             ]);
-        }else{
+        } else {
             $Caisse = Caisse::create([
                 'operation' => $request->operation,
                 'montant' => $request->montant,
@@ -70,7 +100,7 @@ class CaisseController extends Controller
                 'user_id' => Auth::user()->id,
             ]);
         }
-       
+
 
         return response($Caisse, 201);
     }
@@ -100,10 +130,10 @@ class CaisseController extends Controller
 
         return response($req, 201);
     }
-    
+
     public function indexView()
     {
-        $caisses = Caisse::where('disable', 'false')->orderBy('id', 'DESC')->paginate(50);
+        $caisses = Caisse::orderBy('id', 'DESC')->paginate(50);
         return Inertia::render('caisse/index', [
             'caisses' => $caisses,
         ]);
