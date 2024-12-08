@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::where('disable', 'false')->where('acces', 0)->orderBy('id', 'DESC')->get();
+        return User::where('disable', false)->where('acces', 0)->orderBy('id', 'DESC')->get();
     }
 
     public function all()
@@ -23,7 +23,7 @@ class UserController extends Controller
 
     public function indexView()
     {
-        $users = User::where('disable', 'false')->where('acces', '!=',0)->orderBy('id', 'DESC')->paginate(50);
+        $users = User::where('disable', false)->where('acces', '!=',0)->orderBy('id', 'DESC')->paginate(50);
 
         return Inertia::render('user/index', [
             'users' => $users,

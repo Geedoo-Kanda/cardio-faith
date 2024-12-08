@@ -17,10 +17,10 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'name' => 'Admin User',
-                'email' => 'admin@example.com',
+                'email' => 'docteur@example.com',
                 'phone' => '1234567890',
                 'adresse' => '123 Admin Street',
-                'acces' => 1,
+                'acces' => 3,
                 'email_verified_at' => now(),
                 'password' => Hash::make('123456789'), // Mot de passe sécurisé
                 'created_at' => now(),
@@ -28,10 +28,10 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'name' => 'Test User',
-                'email' => 'user@example.com',
+                'email' => 'caissier@example.com',
                 'phone' => '0987654321',
                 'adresse' => '456 User Avenue',
-                'acces' => 2,
+                'acces' => 4,
                 'email_verified_at' => now(),
                 'password' => Hash::make('123456789'), // Mot de passe sécurisé
                 'created_at' => now(),

@@ -6,9 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Caisse>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CompteRendu>
  */
-class CaisseFactory extends Factory
+class CompteRenduFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -22,13 +22,11 @@ class CaisseFactory extends Factory
         $randomDate = $startDate->copy()->addDays(rand(1, $endDate->diffInDays($startDate)));
         
         return [
-            'operation' => fake()->randomElement(['retrait', 'depot']),
-            'montant' => fake()->randomNumber(5, true),
-            'solde' => fake()->randomNumber(6, true),
-            'libele' => fake()->sentence(),
-            'user_id' => fake()->randomNumber(2),
-            'date' => $randomDate,
-
+            'description' => fake()->sentence(),
+            'disable' => fake()->randomElement(['true', 'false']),
+            'user_id' => fake()->randomNumber(5, true),
+            'fiche_id' => fake()->randomNumber(5, true), // Remplacez par une relation si possible
+            'created_at' => $randomDate,
         ];
     }
 }

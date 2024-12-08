@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Exports\CaisseExport;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use DateTimeImmutable;
 
@@ -15,20 +16,59 @@ class CaisseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $operation = $request->input('operation'); // Récupération des valeurs au lieu d'utiliser filled()
+        $filter = $request->input('filter');
+
+        $query = Caisse::where('disable', false)->where('operation', $operation);
+
+        // Appliquer les filtres temporels
+        switch ($filter) {
+            case 'today':
+                $query->whereDate('date', Carbon::today());
+                break;
+            case 'yesterday':
+                $query->whereDate('date', Carbon::yesterday());
+                break;
+            case 'week':
+                $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                break;
+            case 'month':
+                $query->whereMonth('date', Carbon::now()->month)
+                    ->whereYear('date', Carbon::now()->year);
+                break;
+            case 'year':
+                $query->whereYear('date', Carbon::now()->year);
+                break;
+        }
+
+        // Appliquer la recherche si un terme est fourni
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('montant', 'like', "%{$searchTerm}%")
+                ->orWhere('libele', 'like', "%{$searchTerm}%");
+        }
+
+        // Pagination et réponse JSON
+        $caisses = $query->orderBy('id', 'desc')->paginate(50);
+        return response()->json($caisses);
     }
 
     public function countByMonth($year)
     {
-        // Récupérer tous les enregistrements de caisse de l'année spécifiée
-        $caisses = Caisse::whereYear('created_at', $year)->get();
-
-        // Grouper les caisses par mois et calculer les sommes des dépôts et retraits
+        // Récupérer tous les enregistrements de caisse
+        $caisses = Caisse::all()->filter(function ($caisse) use ($year) {
+            // Vérifier que l'année correspond
+            return Carbon::parse($caisse->date)->year == $year;
+        });
+    
+        // Grouper les caisses par mois
         $caissesParMois = $caisses->groupBy(function ($caisse) {
-            return $caisse->created_at->format('n'); // Format numérique du mois (1 à 12)
+            // Extraire le mois numérique
+            return Carbon::parse($caisse->date)->format('n');
         })->map(function ($caisses) {
+            // Calculer les totaux pour chaque mois
             $totalDepot = $caisses->where('operation', 'depot')->sum('montant');
             $totalRetrait = $caisses->where('operation', 'retrait')->sum('montant');
             return [
@@ -36,10 +76,14 @@ class CaisseController extends Controller
                 'totalRetrait' => $totalRetrait,
             ];
         });
-
-        // Formater les données pour le graphique
+    
+        // Trier les données par mois
+        $caissesParMoisArray = $caissesParMois->toArray();
+        ksort($caissesParMoisArray);
+    
+        // Préparer les données pour le graphique
         $chartData = [];
-        foreach ($caissesParMois as $moisNumerique => $data) {
+        foreach ($caissesParMoisArray as $moisNumerique => $data) {
             $moisNom = date('F', mktime(0, 0, 0, $moisNumerique, 1)); // Nom du mois en anglais
             $chartData[] = [
                 'name' => $moisNom,
@@ -47,9 +91,10 @@ class CaisseController extends Controller
                 'retrait' => $data['totalRetrait'],
             ];
         }
-
+    
         return response()->json($chartData);
     }
+    
 
     public function export($delai, $mois = null, $annee = null)
     {

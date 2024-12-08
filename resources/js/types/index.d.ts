@@ -7,6 +7,7 @@ export interface User {
     adresse: string;
     disable: string;
     email_verified_at: string;
+    roles: any
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {

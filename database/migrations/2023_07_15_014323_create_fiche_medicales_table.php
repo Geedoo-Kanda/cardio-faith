@@ -14,21 +14,22 @@ return new class extends Migration
         Schema::create('fiche_medicales', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('post_nom')->nullable();
+            $table->string('postnom')->nullable();
             $table->string('prenom');
             $table->string('sexe');
             $table->string('lieu_naissance');
             $table->string('date_naissance');
             $table->string('adresse');
-            $table->string('situation_familiale');
+            $table->string('situation_familiale')->nallable();
             $table->integer('nbr_enfants')->default(0);
             $table->integer('nbr_grosses')->default(0);
-            $table->integer('num_secu');
-            $table->string('taille');
-            $table->string('poids');
-            $table->string('groupe_saguin');
+            $table->integer('num_secu')->nallable();
+            $table->integer('num_telephone')->nallable();
+            $table->string('taille')->nallable();
+            $table->string('poids')->nallable();
+            $table->string('groupe_saguin')->nallable();
             $table->string('medecin_traitant');
-            $table->string('fumeur');
+            $table->string('fumeur')->nallable();
             $table->integer('nbr_cigarette')->nallable();
 
             $table->string('antecedents_familiaux')->nullable();
@@ -37,7 +38,7 @@ return new class extends Migration
             $table->string('allergies')->nullable();
             $table->string('intolerance_medicamentaire')->nullable();
             $table->string('traitement_regulier')->nullable();
-            $table->string('disable')->default('no');
+            $table->string('disable')->default(false);
             $table->string('vaccin')->nullable();
 
             $table->longText('conclusion');

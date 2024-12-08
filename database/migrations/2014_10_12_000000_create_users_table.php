@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('adresse')->nullable();
             $table->string('acces')->nullable();
+            $table->string('disable')->default(false);
             $table->string('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -97,8 +97,7 @@ export default function Rdv({ auth }: PageProps<{ rdvs: any }>) {
                     isLoading: false
                 });
                 setDisable(false);
-                router.reload({ only: ['rdvs'] })
-
+                fetchRdv()
             }).catch(() => {
                 toast.update(etat, {
                     render: "Oups, veillez récommencer",
@@ -118,7 +117,7 @@ export default function Rdv({ auth }: PageProps<{ rdvs: any }>) {
 
     useEffect(() => {
         fetchRdv();
-    }, [filter, status]);
+    }, [filter, status, currentPage]);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
@@ -238,7 +237,7 @@ export default function Rdv({ auth }: PageProps<{ rdvs: any }>) {
                                                                     <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
                                                                         {dayjs(new Date(rdv.date)).format("dddd, MMMM D, YYYY")}
                                                                     </td>
-                                                                    <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center uppercase font-bold">{rdv.nom} {rdv.postnom} {rdv.prenom}</td>
+                                                                    <td className="p-4 text-sm text-gray-700  text-center uppercase font-bold">{rdv.nom} {rdv.post_nom} {rdv.prenom}</td>
                                                                     <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">{rdv.phone}</td>
                                                                     <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center font-semibold capitalize">
                                                                         {
@@ -266,12 +265,12 @@ export default function Rdv({ auth }: PageProps<{ rdvs: any }>) {
                                                                                 <h2 className="text-2xl font-bold text-gray-800 text-center w-full border-b-2 mb-4 pb-2">Détails du rendez-vous</h2>
                                                                                 <div className="grid grid-cols-12 gap-4 text-gray-700 text-md h-96 overflow-hidden overflow-y-scroll">
                                                                                     <span className="col-span-4 font-semibold">Nom</span> <span className="col-span-1">:</span> <span className="col-span-7 capitalize">{rdv.nom}</span>
-                                                                                    <span className="col-span-4 font-semibold">Postnom </span> <span className="col-span-1">:</span> <span className="col-span-7 capitalize">{rdv.postnom}</span>
+                                                                                    <span className="col-span-4 font-semibold">Postnom </span> <span className="col-span-1">:</span> <span className="col-span-7 capitalize">{rdv.post_nom}</span>
                                                                                     <span className="col-span-4 font-semibold">Prenom </span> <span className="col-span-1">:</span> <span className="col-span-7 capitalize">{rdv.prenom}</span>
                                                                                     <span className="col-span-4 font-semibold">Numéro de téléphone </span> <span className="col-span-1">:</span> <span className="col-span-7">{rdv.phone}</span>
                                                                                     <span className="col-span-4 font-semibold">Sexe </span> <span className="col-span-1">:</span> <span className="col-span-7">{rdv.sexe}</span>
                                                                                     <span className="col-span-4 font-semibold">email </span> <span className="col-span-1">:</span> <span className="col-span-7">{rdv.email}</span>
-                                                                                    <span className="col-span-4 font-semibold">Date </span> <span className="col-span-1">:</span> <span className="col-span-7">{rdv.date}</span>
+                                                                                    <span className="col-span-4 font-semibold">Date </span> <span className="col-span-1">:</span> <span className="col-span-7">{dayjs(new Date(rdv.date)).format("dddd, MMMM D, YYYY")}</span>
                                                                                     <span className="col-span-4 font-semibold">Status </span> <span className="col-span-1">:</span> <span className="col-span-7"><span className="bg-red-100 text-red-500 p-3">{rdv.status}</span></span>
                                                                                     <span className="col-span-4 font-semibold">Objet </span> <span className="col-span-1">:</span> <span className="col-span-7 text-justify mr-1">{rdv.objet}</span>
                                                                                 </div>
@@ -288,7 +287,7 @@ export default function Rdv({ auth }: PageProps<{ rdvs: any }>) {
                                                                         </Modal>
 
                                                                         {
-                                                                            auth.user.acces == 1 ?
+                                                                            auth.user.roles[0].name == "Administrateur"  ?
                                                                                 <>
                                                                                     <span onClick={() => Disable(rdv.id)} className="bg-red-600 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
                                                                                     <Modal show={id == rdv.id ? disable : false} onClose={closeModal}>

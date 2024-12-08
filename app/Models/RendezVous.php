@@ -26,5 +26,6 @@ class RendezVous extends Model
         'phone',
         'objet',
         'user_id',
+        'updated_at'
     ];
 }

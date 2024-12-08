@@ -12,8 +12,8 @@ export default function Authenticated({ user, header, children }: PropsWithChild
     if (user.acces == 0 || user.disable == 'true') {
         window.location.replace(route('/'));
     }
+    
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-
     return (
         <div className="min-h-screen bg-gray-100 ">
             <nav className="bg-gray-800 border-b border-gray-500 w-full">
@@ -27,32 +27,39 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                {
-                                    user.acces == 1 || user.acces == 2 ?
-                                        <>
-                                            <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                                Dashboard
-                                            </NavLink>
-                                            <NavLink href={route('rendez-vous.indexView')} active={route().current('rendez-vous.indexView')}>
-                                                Rendez-vous
-                                            </NavLink>
-                                            <NavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
-                                                Caisse
-                                            </NavLink>
-                                            <NavLink href={route('message.indexView')} active={route().current('message.indexView')}>
-                                                Messages
-                                            </NavLink>
-                                        </> : ''
-                                }
-                                <NavLink href={route('fiches.indexView')} active={route().current('fiches.indexView')}>
-                                    Fiches
+                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                    Dashboard
                                 </NavLink>
                                 {
-                                    user.acces == 1 ?
-                                        <NavLink href={route('user.indexView')} active={route().current('user.indexView')}>
-                                            Utilsateurs
+                                    (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire") &&
+                                    <>
+                                        <NavLink href={route('rendez-vous.indexView')} active={route().current('rendez-vous.indexView')}>
+                                            Rendez-vous
                                         </NavLink>
-                                        : ''
+                                        <NavLink href={route('message.indexView')} active={route().current('message.indexView')}>
+                                            Messages
+                                        </NavLink>
+                                    </>
+                                }
+                                {
+                                    (user.roles[0].name == "Administrateur" || user.roles[0].name == "Caissier") &&
+                                    <NavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
+                                        Caisse
+                                    </NavLink>
+                                }
+
+                                {
+                                    (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire" || "Administrateur" || user.roles[0].name == "Docteur") &&
+                                    <NavLink href={route('fiches.indexView')} active={route().current('fiches.indexView')}>
+                                        Fiches
+                                    </NavLink>
+                                }
+
+                                {
+                                    (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire" || "Administrateur" || user.roles[0].name == "Docteur") &&
+                                    <NavLink href={route('user.indexView')} active={route().current('user.indexView')}>
+                                        Utilsateurs
+                                    </NavLink>
                                 }
 
                             </div>
@@ -123,33 +130,41 @@ export default function Authenticated({ user, header, children }: PropsWithChild
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        {
-                            user.acces == 1 || user.acces == 2 ?
-                                <>
-                                    <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                        Dashboard
-                                    </ResponsiveNavLink>
-                                    <ResponsiveNavLink href={route('rendez-vous.indexView')} active={route().current('rendez-vous.indexView')}>
-                                        Rendez-vous
-                                    </ResponsiveNavLink>
-                                    <ResponsiveNavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
-                                        Caisse
-                                    </ResponsiveNavLink>
-                                    <ResponsiveNavLink href={route('message.indexView')} active={route().current('message.indexView')}>
-                                        Messages
-                                    </ResponsiveNavLink>
-                                </> : ''
-                        }
-                        <ResponsiveNavLink href={route('fiches.indexView')} active={route().current('fiches.indexView')}>
-                            Fiches
+                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                            Dashboard
                         </ResponsiveNavLink>
                         {
-                            user.acces == 1 ?
-                                <ResponsiveNavLink href={route('user.indexView')} active={route().current('user.indexView')}>
-                                    Utilsateurs
+                            (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire") &&
+                            <>
+                                <ResponsiveNavLink href={route('rendez-vous.indexView')} active={route().current('rendez-vous.indexView')}>
+                                    Rendez-vous
                                 </ResponsiveNavLink>
-                                : ''
+                                <ResponsiveNavLink href={route('message.indexView')} active={route().current('message.indexView')}>
+                                    Messages
+                                </ResponsiveNavLink>
+                            </>
                         }
+                        {
+                            (user.roles[0].name == "Administrateur" || user.roles[0].name == "Caissier") &&
+                            <ResponsiveNavLink href={route('caisse.indexView')} active={route().current('caisse.indexView')}>
+                                Caisse
+                            </ResponsiveNavLink>
+                        }
+
+                        {
+                            (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire" || "Administrateur" || user.roles[0].name == "Docteur") &&
+                            <ResponsiveNavLink href={route('fiches.indexView')} active={route().current('fiches.indexView')}>
+                                Fiches
+                            </ResponsiveNavLink>
+                        }
+
+                        {
+                            (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire" || "Administrateur" || user.roles[0].name == "Docteur") &&
+                            <ResponsiveNavLink href={route('user.indexView')} active={route().current('user.indexView')}>
+                                Utilsateurs
+                            </ResponsiveNavLink>
+                        }
+
 
                     </div>
 

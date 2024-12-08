@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('rendez_vouses', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('post_nom')->nullable();
+            $table->string('postnom')->nullable();
             $table->string('prenom');
             $table->string('sexe');
             $table->string('phone');
             $table->string('objet');
+            $table->string('date');
             $table->string('email')->nullable();
             $table->string('status')->default('A venir');
-            $table->string('disable')->default('no');
+            $table->string('disable')->default(false);
             $table->string('user_id');
             $table->timestamps();
         });

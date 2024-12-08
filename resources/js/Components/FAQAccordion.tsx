@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const FAQAccordion = () => {
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(0);
 
     const handleToggle = (index: any) => {
         setActiveIndex(activeIndex === index ? null : index);

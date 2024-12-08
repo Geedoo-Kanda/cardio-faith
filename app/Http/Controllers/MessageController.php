@@ -10,15 +10,49 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailNotify;
 use App\Mail\Message as SendMail;
+use Carbon\Carbon;
 
 class MessageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = $request->input('filter');
+
+        $query = Message::where('disable', false);
+
+        // Appliquer les filtres temporels
+        switch ($filter) {
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+            case 'yesterday':
+                $query->whereDate('created_at', Carbon::yesterday());
+                break;
+            case 'week':
+                $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                break;
+            case 'month':
+                $query->whereMonth('created_at', Carbon::now()->month)
+                    ->whereYear('created_at', Carbon::now()->year);
+                break;
+            case 'year':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+        }
+
+        // Appliquer la recherche si un terme est fourni
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('objet', 'like', "%{$searchTerm}%")
+                ->orWhere('message', 'like', "%{$searchTerm}%");
+        }
+
+        // Pagination et réponse JSON
+        $rendezVous = $query->orderBy('id', 'desc')->paginate(50);
+        return response()->json($rendezVous);
     }
 
     public function indexView()

@@ -23,7 +23,7 @@ class CaisseExport implements FromView
         return view('exports.caisse', [
             'caisse' => DB::table('caisses')
             ->join("users", "caisses.user_id", "=", "users.id")
-            ->where('caisses.created_at', 'like', "%".$this->req."%")
+            ->where('caisses.date', 'like', "%".$this->req."%")
             ->select("caisses.*", "users.name")->get()
         ]);
     }

@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('caisses', function (Blueprint $table) {
             $table->id();
             $table->string('operation');
-            $table->string('devise');
             $table->string('montant');
             $table->string('solde');
-            $table->string('lobele');
+            $table->string('libele');
+            $table->string('date');
             $table->string('user_id');
+            $table->string('disable')->default(false);
             $table->timestamps();
         });
     }

@@ -23,16 +23,16 @@ class RendezVousFactory extends Factory
         
         return [
             'nom' => fake()->firstName(),
-            'post_nom' => fake()->lastName(),
+            'postnom' => fake()->lastName(),
             'prenom' => fake()->firstName(),
             'sexe' => fake()->randomElement(['M', 'F']),
             'phone' => fake()->phoneNumber(),
             'objet' => fake()->sentence(),
             'email' => fake()->unique()->safeEmail(),
             'status' => fake()->randomElement(['A venir', 'effectue', 'annule', 'repporte']),
-            'disable' => fake()->randomElement(['no', 'yes']),
+            'disable' => fake()->boolean(),
             'user_id' => fake()->randomNumber(2),
-            'created_at' => $randomDate,
+            'date' => $randomDate,
         ];
     }
 }

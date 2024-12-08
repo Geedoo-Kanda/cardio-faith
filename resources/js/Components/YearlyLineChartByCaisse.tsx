@@ -54,8 +54,6 @@ const YearlyLineChartByCaisse = ({ monthlyData = [] }) => {
     return <div className='py-12 text-center'>Aucune donnée disponible.</div>;
   }
 
-  console.log(monthlyData)
-
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart data={selected}>

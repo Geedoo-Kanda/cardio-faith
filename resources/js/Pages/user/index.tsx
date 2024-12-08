@@ -112,7 +112,7 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                                                         Fonction
                                                     </th>
                                                     {
-                                                        auth.user.acces == 1 ?
+                                                        auth.user.roles[0].name == "Administrateur"  ?
                                                             <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
                                                                 Options
                                                             </th> : ''
@@ -142,7 +142,7 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                                                             }
                                                             </td>
                                                         {
-                                                            auth.user.acces == 1 ?
+                                                            auth.user.roles[0].name == "Administrateur"  ?
                                                                 <td className="flex items-center justify-center px-2 h-full">
                                                                     <span onClick={() => Disable(user.id)} className="bg-red-600 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
                                                                     <Modal show={id == user.id ? disable : false} onClose={closeModal}>

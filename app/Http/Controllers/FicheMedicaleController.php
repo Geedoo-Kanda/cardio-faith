@@ -7,6 +7,7 @@ use App\Models\FicheMedicale;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use App\Exports\FicheExport;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,18 +17,55 @@ class FicheMedicaleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filter = $request->input('filter');
+
+        $query = FicheMedicale::where('disable', false);
+
+        // Appliquer les filtres temporels
+        switch ($filter) {
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+            case 'yesterday':
+                $query->whereDate('created_at', Carbon::yesterday());
+                break;
+            case 'week':
+                $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                break;
+            case 'month':
+                $query->whereMonth('created_at', Carbon::now()->month)
+                    ->whereYear('created_at', Carbon::now()->year);
+                break;
+            case 'year':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+        }
+
+        // Appliquer la recherche si un terme est fourni
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('nom', 'like', "%{$searchTerm}%")
+                ->orWhere('postnom', 'like', "%{$searchTerm}%")
+                ->orWhere('prenom', 'like', "%{$searchTerm}%")
+                ->orWhere('lieu_naissance', 'like', "%{$searchTerm}%")
+                ->orWhere('adresse', 'like', "%{$searchTerm}%")
+                ->orWhere('num_secu', 'like', "%{$searchTerm}%")
+                ->orWhere('situation_familiale', 'like', "%{$searchTerm}%")
+                ->orWhere('medecin_traitant', 'like', "%{$searchTerm}%");
+        }
+
+        // Pagination et réponse JSON
+        $rendezVous = $query->orderBy('nom', 'asc')->paginate(50);
+        return response()->json($rendezVous);
     }
 
     public function indexView()
     {
-        $fiches = FicheMedicale::where('disable', 'false')->orderBy('id', 'DESC')->paginate(50);
-        $compteRendus = CompteRendu::where('disable', 'false')->orderBy('id', 'DESC')->get();
+        $compteRendus = CompteRendu::where('disable', false)->orderBy('id', 'DESC')->get();
 
         return Inertia::render('fiches/index', [
-            'fiches' => $fiches,
             'compteRendus' => $compteRendus,
         ]);
     }
