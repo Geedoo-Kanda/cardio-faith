@@ -31,7 +31,6 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
         setadd(false);
         setDisable(false);
         router.reload({ only: ['users'] })
-
     };
 
     const DeleteUser = () => {
@@ -58,15 +57,16 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
             )
     };
 
+
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-white leading-tight">Utilisateurs</h2>}
+            header={<h2 className="font-semibold text-xl text-white leading-tight">Agents</h2>}
         >
-            <Head title="Rendez vous" />
+            <Head title="Agents" />
 
             <div className="py-12 px-4">
-                <div className="flex flex-wrap items-center justify-between md:px-4 mb-10">
+                <div className="flex flex-wrap items-center justify-between md:px-4 mb-10 container mx-auto">
                     <div>
                         <Modal show={add} onClose={closeModal}>
                             <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
@@ -74,8 +74,30 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                         </Modal>
                         <span onClick={Add} className="p-4 cursor-pointer rounded-md bg-red-600 text-white mr-5 text-sm"> <BiPlusMedical className="inline-flex mr-2" />Ajouter un utilisateur</span>
                     </div>
-                    <div className="max-w-xs w-full">
-                        <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" id="search-dropdown" className="bg-white border-0 md:mt-0 mt-8 text-sm rounded-full w-full h-12" placeholder="Recherche..." />
+                    <div className='max-w-md w-full'>
+                        <div className='flex items-center space-x-1'>
+                            <div className="border w-full bg-white rounded-md py-2 border-gray-300 px-3">
+                                <div className='flex items-center'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" className='text-gray-500' height="20" viewBox="0 0 24 24"><g fill="none" fillRule="evenodd"><path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path fill="currentColor" d="M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13M2 10.5a8.5 8.5 0 1 1 15.176 5.262l3.652 3.652a1 1 0 0 1-1.414 1.414l-3.652-3.652A8.5 8.5 0 0 1 2 10.5M9.5 7a1 1 0 0 1 1-1a4.5 4.5 0 0 1 4.5 4.5a1 1 0 1 1-2 0A2.5 2.5 0 0 0 10.5 8a1 1 0 0 1-1-1" /></g></svg>
+                                    <input
+                                        type="search"
+                                        name="search"
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder='Recherchez...'
+                                        className="outline-none text-xs px-2 py-1 w-full bg-inherit border-0 ring-0 border-transparent focus:ring-0"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <button
+                                    // onClick={handleSubmitSearch}
+                                    className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" fillRule="evenodd"><path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path fill="currentColor" d="M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13M2 10.5a8.5 8.5 0 1 1 15.176 5.262l3.652 3.652a1 1 0 0 1-1.414 1.414l-3.652-3.652A8.5 8.5 0 0 1 2 10.5M9.5 7a1 1 0 0 1 1-1a4.5 4.5 0 0 1 4.5 4.5a1 1 0 1 1-2 0A2.5 2.5 0 0 0 10.5 8a1 1 0 0 1-1-1" /></g></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -112,7 +134,7 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                                                         Fonction
                                                     </th>
                                                     {
-                                                        auth.user.roles[0].name == "Administrateur"  ?
+                                                        auth.user.roles[0].name == "Administrateur" ?
                                                             <th scope="col" className="px-4 py-3.5 text-sm text-center text-white font-bold">
                                                                 Options
                                                             </th> : ''
@@ -134,15 +156,11 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">{user.email}</td>
                                                         <td className="p-4 text-sm text-gray-700 whitespace-nowrap text-center">
                                                             {
-                                                            user.acces == 1 ?
-                                                            'Manager/Administrateur' :
-                                                            user.acces == 2 ?
-                                                            'Secretaire' : 'Docteur/Infirmier'
-
+                                                                user.roles[0].name
                                                             }
-                                                            </td>
+                                                        </td>
                                                         {
-                                                            auth.user.roles[0].name == "Administrateur"  ?
+                                                            auth.user.roles[0].name == "Administrateur" ?
                                                                 <td className="flex items-center justify-center px-2 h-full">
                                                                     <span onClick={() => Disable(user.id)} className="bg-red-600 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
                                                                     <Modal show={id == user.id ? disable : false} onClose={closeModal}>

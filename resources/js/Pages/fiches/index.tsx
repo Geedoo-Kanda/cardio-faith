@@ -361,7 +361,7 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                                                         </Modal>
 
                                                                         {
-                                                                            auth.user.roles[0].name == "Administrateur" || auth.user.acces == 3 ?
+                                                                            (auth.user.roles[0].name == "Administrateur" || auth.user.roles[0].name == "Docteur") ?
                                                                                 <>
                                                                                     <span onClick={() => AddCR(fiche.id)} className="bg-blue-500 hover:bg-blue-700 text-white mt-1 p-2 mx-1 rounded-md text-sm"><BiPlusMedical /></span>
                                                                                     <Modal show={id == fiche.id ? addCr : false} onClose={closeModal}>
@@ -404,7 +404,6 @@ export default function Fiche({ auth, fiches, compteRendus }: PageProps<{ fiches
                                             </div>
                                         </div>
                                     </div>
-
                                 </>
                             )}
                         <div className="w-full flex justify-center">

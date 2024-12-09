@@ -21,11 +21,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // $this->call(UsersTableSeeder::class);
-        Caisse::factory()->count(3000)->create();
-        RendezVous::factory()->count(5000)->create();
-        Message::factory(5000)->create();
-        FicheMedicale::factory(5000)->create();
-        CompteRendu::factory(5000)->create();
+        // Caisse::factory()->count(3000)->create();
+        // RendezVous::factory()->count(5000)->create();
+        // Message::factory(5000)->create();
+        // FicheMedicale::factory(5000)->create();
+        // CompteRendu::factory(5000)->create();
 
         $roles = [
             'Administrateur',

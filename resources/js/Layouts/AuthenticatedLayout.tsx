@@ -49,14 +49,14 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                 }
 
                                 {
-                                    (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire" || "Administrateur" || user.roles[0].name == "Docteur") &&
+                                    (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire" || user.roles[0].name == "Docteur") &&
                                     <NavLink href={route('fiches.indexView')} active={route().current('fiches.indexView')}>
                                         Fiches
                                     </NavLink>
                                 }
 
                                 {
-                                    (user.roles[0].name == "Administrateur" || user.roles[0].name == "Secretaire" || "Administrateur" || user.roles[0].name == "Docteur") &&
+                                    user.roles[0].name == "Administrateur" &&
                                     <NavLink href={route('user.indexView')} active={route().current('user.indexView')}>
                                         Utilsateurs
                                     </NavLink>

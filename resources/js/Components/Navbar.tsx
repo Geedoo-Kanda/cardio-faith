@@ -60,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ auth }) => {
                                         auth.user.disable != 'true' ?
                                             <Link
                                                 href={route('dashboard')}
-                                                className="inline-flex font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                                                className="inline-flex font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                             >
                                                 Dashboard
                                             </Link>
@@ -73,7 +73,7 @@ const Navbar: React.FC<NavbarProps> = ({ auth }) => {
 
                             </>
                         ) : (
-                            <>
+                            <div className='flex gap-2'>
                                 <Link
                                     href={route('login')}
                                     className='px-4 py-2 text-sm bg-red-600 hover:bg-red-600 text-white rounded-md flex items-center'
@@ -81,7 +81,14 @@ const Navbar: React.FC<NavbarProps> = ({ auth }) => {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M26 30H14a2 2 0 0 1-2-2v-3h2v3h12V4H14v3h-2V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v24a2 2 0 0 1-2 2" /><path fill="currentColor" d="M14.59 20.59L18.17 17H4v-2h14.17l-3.58-3.59L16 10l6 6l-6 6z" /></svg>
                                     Connexion
                                 </Link>
-                            </>
+                                <Link
+                                    href={route('register')}
+                                    className='px-4 py-2 text-sm border border-red-600 hover:bg-red-600 text-red-600 hover:text-white rounded-md flex items-center'
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="2.75" r="2.25"/><path d="M4.5 12.5h-4V11A4.51 4.51 0 0 1 7 7m3.5.5v6m-3-3h6"/></g></svg>
+                                    Inscription
+                                </Link>
+                            </div>
                         )}
                     </div>
                 </div>

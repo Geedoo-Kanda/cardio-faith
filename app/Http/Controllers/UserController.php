@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::where('disable', false)->where('acces', 0)->orderBy('id', 'DESC')->get();
+        return User::doesntHave('roles')->orderBy('id', 'DESC')->get();
     }
 
     public function all()
@@ -23,12 +23,17 @@ class UserController extends Controller
 
     public function indexView()
     {
-        $users = User::where('disable', false)->where('acces', '!=',0)->orderBy('id', 'DESC')->paginate(50);
-
+        $users = User::where('disable', false)
+                     ->whereHas('roles') // Vérifie que l'utilisateur a au moins un rôle
+                     ->with('roles') // Charge les rôles associés
+                     ->orderBy('id', 'DESC')
+                     ->paginate(50);
+    
         return Inertia::render('user/index', [
             'users' => $users,
         ]);
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -36,35 +41,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom' => 'required|string|max:255',
+            'id' => 'required|exists:users,id',
             'role' => 'required|string|max:255',
         ]);
 
-        if($request->role == 'manager'){
-            $req = User::where('id', $request->nom)->update(['acces' => 1]);
+        $user = User::findOrFail($request->id);
 
-            return response($req, 201);
-        }elseif($request->role == 'secretaire'){
-
-            $req = User::where('id', $request->nom)->update(['acces' => 2]);
-
-            return response($req, 201);
-        }elseif($request->role == 'docteur'){
-
-            $req = User::where('id', $request->nom)->update(['acces' => 3]);
-
-            return response($req, 201);
-        }
-
+        $user->assignRole($request->role);
+        return response($user, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
-    {
-      
-    }
+    public function show(User $user) {}
 
     /**
      * Update the specified resource in storage.
@@ -79,8 +69,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $req = User::where('id', $user->id)->update(['disable' => 'true']);
-
-        return response($req, 201);
+        $user->syncRoles([]);
+        $user->update(['disable' => true]);
+        return response($user, 200);
     }
 }
