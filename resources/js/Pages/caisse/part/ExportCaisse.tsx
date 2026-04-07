@@ -6,6 +6,7 @@ import { useState } from 'react';
 export default function ExportCaisse() {
 
     const [delai, setdelai] = useState('');
+    const [operation, setoperation] = useState('');
     const [mois, setmois] = useState<any | null>(null);
     const [annee, setannee] = useState<any | null>(null);
 
@@ -15,10 +16,20 @@ export default function ExportCaisse() {
 
             <form >
                 <div>
+                    <InputLabel htmlFor="operation" value="Operation*" />
+
+                    <select name='operation' id="operation" value={operation} onChange={(e) => setoperation(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
+                        <option >Choisir</option>
+                        <option value="depot">Depot</option>
+                        <option value="retrait">Retrait</option>
+                    </select>
+
+                </div>
+                <div className='mt-3'>
                     <InputLabel htmlFor="delai" value="Tranche*" />
 
                     <select name='delai' id="delai" value={delai} onChange={(e) => setdelai(e.target.value)} className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" aria-label="Default select example">
-                        <option selected>Choisir</option>
+                        <option >Choisir</option>
                         <option value="annee">Année</option>
                         <option value="mois">Mois</option>
                     </select>
@@ -46,10 +57,10 @@ export default function ExportCaisse() {
                         : ''
                 }
                 <div className="flex items-center justify-end mt-4">
-                    <a href={`/admin/caisse/export/${delai}/${dayjs(new Date(mois)).format("YYYY-MM")}/${dayjs(new Date(annee)).format("YYYY-MM")}`} onClick={() => setTimeout(function () { setannee(''); setmois(''); setdelai('') }, 2000)}
+                    <a href={`/admin/caisse/export/${operation}/${delai}/${dayjs(new Date(mois)).format("YYYY-MM")}/${dayjs(new Date(annee)).format("YYYY-MM")}`} onClick={() => setTimeout(function () { setannee(''); setmois(''); setdelai('') }, 2000)}
                         className='inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150'>
-                             Exporter
-                             </a>
+                        Exporter
+                    </a>
                 </div>
             </form>
         </div>

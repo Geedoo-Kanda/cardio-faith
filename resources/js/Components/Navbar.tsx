@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
 import Dropdown from './Dropdown';
 import ApplicationLogo from './ApplicationLogo';
+import ApplicationLogoBlack from './ApplicationLogoBlack';
 
 interface NavbarProps {
     auth: {
@@ -12,7 +13,7 @@ interface NavbarProps {
     };
 }
 
-const Navbar: React.FC<NavbarProps> = ({ auth }) => {
+const Navbar: React.FC<NavbarProps> = ({ auth, userRoles }: any) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -47,25 +48,24 @@ const Navbar: React.FC<NavbarProps> = ({ auth }) => {
                 <div className='flex justify-between w-full items-center'>
                     <div className="">
                         {
-                            isScrolled &&
-                            <ApplicationLogo className='h-14 w-auto ' />
-
+                            isScrolled ?
+                                <ApplicationLogo className='h-16 w-auto ' />
+                                :
+                                <ApplicationLogoBlack className='h-16 w-auto ' />
                         }
                     </div>
                     <div className="">
                         {auth.user ? (
                             <>
                                 {
-                                    auth.user.acces != 0 ?
-                                        auth.user.disable != 'true' ?
-                                            <Link
-                                                href={route('dashboard')}
-                                                className="inline-flex font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                            >
-                                                Dashboard
-                                            </Link>
-                                            : ''
-                                        : ''
+                                    userRoles.length > 0 && (
+                                        <Link
+                                            href={route('dashboard')}
+                                            className="inline-flex font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                                        >
+                                            Dashboard
+                                        </Link>
+                                    )
                                 }
                                 <Dropdown.Link href={route('logout')} method="post" as="button" className='px-4 py-2 text-sm bg-red-600 hover:bg-red-600 text-white rounded-md'>
                                     Deconnexion
@@ -85,7 +85,7 @@ const Navbar: React.FC<NavbarProps> = ({ auth }) => {
                                     href={route('register')}
                                     className='px-4 py-2 text-sm border border-red-600 hover:bg-red-600 text-red-600 hover:text-white rounded-md flex items-center'
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="2.75" r="2.25"/><path d="M4.5 12.5h-4V11A4.51 4.51 0 0 1 7 7m3.5.5v6m-3-3h6"/></g></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="2.75" r="2.25" /><path d="M4.5 12.5h-4V11A4.51 4.51 0 0 1 7 7m3.5.5v6m-3-3h6" /></g></svg>
                                     Inscription
                                 </Link>
                             </div>

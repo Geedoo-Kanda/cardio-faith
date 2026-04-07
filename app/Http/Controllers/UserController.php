@@ -59,9 +59,14 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'role' => 'required|string|max:255',
+        ]);
+
+        $user->syncRoles($request->role);
+        return response($user, 201);
     }
 
     /**

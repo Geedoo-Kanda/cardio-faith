@@ -28,6 +28,22 @@ export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, r
         } else if (nombre >= 1000000) {
             return (nombre / 1000000).toFixed(2) + ' M';
         } else {
+            return nombre.toFixed(2)
+        }
+    }
+
+    function formatNombre2(nombreString: any) {
+        const nombre = parseFloat(nombreString);
+
+        if (isNaN(nombre)) {
+            return "Invalid number";
+        }
+
+        if (nombre >= 1000000000) {
+            return (nombre / 1000000000).toFixed(2) + ' B';
+        } else if (nombre >= 1000000) {
+            return (nombre / 1000000).toFixed(2) + ' M';
+        } else {
             return nombre
         }
     }
@@ -81,7 +97,7 @@ export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, r
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Tous les rendez-vous</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                {formatNombre(rdv_annule + rdv_effectue + rdv_repporte + rdv_venir)}
+                                {formatNombre2(rdv_annule + rdv_effectue + rdv_repporte + rdv_venir)}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
@@ -90,7 +106,7 @@ export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, r
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"> <AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous à venir</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                {formatNombre(rdv_venir)}
+                                {formatNombre2(rdv_venir)}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
@@ -99,7 +115,7 @@ export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, r
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous effectués</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                {formatNombre(rdv_effectue)}
+                                {formatNombre2(rdv_effectue)}
 
                                 <span className="text-sm rounded-md ml-2">
                                     Total
@@ -109,7 +125,7 @@ export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, r
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"><AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous repporté</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                {formatNombre(rdv_repporte)}
+                                {formatNombre2(rdv_repporte)}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
@@ -118,7 +134,7 @@ export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, r
                         <div className="bg-white rounded-md p-4 shadow-md">
                             <h2 className="font-bold text-xl text-gray-900"> <AiOutlineBarChart className='inline-flex text-red-500 text-3xl' /> Rendez-vous annulés</h2>
                             <p className="text-3xl mt-8 font-semibold text-gray-600 mb-4 text-right">
-                                {formatNombre(rdv_annule)}
+                                {formatNombre2(rdv_annule)}
                                 <span className="text-sm rounded-md ml-2">
                                     Total
                                 </span>
@@ -133,6 +149,7 @@ export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, r
                             </div>
                             <div>
                                 <select onChange={handleYearChange} value={selectedYear} className='border-gray-300 rounded-md'>
+                                    <option selected value='2024'>2024</option>
                                     {Array.isArray(years) ? years.map((year) => (
                                         <option key={year} value={year}>
                                             {year}
@@ -189,6 +206,7 @@ export default function Dashboard({ auth, rdv_venir, rdv_annule, rdv_effectue, r
                                     </div>
                                     <div>
                                         <select onChange={handleYearChange} value={selectedYear} className='border-gray-300 rounded-md'>
+                                            <option selected value='2024'>2024</option>
                                             {Array.isArray(years) ? years.map((year) => (
                                                 <option key={year} value={year}>
                                                     {year}

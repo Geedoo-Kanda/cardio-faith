@@ -11,10 +11,12 @@ use Carbon\Carbon;
 class CaisseExport implements FromView
 {
     private $req;
+    private $operation;
 
-    public function __construct( $req) 
+    public function __construct($req, $operation)
     {
         $this->req = $req;
+        $this->operation = $operation;
     }
 
 
@@ -22,9 +24,10 @@ class CaisseExport implements FromView
     {
         return view('exports.caisse', [
             'caisse' => DB::table('caisses')
-            ->join("users", "caisses.user_id", "=", "users.id")
-            ->where('caisses.date', 'like', "%".$this->req."%")
-            ->select("caisses.*", "users.name")->get()
+                ->join("users", "caisses.user_id", "=", "users.id")
+                ->where('caisses.date', 'like', "%" . $this->req . "%")
+                ->where('caisses.operation', $this->operation)
+                ->select("caisses.*", "users.name")->get()
         ]);
     }
 }

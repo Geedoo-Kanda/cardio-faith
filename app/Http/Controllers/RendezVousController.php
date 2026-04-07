@@ -28,10 +28,12 @@ class RendezVousController extends Controller
         // Appliquer les filtres temporels
         switch ($filter) {
             case 'today':
-                $query->whereDate('date', Carbon::today());
+                $query->whereRaw("CONVERT_TZ(date, '+00:00', '+01:00') >= ?", [Carbon::today()->startOfDay()])
+                    ->whereRaw("CONVERT_TZ(date, '+00:00', '+01:00') <= ?", [Carbon::today()->endOfDay()]);
                 break;
             case 'yesterday':
-                $query->whereDate('date', Carbon::yesterday());
+                $query->whereRaw("CONVERT_TZ(date, '+00:00', '+01:00') >= ?", [Carbon::yesterday()->startOfDay()])
+                    ->whereRaw("CONVERT_TZ(date, '+00:00', '+01:00') <= ?", [Carbon::yesterday()->endOfDay()]);
                 break;
             case 'week':
                 $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);

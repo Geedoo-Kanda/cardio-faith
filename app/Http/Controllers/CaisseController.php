@@ -26,10 +26,12 @@ class CaisseController extends Controller
         // Appliquer les filtres temporels
         switch ($filter) {
             case 'today':
-                $query->whereDate('date', Carbon::today());
+                $query->whereRaw("CONVERT_TZ(date, '+00:00', '+01:00') >= ?", [Carbon::today()->startOfDay()])
+                    ->whereRaw("CONVERT_TZ(date, '+00:00', '+01:00') <= ?", [Carbon::today()->endOfDay()]);
                 break;
             case 'yesterday':
-                $query->whereDate('date', Carbon::yesterday());
+                $query->whereRaw("CONVERT_TZ(date, '+00:00', '+01:00') >= ?", [Carbon::yesterday()->startOfDay()])
+                    ->whereRaw("CONVERT_TZ(date, '+00:00', '+01:00') <= ?", [Carbon::yesterday()->endOfDay()]);
                 break;
             case 'week':
                 $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
@@ -62,7 +64,7 @@ class CaisseController extends Controller
             // Vérifier que l'année correspond
             return Carbon::parse($caisse->date)->year == $year;
         });
-    
+
         // Grouper les caisses par mois
         $caissesParMois = $caisses->groupBy(function ($caisse) {
             // Extraire le mois numérique
@@ -76,11 +78,11 @@ class CaisseController extends Controller
                 'totalRetrait' => $totalRetrait,
             ];
         });
-    
+
         // Trier les données par mois
         $caissesParMoisArray = $caissesParMois->toArray();
         ksort($caissesParMoisArray);
-    
+
         // Préparer les données pour le graphique
         $chartData = [];
         foreach ($caissesParMoisArray as $moisNumerique => $data) {
@@ -91,24 +93,24 @@ class CaisseController extends Controller
                 'retrait' => $data['totalRetrait'],
             ];
         }
-    
+
         return response()->json($chartData);
     }
-    
 
-    public function export($delai, $mois = null, $annee = null)
+
+    public function export($operation, $delai, $mois = null, $annee = null)
     {
         if ($delai == 'annee') {
             $date = new DateTimeImmutable($annee);
             $req = $date->format('Y');
 
-            return Excel::download(new CaisseExport($req), 'rapport de la caisse de ' . $req . '.xlsx');
+            return Excel::download(new CaisseExport($req, $operation), 'rapport de la caisse de ' . $req . '-' . $operation . '.xlsx');
         } elseif ($delai == 'mois') {
 
             $date = new DateTimeImmutable($mois);
             $req = $date->format('Y-m');
 
-            return Excel::download(new CaisseExport($req), 'rapport de la caisse de ' . $req . '.xlsx');
+            return Excel::download(new CaisseExport($req, $operation), 'rapport de la caisse de ' . $req . '-' . $operation . '.xlsx');
         }
     }
 

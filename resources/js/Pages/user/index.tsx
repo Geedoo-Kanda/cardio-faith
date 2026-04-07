@@ -11,6 +11,7 @@ import AddUser from './part/AddUser';
 import axios from "axios";
 import { toast } from "react-toastify";
 import DangerButton from "@/Components/DangerButton";
+import EditUser from "./part/EditUser";
 
 
 export default function User({ auth, users }: PageProps<{ users: any }>) {
@@ -18,6 +19,7 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
     const [id, setid] = useState('');
     const [disable, setDisable] = useState(false);
     const [search, setSearch] = useState("");
+    const [edit, setedit] = useState(false);
 
     function Disable(p: any) {
         setDisable(true);
@@ -27,7 +29,13 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
         setadd(true);
     };
 
+    function Edit(p: any) {
+        setedit(true);
+        setid(p)
+    };
+
     const closeModal = () => {
+        setedit(false);
         setadd(false);
         setDisable(false);
         router.reload({ only: ['users'] })
@@ -162,6 +170,14 @@ export default function User({ auth, users }: PageProps<{ users: any }>) {
                                                         {
                                                             auth.user.roles[0].name == "Administrateur" ?
                                                                 <td className="flex items-center justify-center px-2 h-full">
+                                                                    <span onClick={() => Edit(user.id)} className="bg-green-500 hover:bg-green-700 text-white mt-1 p-2 mx-1 rounded-md text-sm">  <FaRegEdit /></span>
+                                                                    <Modal show={id == user.id ? edit : false} onClose={closeModal}>
+                                                                        <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />
+                                                                        <EditUser edit={{
+                                                                            'id': user.id,
+                                                                            'role': user.roles[0].name,
+                                                                        }} />
+                                                                    </Modal>
                                                                     <span onClick={() => Disable(user.id)} className="bg-red-600 cursor-pointer hover:bg-red-700 text-white mt-1 p-2 rounded-md text-sm">  <FaTrashAlt /></span>
                                                                     <Modal show={id == user.id ? disable : false} onClose={closeModal}>
                                                                         <AiOutlineClose className="text-xl md:text-2xl text-gray-500 absolute right-3 top-3 cursor-pointer hover:text-red-500" onClick={closeModal} />

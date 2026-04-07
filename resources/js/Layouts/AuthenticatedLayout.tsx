@@ -9,7 +9,7 @@ import { User } from '@/types';
 import { ToastContainer } from 'react-toastify';
 
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
-    if (user.acces == 0 || user.disable == 'true') {
+    if (user.roles.length == 0 || user.disable == 'true') {
         window.location.replace(route('/'));
     }
     
@@ -95,7 +95,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                     <Dropdown.Content>
                                         <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
-                                            Log Out
+                                           Deconnexion
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
@@ -179,7 +179,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                         <div className="mt-3 space-y-1">
                             <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
                             <ResponsiveNavLink method="post" href={route('logout')} as="button">
-                                Log Out
+                               Deconnexion
                             </ResponsiveNavLink>
                         </div>
                     </div>

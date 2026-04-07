@@ -10,11 +10,11 @@ export default function Guest({ children }: PropsWithChildren) {
                 <BarreLogo className='absolute left-0 h-96 w-auto'/>
                 <div>
                     <Link href="/">
-                        <ApplicationLogo className='h-24 w-auto'/>
+                        <ApplicationLogo className='h-36 w-auto'/>
                     </Link>
                 </div>
 
-                <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md z-40">
+                <div className="w-full sm:max-w-md px-6 py-4 bg-white overflow-hidden rounded-lg shadow-md z-40">
                     {children}
                 </div>
             </div>

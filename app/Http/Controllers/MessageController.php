@@ -26,10 +26,12 @@ class MessageController extends Controller
         // Appliquer les filtres temporels
         switch ($filter) {
             case 'today':
-                $query->whereDate('created_at', Carbon::today());
+                $query->whereRaw("CONVERT_TZ(created_at, '+00:00', '+01:00') >= ?", [Carbon::today()->startOfDay()])
+                    ->whereRaw("CONVERT_TZ(created_at, '+00:00', '+01:00') <= ?", [Carbon::today()->endOfDay()]);
                 break;
             case 'yesterday':
-                $query->whereDate('created_at', Carbon::yesterday());
+                $query->whereRaw("CONVERT_TZ(created_at, '+00:00', '+01:00') >= ?", [Carbon::yesterday()->startOfDay()])
+                    ->whereRaw("CONVERT_TZ(created_at, '+00:00', '+01:00') <= ?", [Carbon::yesterday()->endOfDay()]);
                 break;
             case 'week':
                 $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);

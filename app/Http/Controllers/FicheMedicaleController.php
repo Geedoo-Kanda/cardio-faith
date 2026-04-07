@@ -26,10 +26,12 @@ class FicheMedicaleController extends Controller
         // Appliquer les filtres temporels
         switch ($filter) {
             case 'today':
-                $query->whereDate('created_at', Carbon::today());
+                $query->whereRaw("CONVERT_TZ(created_at, '+00:00', '+01:00') >= ?", [Carbon::today()->startOfDay()])
+                    ->whereRaw("CONVERT_TZ(created_at, '+00:00', '+01:00') <= ?", [Carbon::today()->endOfDay()]);
                 break;
             case 'yesterday':
-                $query->whereDate('created_at', Carbon::yesterday());
+                $query->whereRaw("CONVERT_TZ(created_at, '+00:00', '+01:00') >= ?", [Carbon::yesterday()->startOfDay()])
+                    ->whereRaw("CONVERT_TZ(created_at, '+00:00', '+01:00') <= ?", [Carbon::yesterday()->endOfDay()]);
                 break;
             case 'week':
                 $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
@@ -48,12 +50,7 @@ class FicheMedicaleController extends Controller
             $searchTerm = $request->input('search');
             $query->where('nom', 'like', "%{$searchTerm}%")
                 ->orWhere('postnom', 'like', "%{$searchTerm}%")
-                ->orWhere('prenom', 'like', "%{$searchTerm}%")
-                ->orWhere('lieu_naissance', 'like', "%{$searchTerm}%")
-                ->orWhere('adresse', 'like', "%{$searchTerm}%")
-                ->orWhere('num_secu', 'like', "%{$searchTerm}%")
-                ->orWhere('situation_familiale', 'like', "%{$searchTerm}%")
-                ->orWhere('medecin_traitant', 'like', "%{$searchTerm}%");
+                ->orWhere('prenom', 'like', "%{$searchTerm}%");
         }
 
         // Pagination et réponse JSON

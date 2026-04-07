@@ -14,6 +14,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompteRenduController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MessageController;
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,19 +81,24 @@ Route::prefix('admin')->group(function () {
         Route::post('/', [CaisseController::class, 'store'])->name('caisse.store');
         Route::get('/delete/{caisse}', [CaisseController::class, 'destroy'])->name('caisse.destroy');
         Route::put('/{caisse}', [CaisseController::class, 'update'])->name('caisse.update');
-        Route::get('/export/{delai}/{mois?}/{annee?}', [CaisseController::class, 'export'])
-            ->name('rendez-vous.export');
+        Route::get('/export/{operation}/{delai}/{mois?}/{annee?}', [CaisseController::class, 'export'])
+            ->name('caisse.export');
     });
 });
 
 Route::get('/', function () {
+    $user = Auth::user();
+    $roles = $user ? $user->roles : []; // Return an empty array if not authenticated
+
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'userRoles' => $roles,
     ]);
 });
+
 
 Route::get('/sitemap', function () {
     return view('sitemap');

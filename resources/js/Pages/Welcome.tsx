@@ -6,16 +6,16 @@ import BarreLogo from '@/Components/BarreLogo';
 import FAQAccordion from '@/Components/FAQAccordion';
 import Footer from '@/Components/Footer';
 
-export default function Welcome({ auth, laravelVersion, phpVersion }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
+export default function Welcome({ auth, laravelVersion, phpVersion, userRoles }: PageProps<{ laravelVersion: string, phpVersion: string, userRoles: any }>) {
     return (
         <main className='font-mono'>
             <Head title="Welcome" />
-            <Navbar auth={auth} />
+            <Navbar auth={auth} userRoles={userRoles} />
             <div id='home' className='h-screen grid lg:grid-cols-2'>
                 <div className='rounded-br-[30%] lg:rounded-br-[0%] lg:rounded-tr-[30%] bg-red-600 text-white flex items-center'>
                     <div className='p-8'>
                         <h3 className='text-xl'>Cabinet Médical</h3>
-                        <h1 className=" mb-4 text-4xl font-sans font-bold">Cardio Faith : Votre partenaire en santé cardiaque.</h1>
+                        <h1 className=" mb-4 text-4xl font-sans font-bold">CardioFaith : Votre partenaire en santé cardiaque.</h1>
                         <p className='text-sm'>Nous offrons des soins spécialisés et personnalisés pour prévenir, diagnostiquer et traiter les maladies cardiovasculaires. Votre santé est notre priorité.</p>
                         <div className='flex justify-center'>
                             <a href='mailto:Cardio.faith@gmail.com' className="flex items-center justify-center mt-4 mb-2 mx-2 border rounded-full hover:bg-white cursor-pointer transition-transform duration-300 transform p-3 border-white relative group w-64">
@@ -36,7 +36,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }: PageProps<
                 </div>
                 <div className='flex items-center justify-center bg-red-600 relative'>
                     <div className='rounded-tl-[30%] lg:rounded-tl-[0%] lg:rounded-bl-[30%] bg-white h-full w-full flex justify-center items-center'>
-                        <img src="/heart.png" alt="logo" />
+                        <img src="/public/heart.png" alt="logo" />
                     </div>
                     <div className='absolute flex flex-wrap justify-around items-center w-full h-full'>
                         <div className="backdrop-blur-sm bg-[#4f4f4f]/50 text-white p-3 rounded-md m-1">
@@ -94,7 +94,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }: PageProps<
             </div>
             <div className='container mx-auto text-gray-800 px-2'>
                 <div id='about' className="grid md:grid-cols-2 gap-8 my-20 items-center">
-                    <div className="h-80 overflow-hidden w-full bg-cover bg-center rounded-md min-h-56 bg-[url('/about.jpg')]">
+                    <div className="h-80 overflow-hidden w-full bg-cover bg-center rounded-md min-h-56 bg-[url('/public/about.jpg')]">
                         <div className="bg-black/30 w-full h-full p-4">
                         </div>
                     </div>
@@ -102,7 +102,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }: PageProps<
                         <span className="bg-red-100 text-red-600 py-2 px-8 rounded-full border border-red-600">About us</span>
                         <div className="mt-4">
                             <p className="my-3">
-                                <span className='text-red-600 font-semibold'>Cardio Faith</span> est un cabinet médical spécialisé dans la prise en charge des pathologies cardiovasculaires, dédié à améliorer la santé cardiaque de nos patients grâce à une expertise de pointe et des soins personnalisés. Nous croyons fermement que chaque battement de cœur mérite une attention particulière, et notre mission est d'assurer un suivi complet et de qualité pour prévenir, diagnostiquer et traiter les maladies cardiaques.
+                                <span className='text-red-600 font-semibold'>CardioFaith</span> est un cabinet médical spécialisé dans la prise en charge des pathologies cardiovasculaires, dédié à améliorer la santé cardiaque de nos patients grâce à une expertise de pointe et des soins personnalisés. Nous croyons fermement que chaque battement de cœur mérite une attention particulière, et notre mission est d'assurer un suivi complet et de qualité pour prévenir, diagnostiquer et traiter les maladies cardiaques.
                             </p>
                             <p className="my-3">
                                 Nous offrons des soins de qualité en utilisant les meilleures pratiques médicales et des technologies modernes pour prévenir, diagnostiquer et traiter les maladies cardiovasculaires, tout en sensibilisant nos patients à l’importance de leur santé cardiaque.

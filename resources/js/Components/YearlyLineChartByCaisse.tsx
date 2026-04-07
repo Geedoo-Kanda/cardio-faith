@@ -28,13 +28,28 @@ const DataItem = ({ label, value, color }:any) => (
 
 
 const CustomTooltip = ({ active, payload, label }:any) => {
+  function formatNombre(nombreString: any) {
+    const nombre = parseFloat(nombreString);
+
+    if (isNaN(nombre)) {
+        return "Invalid number";
+    }
+
+    if (nombre >= 1000000000) {
+        return (nombre / 1000000000).toFixed(2) + ' B';
+    } else if (nombre >= 1000000) {
+        return (nombre / 1000000).toFixed(2) + ' M';
+    } else {
+        return nombre.toFixed(2)
+    }
+}
   if (active && payload && payload.length) {
     return (
       <div className="bg-white borde rounded-lg overflow-hidden shadow-lg text-sm pb-4 max-w-xs">
         <p className="font-bold border-b mb-2 p-2 bg-red-600 text-white">{`Mois : ${label}`}</p>
         <div className="px-2">
-          <DataItem label="Total retrait" value={payload[0]?.value} color="red" />
-          <DataItem label="Total depot" value={payload[1]?.value} color="cyan" />
+          <DataItem label="Total retrait" value={formatNombre(payload[0]?.value)} color="red" />
+          <DataItem label="Total depot" value={formatNombre(payload[1]?.value)} color="cyan" />
         </div>
       </div>
     );
@@ -48,7 +63,6 @@ const YearlyLineChartByCaisse = ({ monthlyData = [] }) => {
   useEffect(() => {
     setSelected(monthlyData)
   }, [monthlyData]);
-
 
   if (monthlyData.length === 0) {
     return <div className='py-12 text-center'>Aucune donnée disponible.</div>;
