@@ -36,7 +36,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, userRoles }:
                 </div>
                 <div className='flex items-center justify-center bg-red-600 relative'>
                     <div className='rounded-tl-[30%] lg:rounded-tl-[0%] lg:rounded-bl-[30%] bg-white h-full w-full flex justify-center items-center'>
-                        <img src="/public/heart.png" alt="logo" />
+                        <img src="/heart.png" alt="logo" />
                     </div>
                     <div className='absolute flex flex-wrap justify-around items-center w-full h-full'>
                         <div className="backdrop-blur-sm bg-[#4f4f4f]/50 text-white p-3 rounded-md m-1">
@@ -94,7 +94,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, userRoles }:
             </div>
             <div className='container mx-auto text-gray-800 px-2'>
                 <div id='about' className="grid md:grid-cols-2 gap-8 my-20 items-center">
-                    <div className="h-80 overflow-hidden w-full bg-cover bg-center rounded-md min-h-56 bg-[url('/public/about.jpg')]">
+                    <div className="h-80 overflow-hidden w-full bg-cover bg-center rounded-md min-h-56 bg-[url('/about.jpg')]">
                         <div className="bg-black/30 w-full h-full p-4">
                         </div>
                     </div>

@@ -11,6 +11,7 @@ interface NavbarProps {
     auth: {
         user: any;
     };
+    userRoles: any;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ auth, userRoles }: any) => {
